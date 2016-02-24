@@ -216,7 +216,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			var paramWelcome:String = "&welcome=Welcome"//+ "Вы вошли в приватный чат.";
 			var paramAttendeePW:String = "&attendeePW=" + privateAttendeePW;
 			var paramModeratorPW:String = "&moderatorPW=" + privateModeratorPW;
-			var paramVoiceBridge:String = "&voiceBridge=77777"; //CHANGE!!!!!!!!!!!!!
+			var paramVoiceBridge:String = "&voiceBridge="+(70000+Math.round(Math.random()*1000)); //CHANGE!!!!!!!!!!!!!
 			var paramLogoutURL:String = "&logoutURL=/"//CHANGE!!!!!!!!!!!!!
 							
 			var urlParametersCreateMeeting:String = "/bigbluebutton/api/create?" + paramName + paramMetengID + paramWelcome + paramAttendeePW + paramModeratorPW + paramVoiceBridge + paramLogoutURL + "&checksum=";
