@@ -50,7 +50,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		import org.bigbluebutton.util.i18n.ResourceUtil;
 			
       public var sharerUserID:String;
-	  public var salt:String = "eb7c5c72b730112644db1a12db84267e";
+	  public var salt:String = "2d75e011711511fb656d2eadf7a5ff29";//"eb7c5c72b730112644db1a12db84267e";
 	  public var moderatorPW:String = "prof123";
 	  public var attendeePW:String = "student123";
 	  public var privateModeratorPW:String = "privateprof123";
