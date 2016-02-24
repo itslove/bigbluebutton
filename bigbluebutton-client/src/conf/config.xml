@@ -1,0 +1,161 @@
+<?xml version="1.0" ?>
+<config>
+    <localeversion suppressWarning="false">0.9.0</localeversion>
+    <version>268</version>
+    <help url="http://52.25.27.254/help.html"/>
+    <javaTest url="http://52.25.27.254/testjava.html"/>
+    <porttest host="52.25.27.254" application="video/portTest" timeout="10000"/>    
+    <bwMon server="52.25.27.254" application="video/bwTest"/>
+    <application uri="rtmp://52.25.27.254/bigbluebutton" host="http://52.25.27.254/bigbluebutton/api/enter"/>
+    <language userSelectionEnabled="true" />
+    <skinning enabled="true" url="http://52.25.27.254/client/branding/css/BBBDefault.css.swf" />
+    <shortcutKeys showButton="true" />
+    <browserVersions chrome="41" firefox="36" flash="17" java="1.7.0_51" />
+    <layout showLogButton="false" defaultLayout="bbb.layout.name.defaultlayout"
+            showToolbar="true" showFooter="false" showMeetingName="false" showHelpButton="false" 
+            showLogoutWindow="true" showLayoutTools="true" confirmLogout="true"
+            showRecordingNotification="true"/>
+    <meeting muteOnStart="false" />
+    <lock disableCamForLockedUsers="false" disableMicForLockedUsers="false" disablePrivateChatForLockedUsers="false" 
+          disablePublicChatForLockedUsers="false" lockLayoutForLockedUsers="false" lockOnJoin="true" lockOnJoinConfigurable="false"/>
+            
+		<modules>
+		 
+		<module name="ChatModule" url="http://52.25.27.254/client/ChatModule.swf?v=268" 
+			uri="rtmp://52.25.27.254/bigbluebutton" 
+			dependsOn="UsersModule"	
+			privateEnabled="false"  
+			fontSize="12"
+			position="top-right"
+			baseTabIndex="701"
+			colorPickerIsVisible="false"
+		/>
+
+		<module name="UsersModule" url="http://52.25.27.254/client/UsersModule.swf?v=268" 
+			uri="rtmp://52.25.27.254/bigbluebutton" 
+			allowKickUser="true"
+			enableRaiseHand="true"
+			enableSettingsButton="true"
+			baseTabIndex="301"
+		/>
+
+		
+		<module name="DeskShareModule" 
+			url="http://52.25.27.254/client/DeskShareModule.swf?v=268" 
+			uri="rtmp://52.25.27.254/deskShare"
+			showButton="true"
+			autoStart="false"
+			autoFullScreen="false"
+			baseTabIndex="201"
+		/>
+		
+		<module name="PhoneModule" url="http://52.25.27.254/client/PhoneModule.swf?v=268" 
+			uri="rtmp://52.25.27.254/sip" 
+			autoJoin="true"
+			listenOnlyMode="true"
+			presenterShareOnly="false"
+			skipCheck="false"
+			showButton="true"
+			enabledEchoCancel="true"
+			useWebRTCIfAvailable="true"
+			showPhoneOption="false"
+			echoTestApp="9196"
+			dependsOn="UsersModule"
+		/>
+
+		<module name="VideoconfModule" url="http://52.25.27.254/client/VideoconfModule.swf?v=268" 
+			uri="rtmp://52.25.27.254/video"
+			dependson = "UsersModule"
+			videoQuality = "100"
+			presenterShareOnly = "true"
+			controlsForPresenter = "true"
+			resolutions = "320x240,640x480,1280x720"
+			autoStart = "false"
+			skipCamSettingsCheck="true"
+			showButton = "true"
+			showCloseButton = "false"
+			publishWindowVisible = "true"
+			viewerWindowMaxed = "false"
+			viewerWindowLocation = "top"
+			camKeyFrameInterval = "30"
+			camModeFps = "10"
+			camQualityBandwidth = "0"
+			camQualityPicture = "90"
+			smoothVideo="false"
+			applyConvolutionFilter="false"
+			convolutionFilter="-1, 0, -1, 0, 6, 0, -1, 0, -1"
+			filterBias="0"
+			filterDivisor="4"
+			enableH264 = "true"
+			h264Level = "2.1"
+			h264Profile = "main"		
+			displayAvatar = "false"
+			focusTalking = "false"
+			glowColor = "0x4A931D"
+			glowBlurSize = "30.0"	
+		/>
+<!--		
+		<module name="WhiteboardModule" url="http://52.25.27.254/client/WhiteboardModule.swf?v=268" 
+			uri="rtmp://52.25.27.254/bigbluebutton" 
+			dependsOn="PresentModule"
+			baseTabIndex="601"
+			whiteboardAccess="presenter"
+			keepToolbarVisible="false"
+		/>
+
+
+    <module name="PollingModule" url="http://52.25.27.254/client/PollingModule.swf?v=268" 
+      uri="rtmp://52.25.27.254/bigbluebutton" 
+      dependsOn="PresentModule"
+    />
+    		
+
+		<module name="PresentModule" url="http://52.25.27.254/client/PresentModule.swf?v=268" 
+			uri="rtmp://52.25.27.254/bigbluebutton" 
+			host="http://52.25.27.254" 
+			showPresentWindow="true"
+			showWindowControls="true"
+			openExternalFileUploadDialog="false"
+			dependsOn="UsersModule"
+			baseTabIndex="501"
+			maxFileSize="30"
+		/>
+-->
+		<module name="VideodockModule" url="http://52.25.27.254/client/VideodockModule.swf?v=268"
+			uri="rtmp://52.25.27.254/bigbluebutton" 
+			dependsOn="VideoconfModule, UsersModule"
+			autoDock="true"
+			showControls="true"
+			maximizeWindow="false"
+			position="bottom-right"
+			width="172"
+			height="179"
+			layout="smart"
+			oneAlwaysBigger="false"
+			baseTabIndex="401"
+		/>
+		
+		<module name="LayoutModule" url="http://52.25.27.254/client/LayoutModule.swf?v=268"
+			uri="rtmp://52.25.27.254/bigbluebutton"
+			layoutConfig="http://52.25.27.254/client/conf/layout.xml"
+			enableEdit="true"
+		/>
+
+<!--
+    <module name="NotesModule" url="http://52.25.27.254/client/NotesModule.swf?v=268"
+      saveURL="http://52.25.27.254"
+      position="top-left"
+    />
+    
+    <module name="BroadcastModule" url="http://52.25.27.254/client/BroadcastModule.swf?v=268"
+      uri="rtmp://52.25.27.254/bigbluebutton"
+      streamsUri="http://52.25.27.254/streams.xml"
+      position="top-left"
+      showStreams="true"
+      autoPlay="false"
+      dependsOn="UsersModule"
+    />
+-->
+    		
+	</modules>
+</config>
