@@ -377,11 +377,10 @@ package org.bigbluebutton.main.model.users {
 		}		
 	
     public function raiseHand(userId: String, raised: Boolean):void {
-      var aUser:BBBUser = getUser(userId);			
+	  var aUser:BBBUser = getUser(userId);			
       if (aUser != null) {
         aUser.userRaiseHand(raised)
-      }	
-      
+      }		  
       users.refresh();      
     }
     

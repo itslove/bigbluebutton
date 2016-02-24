@@ -69,8 +69,13 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				var userManager:UserManager = UserManager.getInstance();
 				var conference:Conference = userManager.getConference();
 				var me:BBBUser = conference.getMyUser();
+				var meetingID:String=UsersUtil.getExternalMeetingID();
 				
-				_this.visible = !me.disableMyCam;
+				if (UsersUtil.amIModerator() || UsersUtil.amIPresenter() || meetingID.slice(-11,meetingID.length) == "PrivateChat"){
+					_this.visible = !me.disableMyCam;
+				} else {
+					_this.visible = false;
+				}
 				_this.includeInLayout = !me.disableMyCam;
 			}
 			

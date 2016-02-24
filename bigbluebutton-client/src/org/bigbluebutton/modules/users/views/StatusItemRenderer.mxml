@@ -96,6 +96,8 @@
 						roleImg.visible = false;
 						roleBtn.visible = true;
 						roleBtn.enabled = true;
+						//trace("LOG: this is lowerHand");
+						
 					} else if (rolledOver && !data.presenter && !data.phoneUser) {
 						roleBtn.setStyle("icon", images.presenter_new);
 						roleBtn.toolTip = ResourceUtil.getInstance().getString('bbb.users.usersGrid.statusItemRenderer.changePresenter');
@@ -108,6 +110,7 @@
 						roleImg.visible = true;
 						roleBtn.visible = false;
 						roleBtn.enabled = false;
+						//trace("LOG:  this is handRaised");
 					} else if (data.presenter) {
 						roleImg.source = images.presenter_new;
 						roleImg.toolTip = ResourceUtil.getInstance().getString('bbb.users.usersGrid.statusItemRenderer.presenter');

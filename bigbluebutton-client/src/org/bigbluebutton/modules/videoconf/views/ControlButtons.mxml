@@ -24,7 +24,10 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 	<mate:Listener type="{LockControlEvent.CHANGED_LOCK_SETTINGS}" method="lockSettingsChanged" />
   <mx:Script>
     <![CDATA[
+		import com.adobe.crypto.SHA1;
 		import com.asfusion.mate.events.Dispatcher;
+		
+		import flash.net.navigateToURL;
 		
 		import org.bigbluebutton.common.Images;
 		import org.bigbluebutton.common.LogUtil;
@@ -38,19 +41,29 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		import org.bigbluebutton.main.model.users.BBBUser;
 		import org.bigbluebutton.main.model.users.Conference;
 		import org.bigbluebutton.main.model.users.events.KickUserEvent;
+		import org.bigbluebutton.main.model.users.events.RaiseHandEvent;
 		import org.bigbluebutton.main.model.users.events.RoleChangeEvent;
+		import org.bigbluebutton.modules.breakout.business.BreakoutProxy;
 		import org.bigbluebutton.modules.chat.model.ChatOptions;
 		import org.bigbluebutton.modules.users.model.UsersOptions;
 		import org.bigbluebutton.modules.videoconf.model.VideoConfOptions;
 		import org.bigbluebutton.util.i18n.ResourceUtil;
 			
       public var sharerUserID:String;
+	  public var salt:String = "eb7c5c72b730112644db1a12db84267e";
+	  public var moderatorPW:String = "prof123";
+	  public var attendeePW:String = "student123";
+	  public var privateModeratorPW:String = "privateprof123";
+	  public var privateAttendeePW:String = "privatestudent123";
+		
       [Bindable]
       private var BUTTONS_SIZE:int = 31;
       private var BUTTONS_PADDING:int = 10;
            
       [Bindable]
       private var showButton:Boolean;
+		
+	  private static const LOG:String = "ControlButtons videoconf - ";
       
 	  private function lockSettingsChanged(e:*):void {
 		  showControlButtons();
@@ -59,6 +72,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
       private function onCreationComplete():void {
         showControlButtons();
         showPrivateChatButton();
+		showNextManagerButton();
       }
       
       public function get padding():int {
@@ -83,15 +97,222 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
         var gd:Dispatcher = new Dispatcher();
         gd.dispatchEvent(new KickUserEvent(sharerUserID)); 
       }
+		
+	//------------------------------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------------------------------
+		
+	  private function onNextManagerClicked(event:Event):void {
+			event.stopImmediatePropagation();
+			
+			var gd:Dispatcher = new Dispatcher();
+			
+			//gd.dispatchEvent(e);			
+			getNextManager();
+	  }
+		
+	  public function getNextManager():void {
+		//event.stopImmediatePropagation();
+			
+		//var gd:Dispatcher = new Dispatcher();
+		  
+		var urlParametersRequest:String = "/bigbluebutton/api/getMeetings?checksum=";
+		var urlParameters:String = "getMeetings" + salt;		  
+		var checksum:String = SHA1.hash(urlParameters);
+		urlParametersRequest = urlParametersRequest+checksum;
+		
+		var request:URLRequest = new URLRequest(urlParametersRequest);
+		
+		request.method = URLRequestMethod.GET;		
+		
+		var urlLoader:URLLoader;
+		
+		urlLoader = new URLLoader();
+		urlLoader.addEventListener(Event.COMPLETE, handleComplete);	
+		urlLoader.load(request);	
+	  }
+		
+		private function handleComplete(e:Event):void{
+			var xml:XML = new XML(e.target.data);
+			LogUtil.debug("load URL complete: " + xml);
+			
+			var returncode:String = xml.returncode;
+			LogUtil.debug("return code: " + returncode);
+			if (returncode != 'SUCCESS') {
+				LogUtil.debug("failed to load any dynamic info to add to the UI");
+				return;
+			}
+			
+			var currentMeetingID:String = UsersUtil.getExternalMeetingID();
+			var currentMeetingTime:String;
+			
+			var meetings:XMLList = xml.meetings.children();
+			var meetingsMap:Object = new Object();
+			var times:Array = new Array();
+			//var booleanModeratorPW:Boolean;
+			for each(var meetingXML:XML in meetings) {
+			//	if (meetingXML.moderatorPW!=privateModeratorPW){
+			//		
+			//	}
+				trace ("~~Before If~~~~ID - " + meetingXML.meetingID + "   passwd - " + meetingXML.moderatorPW + "    moderatorPW=privateModeratorPW " + (meetingXML.moderatorPW!=privateModeratorPW));
+				if(meetingXML.running=="true" && meetingXML.moderatorPW!=privateModeratorPW){
+					trace ("~~After If ~~~~ID - " + meetingXML.meetingID + "   passwd - " + meetingXML.moderatorPW + "    moderatorPW=privateModeratorPW " + (meetingXML.moderatorPW!=privateModeratorPW));
+					var meetingID:String = meetingXML.meetingID;
+					var createTime:String = meetingXML.createTime;
+					meetingsMap[createTime]=meetingID;
+					times.push(createTime);
+					if(meetingID==currentMeetingID){
+						currentMeetingTime = createTime;
+					}
+				}
+			}
+			times.sort();
+			
+			var indexList:int = 0;
+			
+			indexList=times.indexOf(currentMeetingTime);
+			
+			if (indexList==-1||indexList==(times.length-1)){
+				indexList = 0;				
+			} else{
+				indexList = indexList + 1;
+			}
+			//trace(LOG + "meetingid: "+currentMeetingID+"   time "+currentMeetingTime + "    array " + times + "   indexList " + indexList + "   MeetingID" + meetingsMap[times[indexList]] + "   meetingsMap" + meetingsMap);
+			var nextManager:String = meetingsMap[times[indexList]];
+			redirectToNextManager(nextManager);
+			
+		}
+		
+		private function redirectToNextManager(nextManager:String):void {
+			var  me:String = UsersUtil.getMyUsername();
+			var urlParametersRequest:String = "/bigbluebutton/api/join?meetingID=" + nextManager + "&fullName=" + me + "&password=" + attendeePW + "&checksum=";
+			var urlParameters:String = "joinmeetingID=" + nextManager + "&fullName=" + me + "&password=" + attendeePW + salt;
+			
+			var checksum:String = SHA1.hash(urlParameters);
+			urlParametersRequest = urlParametersRequest+checksum;
+			
+			var request:URLRequest = new URLRequest(urlParametersRequest);
+			//trace(LOG + "Logging out to: ");
+			navigateToURL(request, '_self'); 
+			
+		}	 
       
+		//------------------------------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------------------------------	
+	  
+		public function goToPrivateChat():void {
+			var  me:String = UsersUtil.getMyUsername();
+			var currentMeetingID:String = UsersUtil.getExternalMeetingID();
+			var createMeetingID:String = currentMeetingID + "PrivateChat";
+			
+			//Create meeting with private chat
+			var paramName:String = "name=" + createMeetingID;
+			var paramMetengID:String = "&meetingID=" + createMeetingID;				
+			var paramWelcome:String = "&welcome=Welcome"//+ "Вы вошли в приватный чат.";
+			var paramAttendeePW:String = "&attendeePW=" + privateAttendeePW;
+			var paramModeratorPW:String = "&moderatorPW=" + privateModeratorPW;
+			var paramVoiceBridge:String = "&voiceBridge=77777"; //CHANGE!!!!!!!!!!!!!
+			var paramLogoutURL:String = "&logoutURL=/"//CHANGE!!!!!!!!!!!!!
+							
+			var urlParametersCreateMeeting:String = "/bigbluebutton/api/create?" + paramName + paramMetengID + paramWelcome + paramAttendeePW + paramModeratorPW + paramVoiceBridge + paramLogoutURL + "&checksum=";
+			var urlParametersCreateMeetingSalt:String = "create" + paramName + paramMetengID + paramWelcome + paramAttendeePW + paramModeratorPW + paramVoiceBridge + paramLogoutURL + salt;
+			
+			var checksum:String = SHA1.hash(urlParametersCreateMeetingSalt);
+			urlParametersCreateMeeting = urlParametersCreateMeeting+checksum;
+			trace("Create private chat: " + urlParametersCreateMeeting);	
+			
+			var request:URLRequest = new URLRequest(urlParametersCreateMeeting);
+			request.method = URLRequestMethod.GET;		
+							
+			var urlLoader:URLLoader;
+			
+			urlLoader = new URLLoader();
+			urlLoader.addEventListener(Event.COMPLETE, joinPrivateChatModerator);	
+			urlLoader.load(request);
+				
+		}
+		private function joinPrivateChatModerator(e:Event):void{
+			var xml:XML = new XML(e.target.data);
+			LogUtil.debug("load URL complete: " + xml);
+			
+			var returncode:String = xml.returncode;
+			LogUtil.debug("return code: " + returncode);
+			if (returncode != 'SUCCESS') {
+				LogUtil.debug("failed to load any dynamic info to add to the UI");
+				return;
+			}
+			
+			var  me:String = UsersUtil.getMyUsername();
+			var currentMeetingID:String = UsersUtil.getExternalMeetingID();
+			var createMeetingID:String = currentMeetingID + "PrivateChat";
+			
+			//Join to meeting with private chat
+			var urlParametersRequest:String = "/bigbluebutton/api/join?meetingID=" + createMeetingID + "&fullName=" + me + "&password=" + privateModeratorPW + "&checksum=";
+			var urlParameters:String = "joinmeetingID=" + createMeetingID + "&fullName=" + me + "&password=" + privateModeratorPW + salt;
+							
+			var checksum:String = SHA1.hash(urlParameters);
+			urlParametersRequest = urlParametersRequest+checksum;
+			
+			var request:URLRequest = new URLRequest(urlParametersRequest);
+			//trace(LOG + "Moderator Go to private chat. ");
+			navigateToURL(request, '_self'); 
+			
+		}
+		
+		public function joinPrivateChatViewer(event:TimerEvent):void{
+				
+			var  me:String = UsersUtil.getMyUsername();
+			var currentMeetingID:String = UsersUtil.getExternalMeetingID();
+			var createMeetingID:String = currentMeetingID + "PrivateChat";
+			
+			var urlParametersRequest:String = "/bigbluebutton/api/join?meetingID=" + createMeetingID + "&fullName=" + me + "&password=" + privateAttendeePW + "&checksum=";
+			var urlParameters:String = "joinmeetingID=" + createMeetingID + "&fullName=" + me + "&password=" + privateAttendeePW + salt;			
+			
+			var checksum:String = SHA1.hash(urlParameters);
+			urlParametersRequest = urlParametersRequest+checksum;
+			
+			var request:URLRequest = new URLRequest(urlParametersRequest);
+			//trace(LOG + "Viewer Go to private chat. ");
+			navigateToURL(request, '_self'); 
+			
+		}
+		
+		
+		
       private function onPrivateChatClicked(event:Event):void {
         event.stopImmediatePropagation();
         
-        var e:CoreEvent = new CoreEvent(EventConstants.START_PRIVATE_CHAT);
-        e.message.chatWith = sharerUserID;
-        var gd:Dispatcher = new Dispatcher();
-        gd.dispatchEvent(e);
+        //var e:CoreEvent = new CoreEvent(EventConstants.START_PRIVATE_CHAT);
+        //e.message.chatWith = sharerUserID;
+		var e:RaiseHandEvent = new RaiseHandEvent(RaiseHandEvent.RAISE_HAND);
+		if (UserManager.getInstance().getConference().isMyHandRaised) {
+			e.raised = false;
+			//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip2');
+		} else {
+			e.raised = true;
+			var gd:Dispatcher = new Dispatcher();
+			gd.dispatchEvent(e);
+			//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip');
+		}
+		
       }
+		
+		/*private function requestPrivateChat():void{
+			var e:RaiseHandEvent = new RaiseHandEvent(RaiseHandEvent.RAISE_HAND);
+			if (UserManager.getInstance().getConference().isMyHandRaised) {
+				e.raised = false;
+				//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip2');
+			} else {
+				e.raised = true;
+				//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip');
+			}
+			dispatchEvent(e);
+		}	*/
       
       private function onSwitchPresenterClicked(event:Event):void {
         event.stopImmediatePropagation();
@@ -142,13 +363,13 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
        */
       if (ejectUserBtn != null) {
         if (UsersUtil.amIModerator() && ! UsersUtil.isMe(sharerUserID)) {
-          ejectUserBtn.visible = true;
+          ejectUserBtn.visible = false;//true;
           ejectUserBtn.toolTip = ResourceUtil.getInstance().getString('bbb.video.controls.ejectUserBtn.toolTip', [UsersUtil.getUserName(sharerUserID)]); 
           return;
         }
         
         if (controlsForPresenter && UsersUtil.amIPresenter() && ! UsersUtil.isMe(sharerUserID)) { /** 2 **/
-          ejectUserBtn.visible = true;
+          ejectUserBtn.visible = false;//true;
           ejectUserBtn.toolTip = ResourceUtil.getInstance().getString('bbb.video.controls.ejectUserBtn.toolTip', [UsersUtil.getUserName(sharerUserID)]); 
           return;
         }
@@ -165,13 +386,13 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
        */
       if (switchPresenter != null) {
         if (UsersUtil.amIModerator() && (sharerUserID != UsersUtil.getPresenterUserID())) { /** 1. **/ 
-          switchPresenter.visible = true;
+          switchPresenter.visible = false;//true;
           switchPresenter.toolTip = ResourceUtil.getInstance().getString('bbb.video.controls.switchPresenter.toolTip', [UsersUtil.getUserName(sharerUserID)]);
           return;
         }
     
         if (controlsForPresenter && UsersUtil.amIPresenter() && ! UsersUtil.isMe(sharerUserID)) { /** 2 **/
-          switchPresenter.visible = true;
+          switchPresenter.visible = false;//true;
           switchPresenter.toolTip = ResourceUtil.getInstance().getString('bbb.video.controls.switchPresenter.toolTip', [UsersUtil.getUserName(sharerUserID)]);  
           return;
         }
@@ -216,9 +437,10 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
   }
 		
 	private function showPrivateChatButton():void {
-        var chatOptions:ChatOptions = new ChatOptions();
         // the first check is to see if the chat module is in the config.xml
-        if (BBB.getConfigForModule("ChatModule") && chatOptions.privateEnabled && ! UsersUtil.isMe(sharerUserID)) {
+		var meetingID:String=UsersUtil.getExternalMeetingID();
+		trace ("+++++++slice:" + meetingID.slice(-11,meetingID.length));
+        if (! UsersUtil.isMe(sharerUserID) && meetingID.slice(-11,meetingID.length) != "PrivateChat") {
           privateChatBtn.toolTip = ResourceUtil.getInstance().getString('bbb.video.controls.privateChatBtn.toolTip', [UsersUtil.getUserName(sharerUserID)]);
           privateChatBtn.visible = true;
         } else {
@@ -226,6 +448,18 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
           privateChatBtn.includeInLayout = false;
         }
       }
+		
+		private function showNextManagerButton():void {
+			// the first check is to see if the chat module is in the config.xml
+			var meetingID:String=UsersUtil.getExternalMeetingID();
+			if (! UsersUtil.isMe(sharerUserID) && meetingID.slice(-11,meetingID.length) != "PrivateChat") {
+				nextManagerBtn.toolTip = ResourceUtil.getInstance().getString('bbb.video.controls.nextManagerBtn.toolTip', [UsersUtil.getUserName(sharerUserID)]);
+				nextManagerBtn.visible = true;
+			} else {
+				nextManagerBtn.visible = false;
+				
+			}
+		}
     ]]>
   </mx:Script>
   <mx:Button id="muteUnmuteBtn" visible="false" click="onMuteUnmuteClicked(event)"
@@ -236,4 +470,6 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
              width="{BUTTONS_SIZE}" height="{BUTTONS_SIZE}" styleName="videoEjectUserButtonStyle" paddingTop="2"/>
   <mx:Button id="privateChatBtn" click="onPrivateChatClicked(event)"
              width="{BUTTONS_SIZE}" height="{BUTTONS_SIZE}" styleName="videoPrivateChatButtonStyle" paddingTop="2"/>
+  <mx:Button id="nextManagerBtn" click="onNextManagerClicked(event)"
+			 width="{BUTTONS_SIZE}" height="{BUTTONS_SIZE}" styleName="videoSwitchPresenterButtonStyle" paddingTop="2"/>
 </mx:HBox>

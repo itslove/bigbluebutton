@@ -19,6 +19,8 @@
 package org.bigbluebutton.modules.users.services
 {
   import com.asfusion.mate.events.Dispatcher;
+  import flash.utils.Timer;
+  import flash.events.TimerEvent;
   
   import org.bigbluebutton.common.LogUtil;
   import org.bigbluebutton.core.BBB;
@@ -48,6 +50,8 @@ package org.bigbluebutton.modules.users.services
   import org.bigbluebutton.modules.present.events.RemovePresentationEvent;
   import org.bigbluebutton.modules.present.events.UploadEvent;
   import org.bigbluebutton.modules.users.events.MeetingMutedEvent;
+  import org.bigbluebutton.modules.videoconf.views.ControlButtons;
+
   
   public class MessageReceiver implements IMessageListener
   {
@@ -56,7 +60,8 @@ package org.bigbluebutton.modules.users.services
     private var dispatcher:Dispatcher;
     private var _conference:Conference;
     private static var globalDispatcher:Dispatcher = new Dispatcher();
-    
+	private var _controlButtons:ControlButtons = new ControlButtons();
+	
     public function MessageReceiver() {
       _conference = UserManager.getInstance().getConference();
       BBB.initConnectionManager().addMessageListener(this);
@@ -502,11 +507,30 @@ package org.bigbluebutton.modules.users.services
     }
 
     private function handleUserLoweredHand(msg: Object):void {
-      trace(LOG + "*** handleUserLoweredHand " + msg.msg + " **** \n");      
-      var map:Object = JSON.parse(msg.msg);      
+      trace(LOG + "*** handleUserLoweredHand " + msg.msg + " **** \n" + "****" + UsersUtil.getMyExternalUserID());
+	  var map:Object = JSON.parse(msg.msg); 
+	  
+	  //if (UsersUtil.isMe(map.userId)){
+		//Nothing  
+	  //}
+	  
+	  
+	  if ((!UsersUtil.amIModerator()) && (!UsersUtil.amIPresenter()) && (!UserManager.getInstance().getConference().isMyHandRaised)){
+		  _controlButtons.getNextManager();  
+	  }	else if (UsersUtil.amIModerator() || UsersUtil.amIPresenter()){
+		  trace("*** I am MODERATOR");
+		  _controlButtons.goToPrivateChat();
+	  } else {
+		  trace("*** I am VIEWER");
+		  
+		  var timer:Timer = new Timer(7000);
+		  timer.addEventListener(TimerEvent.TIMER, _controlButtons.joinPrivateChatViewer); 
+		  timer.start();
+	  }
+	       
       UserManager.getInstance().getConference().raiseHand(map.userId, false);
     }
-
+	
     private function handleUserSharedWebcam(msg: Object):void {
       trace(LOG + "*** handleUserSharedWebcam " + msg.msg + " **** \n");      
       var map:Object = JSON.parse(msg.msg);

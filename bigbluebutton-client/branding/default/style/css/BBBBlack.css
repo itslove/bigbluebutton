@@ -19,7 +19,7 @@ Panel {
   borderColor: #000000;
   borderAlpha: 1;
   shadowDistance: 1;
-  dropShadowColor: #000000;
+  dropShadowColor: #1b1b1b;
   titleStyleName: "mypanelTitle";
 }
 
@@ -58,7 +58,7 @@ Button, .logoutButtonStyle, .chatSendButtonStyle, .helpLinkButtonStyle {
   color: #5e5f63;
   textRollOverColor: #5e5f63;
   textSelectedColor: #5e5f63;
-  borderColor: #000000;
+  borderColor: #78b82c;
   themeColor: haloBlue;
   fontFamily: Arial;
   fontSize: 12;

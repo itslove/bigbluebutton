@@ -128,7 +128,9 @@ package org.bigbluebutton.modules.breakout.business
 		}
 		
 		public function redirectUser(newMeetingName:String, newModeratorPW:String, newAttendeePW:String, kickUser:Boolean, userList:Array):void{
-			if (!checkIfUserInList(userList)) return;
+			trace("USERID++++++++++++++++++"+userid);
+			//if (!checkIfUserInList(userList)) return;
+			trace("USERID++++++++++++++++++"+userid);
 			
 			var password:String;
 			if (userrole == "MODERATOR" ) password = newModeratorPW;
