@@ -63,6 +63,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
       import org.bigbluebutton.main.model.users.events.ConferenceCreatedEvent;
       import org.bigbluebutton.main.model.users.events.ConnectionFailedEvent;
       import org.bigbluebutton.util.i18n.ResourceUtil;
+	  import org.bigbluebutton.core.UsersUtil;
 
 			private var DEFAULT_HELP_URL:String = "http://www.bigbluebutton.org/content/videos";
 			
@@ -110,6 +111,15 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
           shortcutKeysBtn.width = 0;
           helpBtn.width = 0;          
         }
+		
+		//trace("^^^^^^amIModerator  " + UsersUtil.amIModerator());
+		//trace("^^^^^^amIPresenter  " + UsersUtil.amIPresenter());
+		//trace("^^^^^^!UsersUtil.amIModerator() && !UsersUtil.amIPresenter()  " + (!UsersUtil.amIModerator() && !UsersUtil.amIPresenter()));
+		
+		if (!UsersUtil.amIModerator() && !UsersUtil.amIPresenter()){
+			shortcutKeysBtn.visible = false;
+			btnLogout.visible = false;
+		}
       }
       
       private function checkAccessiblity(e:TimerEvent):void {
@@ -275,7 +285,11 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			}
 						
 			private function gotConfigParameters(e:ConfigEvent):void{
-				shortcutKeysBtn.includeInLayout = shortcutKeysBtn.visible = e.config.shortcutKeysShowButton; 
+				if (!UsersUtil.amIModerator() && !UsersUtil.amIPresenter()){
+					shortcutKeysBtn.includeInLayout = shortcutKeysBtn.visible = false;
+				} else {
+					shortcutKeysBtn.includeInLayout = shortcutKeysBtn.visible = e.config.shortcutKeysShowButton; 
+				}
 				DEFAULT_HELP_URL = e.config.helpURL;
 			}
 			

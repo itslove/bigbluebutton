@@ -149,7 +149,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			
 			override protected function resourcesChanged():void{
 				super.resourcesChanged();
-				this.title = ResourceUtil.getInstance().getString("bbb.chat.title");
+				this.title = "";//ResourceUtil.getInstance().getString("bbb.chat.title");
 				
 				if (titleBarOverlay != null) {
 					titleBarOverlay.accessibilityName = ResourceUtil.getInstance().getString('bbb.chat.titleBar');

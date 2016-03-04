@@ -5,7 +5,7 @@
     <help url="http://52.25.27.254/help.html"/>
     <javaTest url="http://52.25.27.254/testjava.html"/>
     <porttest host="52.25.27.254" application="video/portTest" timeout="10000"/>    
-    <bwMon server="52.25.27.254" application="video/bwTest"/>
+    <bwMon server="172.31.20.93" application="video/bwTest"/>
     <application uri="rtmp://52.25.27.254/bigbluebutton" host="http://52.25.27.254/bigbluebutton/api/enter"/>
     <language userSelectionEnabled="true" />
     <skinning enabled="true" url="http://52.25.27.254/client/branding/css/BBBDefault.css.swf" />
@@ -13,7 +13,7 @@
     <browserVersions chrome="41" firefox="36" flash="17" java="1.7.0_51" />
     <layout showLogButton="false" defaultLayout="bbb.layout.name.defaultlayout"
             showToolbar="true" showFooter="false" showMeetingName="false" showHelpButton="false" 
-            showLogoutWindow="true" showLayoutTools="true" confirmLogout="true"
+            showLogoutWindow="true" showLayoutTools="false" confirmLogout="true"
             showRecordingNotification="true"/>
     <meeting muteOnStart="false" />
     <lock disableCamForLockedUsers="false" disableMicForLockedUsers="false" disablePrivateChatForLockedUsers="false" 
@@ -49,12 +49,12 @@
 			baseTabIndex="201"
 		/>
 		
-		<module name="PhoneModule" url="http://52.25.27.254/client/PhoneModule.swf?v=268" 
+ 	<module name="PhoneModule" url="http://52.25.27.254/client/PhoneModule.swf?v=268" 
 			uri="rtmp://52.25.27.254/sip" 
 			autoJoin="true"
 			listenOnlyMode="true"
-			presenterShareOnly="false"
-			skipCheck="false"
+			presenterShareOnly="true"
+			skipCheck="true"
 			showButton="true"
 			enabledEchoCancel="true"
 			useWebRTCIfAvailable="true"

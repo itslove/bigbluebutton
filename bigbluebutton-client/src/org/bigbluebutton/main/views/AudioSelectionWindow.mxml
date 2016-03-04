@@ -70,10 +70,18 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 					vboxMic.percentWidth = 50;
 					vboxListen.percentWidth = 50;
 				}
+				/*
+				if (UsersUtil.amIModerator() || UsersUtil.amIPresenter()) {
+					trace("^^^^^^^^^AudioSelectionWindow - Share Microphone Clicked");
+					onMicClick();
+				} else {
+					trace("^^^^^^^^^AudioSelectionWindow - Listen Only Clicked");
+					onListenClick();	
+				}*/
 			}
 			
 			private function onMicClick():void {
-				trace("AudioSelectionWindow - Share Microphone Clicked");
+				trace("^^^^^^^^^AudioSelectionWindow - Share Microphone Clicked");
 				var dispatcher:Dispatcher = new Dispatcher();
 				var command:JoinVoiceConferenceCommand = new JoinVoiceConferenceCommand();
 				command.mic = true;
@@ -83,7 +91,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			}
 			
 			private function onListenClick():void {
-				trace("AudioSelectionWindow - Share Microphone Clicked");
+				trace("^^^^^^^^^AudioSelectionWindow - Listen Only Clicked");
 				var dispatcher:Dispatcher = new Dispatcher();
 				var command:JoinVoiceConferenceCommand = new JoinVoiceConferenceCommand();
 				command.mic = false;

@@ -27,12 +27,14 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
        verticalScrollPolicy="off"
 		   creationComplete="onCreationComplete()" 
 		   implements="org.bigbluebutton.common.IBbbModuleWindow"
-		   title="{ResourceUtil.getInstance().getString('bbb.videodock.title')}"
+		   title=""
 		   xmlns:mate="http://mate.asfusion.com/" styleNameFocus="videoDockStyleFocus"
 		   layout="absolute" visible="false" styleNameNoFocus="videoDockStyleNoFocus"
 		   horizontalAlign="center" 
 		   verticalAlign="middle"
 		   resize="onChildAdd()">
+	<!--title="{ResourceUtil.getInstance().getString('bbb.videodock.title')}"-->
+	
 	
 	<mate:Listener type="{LocaleChangeEvent.LOCALE_CHANGED}" method="localeChanged" />
 	<mate:Listener type="{ShortcutEvent.FOCUS_VIDEO_WINDOW}" method="focusWindow" />
@@ -473,7 +475,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			
 			override protected function resourcesChanged():void{
 				super.resourcesChanged();
-				this.title = ResourceUtil.getInstance().getString('bbb.videodock.title');
+				this.title = "";//ResourceUtil.getInstance().getString('bbb.videodock.title');
 				
 				if (titleBarOverlay != null) {
 					titleBarOverlay.accessibilityName = ResourceUtil.getInstance().getString('bbb.videoDock.titleBar');

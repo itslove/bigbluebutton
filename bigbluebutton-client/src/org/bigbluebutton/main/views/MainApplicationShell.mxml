@@ -112,6 +112,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			import org.bigbluebutton.modules.videoconf.events.ShareCameraRequestEvent;
 			import org.bigbluebutton.util.i18n.ResourceUtil;
 			import org.bigbluebutton.util.logging.Logger;
+			//import org.bigbluebutton.core.UsersUtil;
 	
       private static const LOG:String = "Main::MainApplicationShell - ";
       
@@ -167,7 +168,18 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				if (!showToolbarOpt) {
 					toolbarHeight = 0;
 					toolbarPaddingTop = 0;
+					trace("^^^^^^!showToolbarOpt");
 				}
+				
+				/*trace("^^^^^^amIModerator  " + UsersUtil.amIModerator());
+				trace("^^^^^^amIPresenter  " + UsersUtil.amIPresenter());
+				trace("^^^^^^!UsersUtil.amIModerator() && !UsersUtil.amIPresenter()  " + (!UsersUtil.amIModerator() && !UsersUtil.amIPresenter()));
+				
+				if (!UsersUtil.amIModerator() && !UsersUtil.amIPresenter()){
+					toolbarHeight = 0;
+					toolbarPaddingTop = 0;
+					trace("^^^^^^!UsersUtil.amIModerator() && !UsersUtil.amIPresenter()");
+				}*/
 				toolbar.displayToolbar();
       
         showFooterOpt = layoutOptions.showFooter;

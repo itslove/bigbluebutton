@@ -27,9 +27,11 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 	creationComplete="onCreationComplete()"
 	implements="org.bigbluebutton.common.IBbbModuleWindow"
 	xmlns:mate="http://mate.asfusion.com/"
-	title="{ResourceUtil.getInstance().getString('bbb.desktopView.title')}" 
+	title="" 
 	showCloseButton="false"
 	resize="fitToWindow()" >
+	
+	<!-- title="{ResourceUtil.getInstance().getString('bbb.desktopView.title')}" -->
 	
 	<mate:Listener type="{ViewStreamEvent.STOP}" method="onStopViewStreamEvent" />
 	<mate:Listener type="{CursorEvent.UPDATE_CURSOR_LOC_EVENT}" method="onUpdateCursorEvent" />
@@ -288,7 +290,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			
 			override protected function resourcesChanged():void{
 				super.resourcesChanged();
-				this.title = ResourceUtil.getInstance().getString('bbb.desktopView.title');
+				this.title = "";//ResourceUtil.getInstance().getString('bbb.desktopView.title');
 				
 				if (windowControls != null) {
 					minimizeBtn.toolTip = ResourceUtil.getInstance().getString("bbb.window.minimizeBtn.toolTip");
