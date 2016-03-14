@@ -3,8 +3,8 @@
    <layout name="bbb.layout.name.defaultlayout">
     <window name="NotesWindow" hidden="true" width="0.7" height="1" x="0" y="0" draggable="false" resizable="false"/>
     <window name="BroadcastWindow" hidden="true" draggable="false" resizable="false"/>
-    <window name="VideoDock" width="0.4670188133140377" height="0.4260106382978723" x="0" y="0" resizable="false" draggable="false" minimized="false"/>
-    <window name="ChatWindow" width="0.5293632416787265" height="0.5305851063829787" x="0.470465991316932" y="0" resizable="false" draggable="false" minimized="false"/>
+    <window name="VideoDock" width="0.2765" height="0.4260106382978723" x="0" y="0" resizable="false" draggable="false" minimized="false"/>
+    <window name="ChatWindow" width="0.7235" height="0.5305851063829787" x="0.2765" y="0" resizable="false" draggable="false" minimized="false"/>
     <window name="PresentationWindow" minimized="true" order="1" hidden="true" />
     <window name="UsersWindow" minimized="true" hidden="true" order="2"/>
     <window name="ViewersWindow" hidden="true" draggable="false" resizable="false" />
