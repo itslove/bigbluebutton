@@ -19,8 +19,10 @@
 package org.bigbluebutton.modules.users.services
 {
   import com.asfusion.mate.events.Dispatcher;
-  import flash.utils.Timer;
+  
   import flash.events.TimerEvent;
+  import flash.utils.Timer;
+  import flash.utils.setTimeout;
   
   import org.bigbluebutton.common.LogUtil;
   import org.bigbluebutton.core.BBB;
@@ -45,6 +47,7 @@ package org.bigbluebutton.modules.users.services
   import org.bigbluebutton.main.model.users.IMessageListener;
   import org.bigbluebutton.main.model.users.events.RoleChangeEvent;
   import org.bigbluebutton.main.model.users.events.UsersConnectionEvent;
+  import org.bigbluebutton.modules.chat.views.AddChatTabBox;
   import org.bigbluebutton.modules.present.events.CursorEvent;
   import org.bigbluebutton.modules.present.events.NavigationEvent;
   import org.bigbluebutton.modules.present.events.RemovePresentationEvent;
@@ -61,6 +64,8 @@ package org.bigbluebutton.modules.users.services
     private var _conference:Conference;
     private static var globalDispatcher:Dispatcher = new Dispatcher();
 	private var _controlButtons:ControlButtons = new ControlButtons();
+	
+	private var _addChatTabBox:AddChatTabBox = new AddChatTabBox();
 	
     public function MessageReceiver() {
       _conference = UserManager.getInstance().getConference();
@@ -515,7 +520,7 @@ package org.bigbluebutton.modules.users.services
 	  //}
 	  
 	  
-	  if ((!UsersUtil.amIModerator()) && (!UsersUtil.amIPresenter()) && (!UserManager.getInstance().getConference().isMyHandRaised)){
+	  /*if ((!UsersUtil.amIModerator()) && (!UsersUtil.amIPresenter()) && (!UserManager.getInstance().getConference().isMyHandRaised)){
 		  _controlButtons.getNextManager();  
 	  }	else if (UsersUtil.amIModerator() || UsersUtil.amIPresenter()){
 		  trace("*** I am MODERATOR");
@@ -526,6 +531,20 @@ package org.bigbluebutton.modules.users.services
 		  var timer:Timer = new Timer(7000);
 		  timer.addEventListener(TimerEvent.TIMER, _controlButtons.joinPrivateChatViewer); 
 		  timer.start();
+	  }*/
+	  
+	  var currentMeetingID:String = UsersUtil.getExternalMeetingID();
+	  var createMeetingID:String = currentMeetingID + "PrivateChat" + Math.round(Math.random()*1000);
+	  
+	  if (UsersUtil.amIPresenter()){
+		  trace("*** I am MODERATOR");
+		  //_addChatTabBox.openPrivateChatInChatModule();
+		  //_controlButtons.goToPrivateChat(createMeetingID);
+	  } else if ((!UsersUtil.amIModerator()) && (!UsersUtil.amIPresenter()) && (UserManager.getInstance().getConference().isMyHandRaised)) {
+		  trace("*** I am VIEWER");
+		  
+		  setTimeout(_controlButtons.joinPrivateChatViewer, 7000, createMeetingID);
+		  
 	  }
 	       
       UserManager.getInstance().getConference().raiseHand(map.userId, false);

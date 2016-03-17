@@ -181,7 +181,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				ns.bufferTime = 0;
 				ns.receiveVideo(true);
 				ns.receiveAudio(false);
-				
+				trace("_________stream:"+stream);
 				var res:Array = getVideoResolution(stream);
 				if (res == null) // error
 					return;

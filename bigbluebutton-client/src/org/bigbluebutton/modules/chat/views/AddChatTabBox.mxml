@@ -81,7 +81,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
             }
             
             protected function openPrivateChat(event:Event):void{
-                if (usersList.selectedIndex == -1) return;
+                				
+				if (usersList.selectedIndex == -1) return;
                 
                 var chatWithUserID:String = usersList.selectedItem.userID;
                 
@@ -96,6 +97,24 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
                 gd.dispatchEvent(e);
                 
             }
+			
+			public function openPrivateChatInChatModule():void{
+								
+				if (usersList.selectedIndex == -1) return;
+				
+				var chatWithUserID:String = usersList.selectedItem.userID;//userId;
+				
+				// Don't want to be chatting with ourself.
+				//if (UsersUtil.isMe(chatWithUserID)) return;
+				
+				//usersList.selectedIndex = -1;
+				
+				var e:CoreEvent = new CoreEvent(EventConstants.START_PRIVATE_CHAT);
+				e.message.chatWith = chatWithUserID;
+				var gd:Dispatcher = new Dispatcher();
+				gd.dispatchEvent(e);
+				
+			}
             
             /**
             * For the Options tab focus the users list instead of the text area.

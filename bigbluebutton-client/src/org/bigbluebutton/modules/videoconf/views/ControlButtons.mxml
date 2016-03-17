@@ -50,7 +50,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		import org.bigbluebutton.util.i18n.ResourceUtil;
 			
       public var sharerUserID:String;
-	  public var salt:String = "2d75e011711511fb656d2eadf7a5ff29";//"eb7c5c72b730112644db1a12db84267e";
+	  public var salt:String = "eb7c5c72b730112644db1a12db84267e";//"2d75e011711511fb656d2eadf7a5ff29";
 	  public var moderatorPW:String = "prof123";
 	  public var attendeePW:String = "student123";
 	  public var privateModeratorPW:String = "privateprof123";
@@ -205,10 +205,10 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		//------------------------------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------------------------------	
 	  
-		public function goToPrivateChat():void {
+		public function goToPrivateChat(createMeetingID:String):void {
 			var  me:String = UsersUtil.getMyUsername();
-			var currentMeetingID:String = UsersUtil.getExternalMeetingID();
-			var createMeetingID:String = currentMeetingID + "PrivateChat";
+			//var currentMeetingID:String = UsersUtil.getExternalMeetingID();
+			//var createMeetingID:String = currentMeetingID + "PrivateChat" + Math.round(Math.random()*1000);
 			
 			//Create meeting with private chat
 			var paramName:String = "name=" + createMeetingID;
@@ -216,8 +216,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			var paramWelcome:String = "&welcome=Welcome"//+ "Вы вошли в приватный чат.";
 			var paramAttendeePW:String = "&attendeePW=" + privateAttendeePW;
 			var paramModeratorPW:String = "&moderatorPW=" + privateModeratorPW;
-			var paramVoiceBridge:String = "&voiceBridge="+(70000+Math.round(Math.random()*1000)); //CHANGE!!!!!!!!!!!!!
-			var paramLogoutURL:String = "&logoutURL=/"//CHANGE!!!!!!!!!!!!!
+			var paramVoiceBridge:String = "&voiceBridge="+(70000+Math.round(Math.random()*1000)); 
+			var paramLogoutURL:String = "&logoutURL=/"
 							
 			var urlParametersCreateMeeting:String = "/bigbluebutton/api/create?" + paramName + paramMetengID + paramWelcome + paramAttendeePW + paramModeratorPW + paramVoiceBridge + paramLogoutURL + "&checksum=";
 			var urlParametersCreateMeetingSalt:String = "create" + paramName + paramMetengID + paramWelcome + paramAttendeePW + paramModeratorPW + paramVoiceBridge + paramLogoutURL + salt;
@@ -231,12 +231,14 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 							
 			var urlLoader:URLLoader;
 			
+			var handler:Function = function(event:Event):void { joinPrivateChatModerator(event, createMeetingID); };
+			
 			urlLoader = new URLLoader();
-			urlLoader.addEventListener(Event.COMPLETE, joinPrivateChatModerator);	
+			urlLoader.addEventListener(Event.COMPLETE, handler);	
 			urlLoader.load(request);
 				
 		}
-		private function joinPrivateChatModerator(e:Event):void{
+		private function joinPrivateChatModerator(e:Event, createMeetingID:String):void{
 			var xml:XML = new XML(e.target.data);
 			LogUtil.debug("load URL complete: " + xml);
 			
@@ -247,9 +249,11 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				return;
 			}
 			
+			//removeEventListener(Event.COMPLETE, handler);
+			
 			var  me:String = UsersUtil.getMyUsername();
-			var currentMeetingID:String = UsersUtil.getExternalMeetingID();
-			var createMeetingID:String = currentMeetingID + "PrivateChat";
+			//var currentMeetingID:String = UsersUtil.getExternalMeetingID();
+			//var createMeetingID:String = currentMeetingID + "PrivateChat";
 			
 			//Join to meeting with private chat
 			var urlParametersRequest:String = "/bigbluebutton/api/join?meetingID=" + createMeetingID + "&fullName=" + me + "&password=" + privateModeratorPW + "&checksum=";
@@ -264,11 +268,11 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			
 		}
 		
-		public function joinPrivateChatViewer(event:TimerEvent):void{
-				
+		public function joinPrivateChatViewer(createMeetingID:String):void{
+				//event:TimerEvent, 
 			var  me:String = UsersUtil.getMyUsername();
-			var currentMeetingID:String = UsersUtil.getExternalMeetingID();
-			var createMeetingID:String = currentMeetingID + "PrivateChat";
+			//var currentMeetingID:String = UsersUtil.getExternalMeetingID();
+			//var createMeetingID:String = currentMeetingID + "PrivateChat";
 			
 			var urlParametersRequest:String = "/bigbluebutton/api/join?meetingID=" + createMeetingID + "&fullName=" + me + "&password=" + privateAttendeePW + "&checksum=";
 			var urlParameters:String = "joinmeetingID=" + createMeetingID + "&fullName=" + me + "&password=" + privateAttendeePW + salt;			
@@ -287,6 +291,10 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
       private function onPrivateChatClicked(event:Event):void {
         event.stopImmediatePropagation();
         
+		var eventChat:CoreEvent = new CoreEvent(EventConstants.START_PRIVATE_CHAT);
+		eventChat.message.chatWith = sharerUserID;
+		var gd:Dispatcher = new Dispatcher();
+		gd.dispatchEvent(eventChat);
         //var e:CoreEvent = new CoreEvent(EventConstants.START_PRIVATE_CHAT);
         //e.message.chatWith = sharerUserID;
 		var e:RaiseHandEvent = new RaiseHandEvent(RaiseHandEvent.RAISE_HAND);
@@ -295,7 +303,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip2');
 		} else {
 			e.raised = true;
-			var gd:Dispatcher = new Dispatcher();
+			//var gd:Dispatcher = new Dispatcher();
 			gd.dispatchEvent(e);
 			//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip');
 		}
@@ -441,7 +449,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		var meetingID:String=UsersUtil.getExternalMeetingID();
 		if (! UsersUtil.isMe(sharerUserID) && meetingID.slice(-11,meetingID.length) != "PrivateChat") {
           privateChatBtn.toolTip = ResourceUtil.getInstance().getString('bbb.video.controls.privateChatBtn.toolTip', [UsersUtil.getUserName(sharerUserID)]);
-          privateChatBtn.visible = false;//true;
+          privateChatBtn.visible = true;
         } else {
           privateChatBtn.visible = false;
           privateChatBtn.includeInLayout = false;
@@ -453,7 +461,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			var meetingID:String=UsersUtil.getExternalMeetingID();
 			if (! UsersUtil.isMe(sharerUserID) && meetingID.slice(-11,meetingID.length) != "PrivateChat") {
 				nextManagerBtn.toolTip = ResourceUtil.getInstance().getString('bbb.video.controls.nextManagerBtn.toolTip', [UsersUtil.getUserName(sharerUserID)]);
-				nextManagerBtn.visible = false;//true;
+				nextManagerBtn.visible = true;
 			} else {
 				nextManagerBtn.visible = false;
 				
