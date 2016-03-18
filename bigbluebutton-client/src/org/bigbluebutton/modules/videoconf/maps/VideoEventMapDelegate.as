@@ -307,9 +307,21 @@ package org.bigbluebutton.modules.videoconf.maps
       
       closeWindow(userID);
             
-      var bbbUser:BBBUser = UsersUtil.getUser(userID);      
-      window.startVideo(proxy.connection, bbbUser.streamName);
-      
+      var bbbUser:BBBUser = UsersUtil.getUser(userID); 
+	  trace("stream name before:"+bbbUser.streamName);
+	  trace("presenter id:"+UsersUtil.getPresenterUserID());
+	  var streamPresenter: String = "320x240-"+UsersUtil.getPresenterUserID();
+      trace("stream name after:"+streamPresenter);
+	  
+	  window.startVideo(proxy.connection, bbbUser.streamName);
+	  /*
+	  window.startVideo(proxy.connection, streamPresenter);
+	  var user:BBBUser = UserManager.getInstance().getConference().getUser(UsersUtil.getMyUserID());
+	  var streemUser:BBBUser = UserManager.getInstance().getConference().getUser(window.userID);
+	  if (!user.isPrivateChat&&!streemUser.presenter){
+		  return;
+	  }
+	  */
       webcamWindows.addWindow(window);        
       openWindow(window);
       dockWindow(window);  

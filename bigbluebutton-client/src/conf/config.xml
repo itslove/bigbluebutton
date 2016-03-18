@@ -2,13 +2,13 @@
 <config>
     <localeversion suppressWarning="false">0.9.0</localeversion>
     <version>268</version>
-    <help url="http://52.25.27.254/help.html"/>
-    <javaTest url="http://52.25.27.254/testjava.html"/>
-    <porttest host="52.25.27.254" application="video/portTest" timeout="10000"/>    
-    <bwMon server="172.31.20.93" application="video/bwTest"/>
-    <application uri="rtmp://52.25.27.254/bigbluebutton" host="http://52.25.27.254/bigbluebutton/api/enter"/>
+    <help url="http://192.168.1.178/help.html"/>
+    <javaTest url="http://192.168.1.178/testjava.html"/>
+    <porttest host="192.168.1.178" application="video/portTest" timeout="10000"/>    
+    <bwMon server="192.168.1.178" application="video/bwTest"/>
+    <application uri="rtmp://192.168.1.178/bigbluebutton" host="http://192.168.1.178/bigbluebutton/api/enter"/>
     <language userSelectionEnabled="true" />
-    <skinning enabled="true" url="http://52.25.27.254/client/branding/css/BBBDefault.css.swf" />
+    <skinning enabled="true" url="http://192.168.1.178/client/branding/css/BBBDefault.css.swf" />
     <shortcutKeys showButton="true" />
     <browserVersions chrome="41" firefox="36" flash="17" java="1.7.0_51" />
     <layout showLogButton="false" defaultLayout="bbb.layout.name.defaultlayout"
@@ -21,8 +21,8 @@
             
 		<modules>
 		 
-		<module name="ChatModule" url="http://52.25.27.254/client/ChatModule.swf?v=268" 
-			uri="rtmp://52.25.27.254/bigbluebutton" 
+		<module name="ChatModule" url="http://192.168.1.178/client/ChatModule.swf?v=268" 
+			uri="rtmp://192.168.1.178/bigbluebutton" 
 			dependsOn="UsersModule"	
 			privateEnabled="false"  
 			fontSize="12"
@@ -31,8 +31,8 @@
 			colorPickerIsVisible="false"
 		/>
 
-		<module name="UsersModule" url="http://52.25.27.254/client/UsersModule.swf?v=268" 
-			uri="rtmp://52.25.27.254/bigbluebutton" 
+		<module name="UsersModule" url="http://192.168.1.178/client/UsersModule.swf?v=268" 
+			uri="rtmp://192.168.1.178/bigbluebutton" 
 			allowKickUser="true"
 			enableRaiseHand="true"
 			enableSettingsButton="true"
@@ -41,16 +41,16 @@
 
 		
 		<module name="DeskShareModule" 
-			url="http://52.25.27.254/client/DeskShareModule.swf?v=268" 
-			uri="rtmp://52.25.27.254/deskShare"
+			url="http://192.168.1.178/client/DeskShareModule.swf?v=268" 
+			uri="rtmp://192.168.1.178/deskShare"
 			showButton="true"
 			autoStart="false"
 			autoFullScreen="false"
 			baseTabIndex="201"
 		/>
 		
- 	<module name="PhoneModule" url="http://52.25.27.254/client/PhoneModule.swf?v=268" 
-			uri="rtmp://52.25.27.254/sip" 
+ 	<module name="PhoneModule" url="http://192.168.1.178/client/PhoneModule.swf?v=268" 
+			uri="rtmp://192.168.1.178/sip" 
 			autoJoin="true"
 			listenOnlyMode="true"
 			presenterShareOnly="true"
@@ -63,11 +63,11 @@
 			dependsOn="UsersModule"
 		/>
 
-		<module name="VideoconfModule" url="http://52.25.27.254/client/VideoconfModule.swf?v=268" 
-			uri="rtmp://52.25.27.254/video"
+		<module name="VideoconfModule" url="http://192.168.1.178/client/VideoconfModule.swf?v=268" 
+			uri="rtmp://192.168.1.178/video"
 			dependson = "UsersModule"
 			videoQuality = "100"
-			presenterShareOnly = "true"
+			presenterShareOnly = "false"
 			controlsForPresenter = "true"
 			resolutions = "320x240,640x480,1280x720"
 			autoStart = "false"
@@ -95,8 +95,8 @@
 			glowBlurSize = "30.0"	
 		/>
 <!--		
-		<module name="WhiteboardModule" url="http://52.25.27.254/client/WhiteboardModule.swf?v=268" 
-			uri="rtmp://52.25.27.254/bigbluebutton" 
+		<module name="WhiteboardModule" url="http://192.168.1.178/client/WhiteboardModule.swf?v=268" 
+			uri="rtmp://192.168.1.178/bigbluebutton" 
 			dependsOn="PresentModule"
 			baseTabIndex="601"
 			whiteboardAccess="presenter"
@@ -104,15 +104,15 @@
 		/>
 
 
-    <module name="PollingModule" url="http://52.25.27.254/client/PollingModule.swf?v=268" 
-      uri="rtmp://52.25.27.254/bigbluebutton" 
+    <module name="PollingModule" url="http://192.168.1.178/client/PollingModule.swf?v=268" 
+      uri="rtmp://192.168.1.178/bigbluebutton" 
       dependsOn="PresentModule"
     />
     		
 
-		<module name="PresentModule" url="http://52.25.27.254/client/PresentModule.swf?v=268" 
-			uri="rtmp://52.25.27.254/bigbluebutton" 
-			host="http://52.25.27.254" 
+		<module name="PresentModule" url="http://192.168.1.178/client/PresentModule.swf?v=268" 
+			uri="rtmp://192.168.1.178/bigbluebutton" 
+			host="http://192.168.1.178" 
 			showPresentWindow="true"
 			showWindowControls="true"
 			openExternalFileUploadDialog="false"
@@ -121,8 +121,8 @@
 			maxFileSize="30"
 		/>
 -->
-		<module name="VideodockModule" url="http://52.25.27.254/client/VideodockModule.swf?v=268"
-			uri="rtmp://52.25.27.254/bigbluebutton" 
+		<module name="VideodockModule" url="http://192.168.1.178/client/VideodockModule.swf?v=268"
+			uri="rtmp://192.168.1.178/bigbluebutton" 
 			dependsOn="VideoconfModule, UsersModule"
 			autoDock="true"
 			showControls="true"
@@ -135,21 +135,21 @@
 			baseTabIndex="401"
 		/>
 		
-		<module name="LayoutModule" url="http://52.25.27.254/client/LayoutModule.swf?v=268"
-			uri="rtmp://52.25.27.254/bigbluebutton"
-			layoutConfig="http://52.25.27.254/client/conf/layout.xml"
+		<module name="LayoutModule" url="http://192.168.1.178/client/LayoutModule.swf?v=268"
+			uri="rtmp://192.168.1.178/bigbluebutton"
+			layoutConfig="http://192.168.1.178/client/conf/layout.xml"
 			enableEdit="true"
 		/>
 
 <!--
-    <module name="NotesModule" url="http://52.25.27.254/client/NotesModule.swf?v=268"
-      saveURL="http://52.25.27.254"
+    <module name="NotesModule" url="http://192.168.1.178/client/NotesModule.swf?v=268"
+      saveURL="http://192.168.1.178"
       position="top-left"
     />
     
-    <module name="BroadcastModule" url="http://52.25.27.254/client/BroadcastModule.swf?v=268"
-      uri="rtmp://52.25.27.254/bigbluebutton"
-      streamsUri="http://52.25.27.254/streams.xml"
+    <module name="BroadcastModule" url="http://192.168.1.178/client/BroadcastModule.swf?v=268"
+      uri="rtmp://192.168.1.178/bigbluebutton"
+      streamsUri="http://192.168.1.178/streams.xml"
       position="top-left"
       showStreams="true"
       autoPlay="false"

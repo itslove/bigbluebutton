@@ -42,29 +42,31 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 	<mate:Listener type="{ShortcutEvent.MAXIMIZE_DOCK}" method="remoteMaximize" />
 	<mx:Script>
 		<![CDATA[ 
-	  import org.bigbluebutton.main.events.ShortcutEvent;
-      import com.asfusion.mate.events.Dispatcher;
-      
-      import flexlib.mdi.containers.MDIWindow;
-
-      import mx.events.ChildExistenceChangedEvent;
-      
-      import org.bigbluebutton.common.Images;
-
-      import org.bigbluebutton.common.LogUtil;
-      import org.bigbluebutton.common.events.CloseWindowEvent;
-      import org.bigbluebutton.common.events.DragWindowEvent;
-      import org.bigbluebutton.common.events.OpenWindowEvent;
-      import org.bigbluebutton.core.BBB;
-      import org.bigbluebutton.core.events.ConnectAppEvent;
-      import org.bigbluebutton.main.model.users.Conference;
-      import org.bigbluebutton.main.views.MainCanvas;
-      import org.bigbluebutton.modules.videoconf.business.VideoWindowItf;
-      import org.bigbluebutton.modules.videoconf.events.OpenVideoWindowEvent;
-      import org.bigbluebutton.modules.videoconf.events.UserTalkingEvent;
-      import org.bigbluebutton.modules.videoconf.model.VideoConfOptions;
-      import org.bigbluebutton.util.i18n.ResourceUtil;
+	  import com.asfusion.mate.events.Dispatcher;
+	  
+	  import mx.events.ChildExistenceChangedEvent;
+	  
+	  import flexlib.mdi.containers.MDIWindow;
+	  
+	  import org.bigbluebutton.common.Images;
+	  import org.bigbluebutton.common.LogUtil;
+	  import org.bigbluebutton.common.events.CloseWindowEvent;
+	  import org.bigbluebutton.common.events.DragWindowEvent;
 	  import org.bigbluebutton.common.events.LocaleChangeEvent;
+	  import org.bigbluebutton.common.events.OpenWindowEvent;
+	  import org.bigbluebutton.core.BBB;
+	  import org.bigbluebutton.core.UsersUtil;
+	  import org.bigbluebutton.core.events.ConnectAppEvent;
+	  import org.bigbluebutton.core.managers.UserManager;
+	  import org.bigbluebutton.main.events.ShortcutEvent;
+	  import org.bigbluebutton.main.model.users.BBBUser;
+	  import org.bigbluebutton.main.model.users.Conference;
+	  import org.bigbluebutton.main.views.MainCanvas;
+	  import org.bigbluebutton.modules.videoconf.business.VideoWindowItf;
+	  import org.bigbluebutton.modules.videoconf.events.OpenVideoWindowEvent;
+	  import org.bigbluebutton.modules.videoconf.events.UserTalkingEvent;
+	  import org.bigbluebutton.modules.videoconf.model.VideoConfOptions;
+	  import org.bigbluebutton.util.i18n.ResourceUtil;
 			
 			private var childrenDimension:Dictionary = new Dictionary();
 			private var borderColor:String;
@@ -266,6 +268,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				 * But for now, this is good enough.
 				 */
 				if (! window.visible) return;
+				
+				
 				
 				saveWindowDimensions(window);
 				

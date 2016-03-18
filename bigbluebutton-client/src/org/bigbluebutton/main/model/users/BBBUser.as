@@ -37,6 +37,11 @@ package org.bigbluebutton.main.model.users
 		
     // Flag to tell that user is in the process of leaving the meeting.
     public var isLeavingFlag:Boolean = false;
+	
+	
+	//Flag to tell that user is in private chat with manager.
+	public var isPrivateChat:Boolean = false;
+	public var presenterForPrivateChat:String = "UNKNOWN USER";
     
 		[Bindable] public var me:Boolean = false;
 		[Bindable] public var userID:String = "UNKNOWN USER";
