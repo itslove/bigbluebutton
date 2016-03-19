@@ -331,7 +331,7 @@
     }
     
     public function handleJoinVoiceConferenceCommand(event:JoinVoiceConferenceCommand):void {
-      trace(LOG + "Handling JoinVoiceConferenceCommand.");
+      trace(LOG + "Handling JoinVoiceConferenceCommand. State:"+state);
       switch(state) {
         case INITED:
           if (usingFlash || !event.mic) {

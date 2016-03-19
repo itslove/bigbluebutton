@@ -296,7 +296,7 @@ package org.bigbluebutton.modules.videoconf.maps
         trace("VideoEventMapDelegate:: [" + me + "] closeWindow:: Not Closing. No window for [" + userID + "] [" + UsersUtil.getUserName(userID) + "]");
       }
     }
-    
+    /*
     private function openViewWindowFor(userID:String):void {
       trace("VideoEventMapDelegate:: [" + me + "] openViewWindowFor:: Opening VIEW window for [" + userID + "]");
       
@@ -320,13 +320,13 @@ package org.bigbluebutton.modules.videoconf.maps
 	  if (!user.isPrivateChat&&!streemUser.presenter){
 		  return;
 	  }
-	  */
+	  //
       webcamWindows.addWindow(window);        
       openWindow(window);
       dockWindow(window);  
     }
 	
-	/*
+	*/
 	private function openViewWindowFor(userID:String):void {
 	trace("VideoEventMapDelegate:: [" + me + "] openViewWindowFor:: Opening VIEW window for [" + userID + "] [" + UsersUtil.getUserName(userID) + "]");
 	
@@ -352,12 +352,12 @@ package org.bigbluebutton.modules.videoconf.maps
 	if (!user.isPrivateChat&&!streemUser.presenter){
 	return;
 	}
-	//
+	//*/
 	webcamWindows.addWindow(window);        
 	openWindow(window);
 	dockWindow(window);  
   } 
-	*/
+	
 	
 	public function handleShowNextManagerEvent(event:ShowNextManagerEvent):void {
 		trace("+_+++++++ShowNextManagerEvent:"+event.managerID);
