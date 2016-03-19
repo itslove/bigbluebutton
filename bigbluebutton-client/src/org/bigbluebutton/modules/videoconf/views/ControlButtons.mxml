@@ -484,7 +484,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		var meetingID:String=UsersUtil.getExternalMeetingID();
 		if (! UsersUtil.isMe(sharerUserID) && meetingID.slice(-11,meetingID.length) != "PrivateChat") {
           privateChatBtn.toolTip = ResourceUtil.getInstance().getString('bbb.video.controls.privateChatBtn.toolTip', [UsersUtil.getUserName(sharerUserID)]);
-          privateChatBtn.visible = false;//true;
+          privateChatBtn.visible = true;
         } else {
           privateChatBtn.visible = false;
           privateChatBtn.includeInLayout = false;
