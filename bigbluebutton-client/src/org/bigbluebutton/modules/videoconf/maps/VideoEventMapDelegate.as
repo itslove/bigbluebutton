@@ -54,6 +54,7 @@ package org.bigbluebutton.modules.videoconf.maps
   import org.bigbluebutton.modules.videoconf.events.StartBroadcastEvent;
   import org.bigbluebutton.modules.videoconf.events.StopBroadcastEvent;
   import org.bigbluebutton.modules.videoconf.events.WebRTCWebcamRequestEvent;
+  import org.bigbluebutton.modules.videoconf.events.ShowNextManagerEvent;
   import org.bigbluebutton.modules.videoconf.model.VideoConfOptions;
   import org.bigbluebutton.modules.videoconf.views.AvatarWindow;
   import org.bigbluebutton.modules.videoconf.views.PublishWindow;
@@ -297,23 +298,21 @@ package org.bigbluebutton.modules.videoconf.maps
     }
     
     private function openViewWindowFor(userID:String):void {
-      trace("VideoEventMapDelegate:: [" + me + "] openViewWindowFor:: Opening VIEW window for [" + userID + "] [" + UsersUtil.getUserName(userID) + "]");
+      trace("VideoEventMapDelegate:: [" + me + "] openViewWindowFor:: Opening VIEW window for [" + userID + "]");
       
       var window:VideoWindow = new VideoWindow();
-      window.userID = userID;
+      window.userID = userID.split('_')[0];
       window.videoOptions = options;       
       window.resolutions = options.resolutions.split(",");
-      window.title = UsersUtil.getUserName(userID);
+      window.title = "Manager"
       
-      closeWindow(userID);
+      closeWindow(userID.split('_')[0]);
             
-      var bbbUser:BBBUser = UsersUtil.getUser(userID); 
-	  trace("stream name before:"+bbbUser.streamName);
-	  trace("presenter id:"+UsersUtil.getPresenterUserID());
-	  var streamPresenter: String = "320x240-"+UsersUtil.getPresenterUserID();
+
+	  var streamPresenter: String = "320x240-"+userID.split('_')[0];
       trace("stream name after:"+streamPresenter);
 	  
-	  window.startVideo(proxy.connection, bbbUser.streamName);
+	  window.startVideo(proxy.connection, streamPresenter);
 	  /*
 	  window.startVideo(proxy.connection, streamPresenter);
 	  var user:BBBUser = UserManager.getInstance().getConference().getUser(UsersUtil.getMyUserID());
@@ -326,6 +325,44 @@ package org.bigbluebutton.modules.videoconf.maps
       openWindow(window);
       dockWindow(window);  
     }
+	
+	/*
+	private function openViewWindowFor(userID:String):void {
+	trace("VideoEventMapDelegate:: [" + me + "] openViewWindowFor:: Opening VIEW window for [" + userID + "] [" + UsersUtil.getUserName(userID) + "]");
+	
+	var window:VideoWindow = new VideoWindow();
+	window.userID = userID;
+	window.videoOptions = options;       
+	window.resolutions = options.resolutions.split(",");
+	window.title = UsersUtil.getUserName(userID);
+	
+	closeWindow(userID);
+	
+	var bbbUser:BBBUser = UsersUtil.getUser(userID); 
+	trace("stream name before:"+bbbUser.streamName);
+	trace("presenter id:"+UsersUtil.getPresenterUserID());
+	var streamPresenter: String = "320x240-"+UsersUtil.getPresenterUserID();
+	trace("stream name after:"+streamPresenter);
+	
+	window.startVideo(proxy.connection, bbbUser.streamName);
+	/*
+	window.startVideo(proxy.connection, streamPresenter);
+	var user:BBBUser = UserManager.getInstance().getConference().getUser(UsersUtil.getMyUserID());
+	var streemUser:BBBUser = UserManager.getInstance().getConference().getUser(window.userID);
+	if (!user.isPrivateChat&&!streemUser.presenter){
+	return;
+	}
+	//
+	webcamWindows.addWindow(window);        
+	openWindow(window);
+	dockWindow(window);  
+  } 
+	*/
+	
+	public function handleShowNextManagerEvent(event:ShowNextManagerEvent):void {
+		trace("+_+++++++ShowNextManagerEvent:"+event.managerID);
+		openViewWindowFor(event.managerID);
+	}
     
     private function openWindow(window:VideoWindowItf):void {
       var windowEvent:OpenWindowEvent = new OpenWindowEvent(OpenWindowEvent.OPEN_WINDOW_EVENT);
