@@ -29,6 +29,7 @@ package org.bigbluebutton.modules.users.services
   import org.bigbluebutton.core.UsersUtil;
   import org.bigbluebutton.core.events.CoreEvent;
   import org.bigbluebutton.core.events.LockControlEvent;
+  import org.bigbluebutton.core.events.PrivateChatEvent;
   import org.bigbluebutton.core.events.VoiceConfEvent;
   import org.bigbluebutton.core.managers.UserManager;
   import org.bigbluebutton.core.model.MeetingModel;
@@ -531,8 +532,8 @@ package org.bigbluebutton.modules.users.services
 		  var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
 		  me.isPrivateChat = true;
 		  var dispatcher:Dispatcher = new Dispatcher();
-		  dispatcher.dispatchEvent(new LockControlEvent(LockControlEvent.CHANGED_LOCK_SETTINGS));
-		  
+		  //dispatcher.dispatchEvent(new LockControlEvent(LockControlEvent.CHANGED_LOCK_SETTINGS));
+		  dispatcher.dispatchEvent(new PrivateChatEvent(PrivateChatEvent.PRIVATE_CHAT));
 		  
 		  /*var timer:Timer = new Timer(7000);
 		  timer.addEventListener(TimerEvent.TIMER, _controlButtons.joinPrivateChatViewer); 
