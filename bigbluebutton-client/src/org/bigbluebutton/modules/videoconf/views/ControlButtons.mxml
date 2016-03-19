@@ -117,6 +117,9 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		//event.stopImmediatePropagation();
 			
 		//var gd:Dispatcher = new Dispatcher();
+		
+		trace("###############InternalMeetingID - " + UsersUtil.getInternalMeetingID());
+		trace("###############ExternalMeetingID - " + UsersUtil.getExternalMeetingID());
 		  
 		var urlParametersRequest:String = "/bigbluebutton/api/getMeetings?checksum=";
 		var urlParameters:String = "getMeetings" + salt;		  

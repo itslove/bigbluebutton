@@ -543,7 +543,7 @@ package org.bigbluebutton.modules.users.services
 	  } else if ((!UsersUtil.amIModerator()) && (!UsersUtil.amIPresenter()) && (UserManager.getInstance().getConference().isMyHandRaised)) {
 		  trace("*** I am VIEWER");
 		  
-		  setTimeout(_controlButtons.joinPrivateChatViewer, 7000, createMeetingID);
+		  //setTimeout(_controlButtons.joinPrivateChatViewer, 7000, createMeetingID);
 		  
 	  }
 	       

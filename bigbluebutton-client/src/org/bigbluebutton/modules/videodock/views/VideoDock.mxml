@@ -42,29 +42,29 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 	<mate:Listener type="{ShortcutEvent.MAXIMIZE_DOCK}" method="remoteMaximize" />
 	<mx:Script>
 		<![CDATA[ 
-	  import org.bigbluebutton.main.events.ShortcutEvent;
-      import com.asfusion.mate.events.Dispatcher;
-      
-      import flexlib.mdi.containers.MDIWindow;
-
-      import mx.events.ChildExistenceChangedEvent;
-      
-      import org.bigbluebutton.common.Images;
-
-      import org.bigbluebutton.common.LogUtil;
-      import org.bigbluebutton.common.events.CloseWindowEvent;
-      import org.bigbluebutton.common.events.DragWindowEvent;
-      import org.bigbluebutton.common.events.OpenWindowEvent;
-      import org.bigbluebutton.core.BBB;
-      import org.bigbluebutton.core.events.ConnectAppEvent;
-      import org.bigbluebutton.main.model.users.Conference;
-      import org.bigbluebutton.main.views.MainCanvas;
-      import org.bigbluebutton.modules.videoconf.business.VideoWindowItf;
-      import org.bigbluebutton.modules.videoconf.events.OpenVideoWindowEvent;
-      import org.bigbluebutton.modules.videoconf.events.UserTalkingEvent;
-      import org.bigbluebutton.modules.videoconf.model.VideoConfOptions;
-      import org.bigbluebutton.util.i18n.ResourceUtil;
-	  import org.bigbluebutton.common.events.LocaleChangeEvent;
+			import com.asfusion.mate.events.Dispatcher;
+			
+			import mx.events.ChildExistenceChangedEvent;
+			
+			import flexlib.mdi.containers.MDIWindow;
+			
+			import org.bigbluebutton.common.Images;
+			import org.bigbluebutton.common.LogUtil;
+			import org.bigbluebutton.common.events.CloseWindowEvent;
+			import org.bigbluebutton.common.events.DragWindowEvent;
+			import org.bigbluebutton.common.events.LocaleChangeEvent;
+			import org.bigbluebutton.common.events.OpenWindowEvent;
+			import org.bigbluebutton.core.BBB;
+			import org.bigbluebutton.core.UsersUtil;
+			import org.bigbluebutton.core.events.ConnectAppEvent;
+			import org.bigbluebutton.main.events.ShortcutEvent;
+			import org.bigbluebutton.main.model.users.Conference;
+			import org.bigbluebutton.main.views.MainCanvas;
+			import org.bigbluebutton.modules.videoconf.business.VideoWindowItf;
+			import org.bigbluebutton.modules.videoconf.events.OpenVideoWindowEvent;
+			import org.bigbluebutton.modules.videoconf.events.UserTalkingEvent;
+			import org.bigbluebutton.modules.videoconf.model.VideoConfOptions;
+			import org.bigbluebutton.util.i18n.ResourceUtil;
 			
 			private var childrenDimension:Dictionary = new Dictionary();
 			private var borderColor:String;
@@ -82,6 +82,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			private var confOptions:VideoConfOptions = new VideoConfOptions();
 			private var dispatcher:Dispatcher;			
 			private var keyCombos:Object;
+			
+			private var BUTTONS_SIZE:int = 31;
 			
 			[Bindable] 
 			private var baseIndex:int;
@@ -121,6 +123,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				maximizeRestoreBtn.tabIndex = baseIndex+2;
 				
 				closeBtn.tabIndex = baseIndex+3;
+				
+				showNextManagerButtonTest();
 				
 				if (options.maximize) this.maximize();
         
@@ -300,7 +304,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				const verticalGap:int = getStyle("verticalGap");
 				
 				var availableWidth:int = this.width - this.borderMetrics.left - this.borderMetrics.right;
-				var availableHeight:int = this.height - this.borderMetrics.top - this.borderMetrics.bottom;
+				var availableHeight:int = this.height-31 - this.borderMetrics.top - this.borderMetrics.bottom;
 				
 				var borderTop:int = 0;
 				var borderLeft:int = 0;
@@ -406,7 +410,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 					
 					// the extra padding is used to center the windows with higher aspect ratio
 					const horizontalExtraPadding:int = (wWidth - window.width) / 2;
-					const verticalExtraPadding:int = (wHeight - window.height) / 2;
+					const verticalExtraPadding:int = (wHeight - window.height+40) / 2;
 					
 					var row:int = (childIndex - (_prioritizeWindow? 1: 0)) / nColumns;
 					var column:int = (childIndex - (_prioritizeWindow? 1: 0)) % nColumns;
@@ -485,11 +489,27 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 					maximizeRestoreBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.video.maximizeRestoreBtn.accessibilityName');
 					minimizeBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.video.minimizeBtn.accessibilityName');
 				}
-			}			
+			}
+			
+			private function showNextManagerButtonTest():void {
+				// the first check is to see if the chat module is in the config.xml
+				/*var meetingID:String=UsersUtil.getExternalMeetingID();
+				if (! UsersUtil.isMe(sharerUserID) && meetingID.slice(-11,meetingID.length) != "PrivateChat") {
+					nextManagerBtn.toolTip = ResourceUtil.getInstance().getString('bbb.video.controls.nextManagerBtn.toolTip', [UsersUtil.getUserName(sharerUserID)]);
+					nextManagerBtn.visible = true;
+				} else {
+					nextManagerBtn.visible = false;
+					
+				}*/
+				nextManagerBtnTest.visible = true;
+			}
 						
 		]]>
 	</mx:Script>
 	
 	<mate:Listener type="{OpenVideoWindowEvent.OPEN_VIDEO_WINDOW_EVENT}" method="onOpenWindow" />
 	<mate:Listener type="{CloseWindowEvent.CLOSE_WINDOW_EVENT}" method="onCloseWindow" />
+	
+	<mx:Button label="Персональный чат" id="nextManagerBtnTest" toolTip="Перейти с менеджером в приватный чат" paddingTop="2" bottom="1" right="5"/>
+	
 </CustomMdiWindow>

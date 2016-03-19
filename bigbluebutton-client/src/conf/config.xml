@@ -13,7 +13,7 @@
     <browserVersions chrome="41" firefox="36" flash="17" java="1.7.0_51" />
     <layout showLogButton="false" defaultLayout="bbb.layout.name.defaultlayout"
             showToolbar="true" showFooter="false" showMeetingName="false" showHelpButton="false" 
-            showLogoutWindow="true" showLayoutTools="true" confirmLogout="true"
+            showLogoutWindow="true" showLayoutTools="false" confirmLogout="true"
             showRecordingNotification="true"/>
     <meeting muteOnStart="false" />
     <lock disableCamForLockedUsers="false" disableMicForLockedUsers="false" disablePrivateChatForLockedUsers="false" 
@@ -24,7 +24,7 @@
 		<module name="ChatModule" url="http://192.168.1.40/client/ChatModule.swf?v=268" 
 			uri="rtmp://192.168.1.40/bigbluebutton" 
 			dependsOn="UsersModule"	
-			privateEnabled="true"  
+			privateEnabled="false"  
 			fontSize="12"
 			position="top-right"
 			baseTabIndex="701"
