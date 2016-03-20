@@ -340,7 +340,20 @@
             trace(LOG + "ignoring join voice conf as usingFlash=[" + usingFlash + "] or eventMic=[" + !event.mic + "]");
           }
           break;
-		
+		case ON_LISTEN_ONLY_STREAM:
+			if (usingFlash || !event.mic) {
+				startCall(event.mic);
+			} else {
+				trace(LOG + "ignoring join voice conf as usingFlash=[" + usingFlash + "] or eventMic=[" + !event.mic + "]");
+			}
+			break;
+		case IN_CONFERENCE:
+			if (usingFlash || !event.mic) {
+				startCall(event.mic);
+			} else {
+				trace(LOG + "ignoring join voice conf as usingFlash=[" + usingFlash + "] or eventMic=[" + !event.mic + "]");
+			}
+			break;
         default:
           trace("Ignoring join voice as state=[" + state + "]");
       }

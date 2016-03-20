@@ -328,6 +328,12 @@ package org.bigbluebutton.modules.videoconf.maps
 	
 	*/
 	private function openViewWindowFor(userID:String):void {
+		var user:BBBUser = UserManager.getInstance().getConference().getUser(UsersUtil.getMyUserID());
+		var bbbUser:BBBUser = UsersUtil.getUser(userID);
+		if(user.isPrivateChat&&!bbbUser.isPrivateChat){
+			closeWindow(userID);
+			return;
+		}
 	trace("VideoEventMapDelegate:: [" + me + "] openViewWindowFor:: Opening VIEW window for [" + userID + "] [" + UsersUtil.getUserName(userID) + "]");
 	
 	var window:VideoWindow = new VideoWindow();
@@ -338,7 +344,7 @@ package org.bigbluebutton.modules.videoconf.maps
 	
 	closeWindow(userID);
 	
-	var bbbUser:BBBUser = UsersUtil.getUser(userID); 
+	 
 	trace("stream name before:"+bbbUser.streamName);
 	trace("presenter id:"+UsersUtil.getPresenterUserID());
 	var streamPresenter: String = "320x240-"+UsersUtil.getPresenterUserID();

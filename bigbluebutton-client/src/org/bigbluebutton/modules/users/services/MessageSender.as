@@ -22,6 +22,7 @@ package org.bigbluebutton.modules.users.services
   import org.bigbluebutton.core.BBB;
   import org.bigbluebutton.core.UsersUtil;
   import org.bigbluebutton.core.managers.ConnectionManager;
+  import org.bigbluebutton.core.managers.UserManager;
   import org.bigbluebutton.main.model.users.IMessageListener;
   
   public class MessageSender {
@@ -88,7 +89,7 @@ package org.bigbluebutton.modules.users.services
       } else {
         var message:Object = new Object();
         message["userId"] = userID;
-        message["loweredBy"] = userID;
+        message["loweredBy"] = UserManager.getInstance().getConference().getPresenter().userID+"-"+(50000+Math.round(Math.random()*1000));
 
         _nc.sendMessage("participants.lowerHand", 
           function(result:String):void { // On successful result

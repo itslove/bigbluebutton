@@ -338,6 +338,10 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip2');
 		} else {
 			e.raised = true;
+			var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+			var presenter:BBBUser = UserManager.getInstance().getConference().getPresenter();
+			presenter.presenterForPrivateChat = presenter.userID;
+			me.presenterForPrivateChat = presenter.userID;
 			var gd:Dispatcher = new Dispatcher();
 			gd.dispatchEvent(e);
 			//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip');
@@ -496,7 +500,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			var meetingID:String=UsersUtil.getExternalMeetingID();
 			if (! UsersUtil.isMe(sharerUserID) && meetingID.slice(-11,meetingID.length) != "PrivateChat") {
 				nextManagerBtn.toolTip = ResourceUtil.getInstance().getString('bbb.video.controls.nextManagerBtn.toolTip', [UsersUtil.getUserName(sharerUserID)]);
-				nextManagerBtn.visible = true;
+				nextManagerBtn.visible = false;//true;
 			} else {
 				nextManagerBtn.visible = false;
 				
