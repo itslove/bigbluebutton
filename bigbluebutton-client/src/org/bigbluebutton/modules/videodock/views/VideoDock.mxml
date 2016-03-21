@@ -124,6 +124,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				
 				closeBtn.tabIndex = baseIndex+3;
 				
+				showPrivateChatButtonVideoDock();
+				
 				if (options.maximize) this.maximize();
         
 		        var gDispatcher:Dispatcher = new Dispatcher();
@@ -304,7 +306,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				const verticalGap:int = getStyle("verticalGap");
 				
 				var availableWidth:int = this.width - this.borderMetrics.left - this.borderMetrics.right;
-				var availableHeight:int = this.height - this.borderMetrics.top - this.borderMetrics.bottom;
+				var availableHeight:int = this.height-31 - this.borderMetrics.top - this.borderMetrics.bottom;
 				
 				var borderTop:int = 0;
 				var borderLeft:int = 0;
@@ -410,7 +412,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 					
 					// the extra padding is used to center the windows with higher aspect ratio
 					const horizontalExtraPadding:int = (wWidth - window.width) / 2;
-					const verticalExtraPadding:int = (wHeight - window.height) / 2;
+					const verticalExtraPadding:int = (wHeight - window.height+40) / 2;
 					
 					var row:int = (childIndex - (_prioritizeWindow? 1: 0)) / nColumns;
 					var column:int = (childIndex - (_prioritizeWindow? 1: 0)) % nColumns;
@@ -490,10 +492,18 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 					minimizeBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.video.minimizeBtn.accessibilityName');
 				}
 			}			
-						
+			
+			private function showPrivateChatButtonVideoDock():void {
+				privateChatBtnVideoDock.visible = true;	
+			}
+			
 		]]>
 	</mx:Script>
 	
 	<mate:Listener type="{OpenVideoWindowEvent.OPEN_VIDEO_WINDOW_EVENT}" method="onOpenWindow" />
 	<mate:Listener type="{CloseWindowEvent.CLOSE_WINDOW_EVENT}" method="onCloseWindow" />
+	
+	<mx:Button label="{ResourceUtil.getInstance().getString('bbb.videodock.privateChatBtn')}" id="privateChatBtnVideoDock"
+			   toolTip="{ResourceUtil.getInstance().getString('bbb.videodock.privateChatBtn.toolTip')}" paddingTop="2" bottom="1" right="5"/>
+	
 </CustomMdiWindow>
