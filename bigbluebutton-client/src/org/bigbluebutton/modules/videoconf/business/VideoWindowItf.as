@@ -296,7 +296,7 @@ package org.bigbluebutton.modules.videoconf.business
 		
 		protected function hideButtons(event:MouseEvent = null):void {
 			if (_controlButtonsEnabled && controlButtons.visible == true) {
-				controlButtons.visible = false;
+				controlButtons.visible = true;//false;
 				updateButtonsPosition();
 			}
 		}

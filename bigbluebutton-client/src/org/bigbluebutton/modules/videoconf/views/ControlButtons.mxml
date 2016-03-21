@@ -453,7 +453,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			var meetingID:String=UsersUtil.getExternalMeetingID();
 			if (! UsersUtil.isMe(sharerUserID) && meetingID.slice(-11,meetingID.length) != "PrivateChat") {
 				nextManagerBtn.toolTip = ResourceUtil.getInstance().getString('bbb.video.controls.nextManagerBtn.toolTip', [UsersUtil.getUserName(sharerUserID)]);
-				nextManagerBtn.visible = true;
+				nextManagerBtn.visible = false;//true;
 			} else {
 				nextManagerBtn.visible = false;
 				
@@ -467,8 +467,10 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
              width="{BUTTONS_SIZE}" height="{BUTTONS_SIZE}" styleName="videoSwitchPresenterButtonStyle" paddingTop="2"/>
   <mx:Button id="ejectUserBtn" visible="false" click="onKickUserClicked(event)"
              width="{BUTTONS_SIZE}" height="{BUTTONS_SIZE}" styleName="videoEjectUserButtonStyle" paddingTop="2"/>
-  <mx:Button id="privateChatBtn" click="onPrivateChatClicked(event)"
-             width="{BUTTONS_SIZE}" height="{BUTTONS_SIZE}" styleName="videoPrivateChatButtonStyle" paddingTop="2"/>
+  <!--<mx:Button id="privateChatBtn" click="onPrivateChatClicked(event)"
+             width="{BUTTONS_SIZE}" height="{BUTTONS_SIZE}" styleName="videoPrivateChatButtonStyle" paddingTop="2" label="Персональный чат" toolTip="Перейти с менеджером в приватный чат"/>-->
   <mx:Button id="nextManagerBtn" click="onNextManagerClicked(event)"
 			 width="{BUTTONS_SIZE}" height="{BUTTONS_SIZE}" styleName="videoSwitchPresenterButtonStyle" paddingTop="2"/>
+	<mx:Button id="privateChatBtn" click="onPrivateChatClicked(event)"
+			   paddingTop="2" label="Персональный чат" toolTip="Перейти с менеджером в приватный чат"/>
 </mx:HBox>
