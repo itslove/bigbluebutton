@@ -524,43 +524,49 @@ package org.bigbluebutton.modules.users.services
 	  var voiceBridge:String = map.loweredBy.split("-")[1];
 	  var dispatcher:Dispatcher = new Dispatcher();
 	  var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+	  //update manager privatechat 
+	  var manager:BBBUser = UsersUtil.getUser(privatePresenter);
+	  manager.isPrivateChat = true;
+	  manager.voiceBridgeForPrivateChat = voiceBridge;	
+	  manager.presenterForPrivateChat=privatePresenter;
+	  //update viewer private chat
+	  var bbbUser:BBBUser = UsersUtil.getUser(map.userId);
+	  bbbUser.isPrivateChat = true;
+	  bbbUser.voiceBridgeForPrivateChat = voiceBridge;	
+	  bbbUser.presenterForPrivateChat=privatePresenter;
+	  var privatChatEvent:PrivateChatEvent = new PrivateChatEvent(PrivateChatEvent.PRIVATE_CHAT);
+	  privatChatEvent.managerID = privatePresenter;
+	  
 	  if ((!UsersUtil.amIModerator()) && (!UsersUtil.amIPresenter()) && (!UserManager.getInstance().getConference().isMyHandRaised)){
-		  
 		  //_controlButtons.getNextManager();  
 	  }	else if (UsersUtil.amIModerator() || UsersUtil.amIPresenter()){
 		  
-		  var manager:BBBUser = UserManager.getInstance().getConference().getMyUser();
+		 
 		  
 		  trace("*** I am MODERATOR: privatePresenter"+manager.presenterForPrivateChat+"   managerID:"+manager.userID);
-		  if (privatePresenter==manager.userID){
+		  if (privatePresenter==me.userID){
 			  trace("----*** I am manager for private chat");
 			  dispatcher.dispatchEvent(new LeaveVoiceConferenceCommand());
-			  manager.isPrivateChat = true;
-			  //me.presenterForPrivateChat = map.userId;
-			  manager.voiceBridgeForPrivateChat = voiceBridge;	
-			  manager.presenterForPrivateChat=manager.userID;
 			  
 			  dispatcher.dispatchEvent(new ShortcutEvent(ShortcutEvent.SHARE_MICROPHONE));
-			  dispatcher.dispatchEvent(new PrivateChatEvent(PrivateChatEvent.PRIVATE_CHAT));
+			  
 		  }
 		  //_controlButtons.goToPrivateChat();
 	  } else {
-		  trace("*** I am VIEWER");
-		  
-		  
-		  me.isPrivateChat = true;
-		  me.presenterForPrivateChat = privatePresenter;
-		  me.voiceBridgeForPrivateChat = voiceBridge;		  
-		  
-		  dispatcher.dispatchEvent(new ShortcutEvent(ShortcutEvent.SHARE_MICROPHONE));
-		  dispatcher.dispatchEvent(new PrivateChatEvent(PrivateChatEvent.PRIVATE_CHAT));
-		  
+		  trace("*** I am VIEWER with raiseHand");
+	  		if(me.userID==map.userId){		  
+		  		dispatcher.dispatchEvent(new ShortcutEvent(ShortcutEvent.SHARE_MICROPHONE));
+				var eventChat:CoreEvent = new CoreEvent(EventConstants.START_PRIVATE_CHAT);
+				eventChat.message.chatWith = privatePresenter;
+				dispatcher.dispatchEvent(eventChat);
+			}
 		  /*var timer:Timer = new Timer(7000);
 		  timer.addEventListener(TimerEvent.TIMER, _controlButtons.joinPrivateChatViewer); 
 		  timer.start();*/
 	  }
 	       
       UserManager.getInstance().getConference().raiseHand(map.userId, false);
+	  dispatcher.dispatchEvent(privatChatEvent);
     }
 	
     private function handleUserSharedWebcam(msg: Object):void {

@@ -23,24 +23,26 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 <EventMap xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="http://mate.asfusion.com/">
 	<mx:Script>
 		<![CDATA[
-      import org.bigbluebutton.common.events.ToolbarButtonEvent;
-      import org.bigbluebutton.core.events.ConnectAppEvent;
-      import org.bigbluebutton.main.events.BBBEvent;
-      import org.bigbluebutton.main.events.MadePresenterEvent;
-      import org.bigbluebutton.main.events.StoppedViewingWebcamEvent;
-      import org.bigbluebutton.main.events.UserJoinedEvent;
-      import org.bigbluebutton.main.events.UserLeftEvent;
-      import org.bigbluebutton.main.model.users.events.StreamStartedEvent;
-      import org.bigbluebutton.modules.users.events.ViewCameraEvent;
-      import org.bigbluebutton.modules.videoconf.events.ClosePublishWindowEvent;
-      import org.bigbluebutton.modules.videoconf.events.ConnectedEvent;
-      import org.bigbluebutton.modules.videoconf.events.ShareCameraRequestEvent;
-      import org.bigbluebutton.modules.videoconf.events.StartBroadcastEvent;
-      import org.bigbluebutton.modules.videoconf.events.StopBroadcastEvent;
-      import org.bigbluebutton.modules.videoconf.events.VideoModuleStartEvent;
-      import org.bigbluebutton.modules.videoconf.events.VideoModuleStopEvent;
-      import org.bigbluebutton.modules.videoconf.events.WebRTCWebcamRequestEvent;	
-	  import org.bigbluebutton.modules.videoconf.events.ShowNextManagerEvent;
+			import org.bigbluebutton.common.events.ToolbarButtonEvent;
+			import org.bigbluebutton.core.events.ConnectAppEvent;
+			import org.bigbluebutton.core.events.PrivateChatEvent;
+			import org.bigbluebutton.main.events.BBBEvent;
+			import org.bigbluebutton.main.events.MadePresenterEvent;
+			import org.bigbluebutton.main.events.PresenterStatusEvent;
+			import org.bigbluebutton.main.events.StoppedViewingWebcamEvent;
+			import org.bigbluebutton.main.events.UserJoinedEvent;
+			import org.bigbluebutton.main.events.UserLeftEvent;
+			import org.bigbluebutton.main.model.users.events.StreamStartedEvent;
+			import org.bigbluebutton.modules.users.events.ViewCameraEvent;
+			import org.bigbluebutton.modules.videoconf.events.ClosePublishWindowEvent;
+			import org.bigbluebutton.modules.videoconf.events.ConnectedEvent;
+			import org.bigbluebutton.modules.videoconf.events.ShareCameraRequestEvent;
+			import org.bigbluebutton.modules.videoconf.events.ShowNextManagerEvent;
+			import org.bigbluebutton.modules.videoconf.events.StartBroadcastEvent;
+			import org.bigbluebutton.modules.videoconf.events.StopBroadcastEvent;
+			import org.bigbluebutton.modules.videoconf.events.VideoModuleStartEvent;
+			import org.bigbluebutton.modules.videoconf.events.VideoModuleStopEvent;
+			import org.bigbluebutton.modules.videoconf.events.WebRTCWebcamRequestEvent;
 		]]>
 	</mx:Script>
 	
@@ -121,7 +123,13 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 <EventHandlers type="{ShowNextManagerEvent.SHOW_NEXT_MANAGER}">
 	<MethodInvoker generator="{VideoEventMapDelegate}" method="handleShowNextManagerEvent"  arguments="{event}"/>
 </EventHandlers>
-  
+	
+<EventHandlers type="{PrivateChatEvent.PRIVATE_CHAT}">
+	<MethodInvoker generator="{VideoEventMapDelegate}" method="handlePrivateChatEvent"  arguments="{event}"/>
+</EventHandlers>
+	
+	
+	
   <!-- ~~~~~~~~~~~~~~~~~~    INJECTORS     ~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
   
 </EventMap>

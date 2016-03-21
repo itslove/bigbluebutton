@@ -40,33 +40,38 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 	<mate:Listener type="{ShortcutEvent.FOCUS_VIDEO_WINDOW}" method="focusWindow" />
 	<mate:Listener type="{ShortcutEvent.MINIMIZE_DOCK}" method="remoteMinimize" />
 	<mate:Listener type="{ShortcutEvent.MAXIMIZE_DOCK}" method="remoteMaximize" />
+	<mate:Listener type="{PrivateChatEvent.PRIVATE_CHAT}" method="privateChatVisible" />
+
 	<mx:Script>
 		<![CDATA[ 
-	  import com.asfusion.mate.events.Dispatcher;
-	  
-	  import mx.events.ChildExistenceChangedEvent;
-	  
-	  import flexlib.mdi.containers.MDIWindow;
-	  
-	  import org.bigbluebutton.common.Images;
-	  import org.bigbluebutton.common.LogUtil;
-	  import org.bigbluebutton.common.events.CloseWindowEvent;
-	  import org.bigbluebutton.common.events.DragWindowEvent;
-	  import org.bigbluebutton.common.events.LocaleChangeEvent;
-	  import org.bigbluebutton.common.events.OpenWindowEvent;
-	  import org.bigbluebutton.core.BBB;
-	  import org.bigbluebutton.core.UsersUtil;
-	  import org.bigbluebutton.core.events.ConnectAppEvent;
-	  import org.bigbluebutton.core.managers.UserManager;
-	  import org.bigbluebutton.main.events.ShortcutEvent;
-	  import org.bigbluebutton.main.model.users.BBBUser;
-	  import org.bigbluebutton.main.model.users.Conference;
-	  import org.bigbluebutton.main.views.MainCanvas;
-	  import org.bigbluebutton.modules.videoconf.business.VideoWindowItf;
-	  import org.bigbluebutton.modules.videoconf.events.OpenVideoWindowEvent;
-	  import org.bigbluebutton.modules.videoconf.events.UserTalkingEvent;
-	  import org.bigbluebutton.modules.videoconf.model.VideoConfOptions;
-	  import org.bigbluebutton.util.i18n.ResourceUtil;
+			import com.asfusion.mate.events.Dispatcher;
+			
+			import mx.events.ChildExistenceChangedEvent;
+			
+			import flexlib.mdi.containers.MDIWindow;
+			
+			import org.bigbluebutton.common.Images;
+			import org.bigbluebutton.common.LogUtil;
+			import org.bigbluebutton.common.events.CloseWindowEvent;
+			import org.bigbluebutton.common.events.DragWindowEvent;
+			import org.bigbluebutton.common.events.LocaleChangeEvent;
+			import org.bigbluebutton.common.events.OpenWindowEvent;
+			import org.bigbluebutton.core.BBB;
+			import org.bigbluebutton.core.UsersUtil;
+			import org.bigbluebutton.core.events.ConnectAppEvent;
+			import org.bigbluebutton.core.events.LockControlEvent;
+			import org.bigbluebutton.core.events.PrivateChatEvent;
+			import org.bigbluebutton.core.managers.UserManager;
+			import org.bigbluebutton.main.events.ShortcutEvent;
+			import org.bigbluebutton.main.model.users.BBBUser;
+			import org.bigbluebutton.main.model.users.Conference;
+			import org.bigbluebutton.main.model.users.events.RaiseHandEvent;
+			import org.bigbluebutton.main.views.MainCanvas;
+			import org.bigbluebutton.modules.videoconf.business.VideoWindowItf;
+			import org.bigbluebutton.modules.videoconf.events.OpenVideoWindowEvent;
+			import org.bigbluebutton.modules.videoconf.events.UserTalkingEvent;
+			import org.bigbluebutton.modules.videoconf.model.VideoConfOptions;
+			import org.bigbluebutton.util.i18n.ResourceUtil;
 			
 			private var childrenDimension:Dictionary = new Dictionary();
 			private var borderColor:String;
@@ -123,6 +128,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				maximizeRestoreBtn.tabIndex = baseIndex+2;
 				
 				closeBtn.tabIndex = baseIndex+3;
+				
+				showPrivateChatButtonVideoDock();
 				
 				if (options.maximize) this.maximize();
         
@@ -304,7 +311,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				const verticalGap:int = getStyle("verticalGap");
 				
 				var availableWidth:int = this.width - this.borderMetrics.left - this.borderMetrics.right;
-				var availableHeight:int = this.height - this.borderMetrics.top - this.borderMetrics.bottom;
+				var availableHeight:int = this.height-31 - this.borderMetrics.top - this.borderMetrics.bottom;
 				
 				var borderTop:int = 0;
 				var borderLeft:int = 0;
@@ -410,7 +417,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 					
 					// the extra padding is used to center the windows with higher aspect ratio
 					const horizontalExtraPadding:int = (wWidth - window.width) / 2;
-					const verticalExtraPadding:int = (wHeight - window.height) / 2;
+					const verticalExtraPadding:int = (wHeight - window.height+40) / 2;
 					
 					var row:int = (childIndex - (_prioritizeWindow? 1: 0)) / nColumns;
 					var column:int = (childIndex - (_prioritizeWindow? 1: 0)) % nColumns;
@@ -490,10 +497,47 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 					minimizeBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.video.minimizeBtn.accessibilityName');
 				}
 			}			
+			
+			private function showPrivateChatButtonVideoDock():void {
+				var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+				if(!me.isPrivateChat&&!UsersUtil.amIModerator()){
+							privateChatBtnVideoDock.visible = true;	
+				}else{
+					privateChatBtnVideoDock.visible = false;	
+				}
+			}
+			
+			public function privateChatVisible(e:PrivateChatEvent):void{
+				showPrivateChatButtonVideoDock();
+			}
+			
+			private function onPrivateChatClicked(event:Event):void {
+				event.stopImmediatePropagation();
+				
+				//var e:CoreEvent = new CoreEvent(EventConstants.START_PRIVATE_CHAT);
+				//e.message.chatWith = sharerUserID;
+				var e:RaiseHandEvent = new RaiseHandEvent(RaiseHandEvent.RAISE_HAND);
+				if (UserManager.getInstance().getConference().isMyHandRaised) {
+					e.raised = false;
+					//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip2');
+				} else {
+					e.raised = true;
+					var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+					var presenter:BBBUser = UserManager.getInstance().getConference().getPresenter();
+					presenter.presenterForPrivateChat = presenter.userID;
+					me.presenterForPrivateChat = presenter.userID;
+					var gd:Dispatcher = new Dispatcher();
+					gd.dispatchEvent(e);
+					//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip');
+				}
+				
+			}
 						
 		]]>
 	</mx:Script>
 	
 	<mate:Listener type="{OpenVideoWindowEvent.OPEN_VIDEO_WINDOW_EVENT}" method="onOpenWindow" />
 	<mate:Listener type="{CloseWindowEvent.CLOSE_WINDOW_EVENT}" method="onCloseWindow" />
+	<mx:Button label="{ResourceUtil.getInstance().getString('bbb.videodock.privateChatBtn')}" id="privateChatBtnVideoDock" toolTip="{ResourceUtil.getInstance().getString('bbb.videodock.privateChatBtn.toolTip')}" paddingTop="2" bottom="1" right="5" click="onPrivateChatClicked(event)"/>
+
 </CustomMdiWindow>
