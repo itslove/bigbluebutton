@@ -305,13 +305,18 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			}
 			
 			private function updateChildrenDimensions(children:Array):void {
+				var padding:int = 0;
+				
 				if (children.length == 0) return;
 				
 				const horizontalGap:int = getStyle("horizontalGap");
 				const verticalGap:int = getStyle("verticalGap");
 				
 				var availableWidth:int = this.width - this.borderMetrics.left - this.borderMetrics.right;
-				var availableHeight:int = this.height-31 - this.borderMetrics.top - this.borderMetrics.bottom;
+				if (!UsersUtil.amIModerator()){
+					padding = 60;
+				}
+				var availableHeight:int = this.height-padding - this.borderMetrics.top - this.borderMetrics.bottom;
 				
 				var borderTop:int = 0;
 				var borderLeft:int = 0;
