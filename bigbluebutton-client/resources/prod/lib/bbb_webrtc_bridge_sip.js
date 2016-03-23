@@ -40,6 +40,7 @@ function webRTCCallback(message) {
 function callIntoConference(voiceBridge, callback) {
 	if (!callerIdName) {
 		BBB.getMyUserInfo(function(userInfo) {
+			console.log(userInfo);
 			console.log("User info callback [myUserID=" + userInfo.myUserID
 				+ ",myUsername=" + userInfo.myUsername + ",myAvatarURL=" + userInfo.myAvatarURL
 				+ ",myRole=" + userInfo.myRole + ",amIPresenter=" + userInfo.amIPresenter

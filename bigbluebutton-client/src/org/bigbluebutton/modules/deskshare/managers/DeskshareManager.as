@@ -23,7 +23,9 @@ package org.bigbluebutton.modules.deskshare.managers
 	
 	import org.bigbluebutton.common.LogUtil;
 	import org.bigbluebutton.core.UsersUtil;
+	import org.bigbluebutton.core.managers.UserManager;
 	import org.bigbluebutton.main.events.MadePresenterEvent;
+	import org.bigbluebutton.main.model.users.BBBUser;
 	import org.bigbluebutton.modules.deskshare.model.DeskshareOptions;
 	import org.bigbluebutton.modules.deskshare.services.DeskshareService;
 			
@@ -49,7 +51,7 @@ package org.bigbluebutton.modules.deskshare.managers
 			this.module = module;			
 			service.handleStartModuleEvent(module);
       
-      if (UsersUtil.amIPresenter()) {
+      if (UsersUtil.amIPresenter()||UsersUtil.amIModerator()) {
         initDeskshare();
       }
       
@@ -96,11 +98,18 @@ package org.bigbluebutton.modules.deskshare.managers
 		
 		public function handleMadeViewerEvent(e:MadePresenterEvent):void{
 			LogUtil.debug("Got MadeViewerEvent ");
-			toolbarButtonManager.removeToolbarButton();
-			if (sharing) {
-				publishWindowManager.stopSharing();
+			if(UsersUtil.amIModerator()){
+				initDeskshare();
+			}else{
+				toolbarButtonManager.removeToolbarButton();
+				if (sharing) {
+					publishWindowManager.stopSharing();
+				}
+				sharing = false;
 			}
-			sharing = false;
+			
+			
+			
 		}
 		
 		public function handleStartSharingEvent(autoStart:Boolean):void {

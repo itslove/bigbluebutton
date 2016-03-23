@@ -28,6 +28,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 	
 	<mate:Listener type="{MadePresenterEvent.SWITCH_TO_PRESENTER_MODE}" method="handleBecomePresenter" />
 	<mate:Listener type="{MadePresenterEvent.SWITCH_TO_VIEWER_MODE}" method="handleBecomeViewer" />
+	<mate:Listener type="{PrivateChatEvent.PRIVATE_CHAT}" method="nandlePrivateChat" />
 	
 	<mx:Script>
 		<![CDATA[
@@ -45,6 +46,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			import org.bigbluebutton.modules.phone.events.AudioSelectionWindowEvent;
 			import org.bigbluebutton.modules.phone.events.JoinVoiceConferenceCommand;
 			import org.bigbluebutton.util.i18n.ResourceUtil;
+			import org.bigbluebutton.core.events.PrivateChatEvent;
 			
 			private var phoneOptions:PhoneOptions = new PhoneOptions;
 			
@@ -53,9 +55,11 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			private function init():void {
 				var conference:Conference = UserManager.getInstance().getConference();
 				
+				var thisUser:BBBUser = conference.getMyUser();
+				
 				if (!phoneOptions.listenOnlyMode) btnListenOnly.enabled = false;
 				if (
-					(phoneOptions.presenterShareOnly && !UsersUtil.amIPresenter() && !UsersUtil.amIModerator())
+					(phoneOptions.presenterShareOnly && !UsersUtil.amIPresenter() && !UsersUtil.amIModerator()&& !thisUser.isPrivateChat)
 				) {
 					btnMicrophone.enabled = false;
 				}
@@ -114,6 +118,12 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			
 			private function handleBecomeViewer(e:MadePresenterEvent):void {
 				if (phoneOptions.presenterShareOnly && !UsersUtil.amIModerator()) btnMicrophone.enabled = false;
+			}
+			
+			private function nandlePrivateChat(e:PrivateChatEvent): void {
+				var conference:Conference = UserManager.getInstance().getConference();
+				var thisUser:BBBUser = conference.getMyUser();
+				if (thisUser.isPrivateChat) btnMicrophone.enabled = true;
 			}
 		]]>
 	</mx:Script>

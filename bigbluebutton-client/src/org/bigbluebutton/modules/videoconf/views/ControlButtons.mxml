@@ -47,6 +47,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		import org.bigbluebutton.modules.chat.model.ChatOptions;
 		import org.bigbluebutton.modules.users.model.UsersOptions;
 		import org.bigbluebutton.modules.videoconf.model.VideoConfOptions;
+		import org.bigbluebutton.modules.videoconf.events.ShowNextManagerEvent;
 		import org.bigbluebutton.util.i18n.ResourceUtil;
 			
       public var sharerUserID:String;
@@ -107,7 +108,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 	  private function onNextManagerClicked(event:Event):void {
 			event.stopImmediatePropagation();
 			
-			var gd:Dispatcher = new Dispatcher();
+			//var gd:Dispatcher = new Dispatcher();
 			
 			//gd.dispatchEvent(e);			
 			getNextManager();
@@ -180,9 +181,51 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				indexList = indexList + 1;
 			}
 			//trace(LOG + "meetingid: "+currentMeetingID+"   time "+currentMeetingTime + "    array " + times + "   indexList " + indexList + "   MeetingID" + meetingsMap[times[indexList]] + "   meetingsMap" + meetingsMap);
-			var nextManager:String = meetingsMap[times[indexList]];
-			redirectToNextManager(nextManager);
+			var nextMitingId:String = meetingsMap[times[indexList]];
+			trace(LOG + "========nextMitingId : "+nextMitingId);
+			//------------------get manager id from meeting info
+			var urlParametersRequest:String = "/bigbluebutton/api/getMeetingInfo?meetingID="+nextMitingId+"&password="+moderatorPW+"&checksum=";
+			var urlParameters:String = "getMeetingInfomeetingID="+nextMitingId+"&password="+moderatorPW + salt;		  
+			var checksum:String = SHA1.hash(urlParameters);
+			urlParametersRequest = urlParametersRequest+checksum;
 			
+			var request:URLRequest = new URLRequest(urlParametersRequest);
+			trace(LOG + "========+++url : "+urlParametersRequest);
+			request.method = URLRequestMethod.GET;		
+			
+			var urlLoader:URLLoader;
+			
+			urlLoader = new URLLoader();
+			urlLoader.addEventListener(Event.COMPLETE, getNetxManagerId);	
+			urlLoader.load(request);
+			//redirectToNextManager(nextMitingId);
+			
+		}
+		
+		private function getNetxManagerId(e:Event):void{
+			var xml:XML = new XML(e.target.data);
+			LogUtil.debug("load URL complete: " + xml);
+			
+			var returncode:String = xml.returncode;
+			LogUtil.debug("return code: " + returncode);
+			if (returncode != 'SUCCESS') {
+				LogUtil.debug("failed to load any dynamic info to add to the UI");
+				return;
+			}
+						
+			var attendees:XMLList = xml.attendees.children();
+			var nextManagerID:String = '';
+			for each(var attendeeXML:XML in attendees) {
+				if(attendeeXML.role=='MODERATOR'){
+					nextManagerID=attendeeXML.userID;
+					break;
+				}
+			}
+			trace(LOG + "___________****NEXT MANAGER ID: "+nextManagerID);
+			var event:ShowNextManagerEvent= new ShowNextManagerEvent();
+			event.managerID=nextManagerID;
+			var gd:Dispatcher = new Dispatcher();
+			gd.dispatchEvent(event);
 		}
 		
 		private function redirectToNextManager(nextManager:String):void {
@@ -216,8 +259,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			var paramWelcome:String = "&welcome=Welcome"//+ "Вы вошли в приватный чат.";
 			var paramAttendeePW:String = "&attendeePW=" + privateAttendeePW;
 			var paramModeratorPW:String = "&moderatorPW=" + privateModeratorPW;
-			var paramVoiceBridge:String = "&voiceBridge="+(70000+Math.round(Math.random()*1000)); //CHANGE!!!!!!!!!!!!!
-			var paramLogoutURL:String = "&logoutURL=/"//CHANGE!!!!!!!!!!!!!
+			var paramVoiceBridge:String = "&voiceBridge="+(70000+Math.round(Math.random()*1000));
+			var paramLogoutURL:String = "&logoutURL=/"
 							
 			var urlParametersCreateMeeting:String = "/bigbluebutton/api/create?" + paramName + paramMetengID + paramWelcome + paramAttendeePW + paramModeratorPW + paramVoiceBridge + paramLogoutURL + "&checksum=";
 			var urlParametersCreateMeetingSalt:String = "create" + paramName + paramMetengID + paramWelcome + paramAttendeePW + paramModeratorPW + paramVoiceBridge + paramLogoutURL + salt;
@@ -295,6 +338,10 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip2');
 		} else {
 			e.raised = true;
+			var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+			var presenter:BBBUser = UserManager.getInstance().getConference().getPresenter();
+			presenter.presenterForPrivateChat = presenter.userID;
+			me.presenterForPrivateChat = presenter.userID;
 			var gd:Dispatcher = new Dispatcher();
 			gd.dispatchEvent(e);
 			//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip');
@@ -441,7 +488,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		var meetingID:String=UsersUtil.getExternalMeetingID();
 		if (! UsersUtil.isMe(sharerUserID) && meetingID.slice(-11,meetingID.length) != "PrivateChat") {
           privateChatBtn.toolTip = ResourceUtil.getInstance().getString('bbb.video.controls.privateChatBtn.toolTip', [UsersUtil.getUserName(sharerUserID)]);
-          privateChatBtn.visible = true;
+          privateChatBtn.visible = false;//true;
         } else {
           privateChatBtn.visible = false;
           privateChatBtn.includeInLayout = false;
