@@ -19,14 +19,17 @@
 package org.bigbluebutton.modules.users.services
 {
   import com.asfusion.mate.events.Dispatcher;
-  import flash.utils.Timer;
+  
   import flash.events.TimerEvent;
+  import flash.utils.Timer;
   
   import org.bigbluebutton.common.LogUtil;
   import org.bigbluebutton.core.BBB;
   import org.bigbluebutton.core.EventConstants;
   import org.bigbluebutton.core.UsersUtil;
   import org.bigbluebutton.core.events.CoreEvent;
+  import org.bigbluebutton.core.events.LockControlEvent;
+  import org.bigbluebutton.core.events.PrivateChatEvent;
   import org.bigbluebutton.core.events.VoiceConfEvent;
   import org.bigbluebutton.core.managers.UserManager;
   import org.bigbluebutton.core.model.MeetingModel;
@@ -37,6 +40,7 @@ package org.bigbluebutton.modules.users.services
   import org.bigbluebutton.main.events.BBBEvent;
   import org.bigbluebutton.main.events.MadePresenterEvent;
   import org.bigbluebutton.main.events.PresenterStatusEvent;
+  import org.bigbluebutton.main.events.ShortcutEvent;
   import org.bigbluebutton.main.events.SwitchedPresenterEvent;
   import org.bigbluebutton.main.events.UserJoinedEvent;
   import org.bigbluebutton.main.events.UserLeftEvent;
@@ -45,12 +49,14 @@ package org.bigbluebutton.modules.users.services
   import org.bigbluebutton.main.model.users.IMessageListener;
   import org.bigbluebutton.main.model.users.events.RoleChangeEvent;
   import org.bigbluebutton.main.model.users.events.UsersConnectionEvent;
+  import org.bigbluebutton.modules.phone.events.LeaveVoiceConferenceCommand;
   import org.bigbluebutton.modules.present.events.CursorEvent;
   import org.bigbluebutton.modules.present.events.NavigationEvent;
   import org.bigbluebutton.modules.present.events.RemovePresentationEvent;
   import org.bigbluebutton.modules.present.events.UploadEvent;
   import org.bigbluebutton.modules.users.events.MeetingMutedEvent;
   import org.bigbluebutton.modules.videoconf.views.ControlButtons;
+  import org.bigbluebutton.modules.videoconf.views.ToolbarButton;
 
   
   public class MessageReceiver implements IMessageListener
@@ -61,6 +67,7 @@ package org.bigbluebutton.modules.users.services
     private var _conference:Conference;
     private static var globalDispatcher:Dispatcher = new Dispatcher();
 	private var _controlButtons:ControlButtons = new ControlButtons();
+	private var _toolbarButton:ToolbarButton = new ToolbarButton();
 	
     public function MessageReceiver() {
       _conference = UserManager.getInstance().getConference();
@@ -513,22 +520,53 @@ package org.bigbluebutton.modules.users.services
 	  //if (UsersUtil.isMe(map.userId)){
 		//Nothing  
 	  //}
-	  
+	  var privatePresenter: String = map.loweredBy.split("-")[0]
+	  var voiceBridge:String = map.loweredBy.split("-")[1];
+	  var dispatcher:Dispatcher = new Dispatcher();
+	  var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+	  //update manager privatechat 
+	  var manager:BBBUser = UsersUtil.getUser(privatePresenter);
+	  manager.isPrivateChat = true;
+	  manager.voiceBridgeForPrivateChat = voiceBridge;	
+	  manager.presenterForPrivateChat=privatePresenter;
+	  //update viewer private chat
+	  var bbbUser:BBBUser = UsersUtil.getUser(map.userId);
+	  bbbUser.isPrivateChat = true;
+	  bbbUser.voiceBridgeForPrivateChat = voiceBridge;	
+	  bbbUser.presenterForPrivateChat=privatePresenter;
+	  var privatChatEvent:PrivateChatEvent = new PrivateChatEvent(PrivateChatEvent.PRIVATE_CHAT);
+	  privatChatEvent.managerID = privatePresenter;
 	  
 	  if ((!UsersUtil.amIModerator()) && (!UsersUtil.amIPresenter()) && (!UserManager.getInstance().getConference().isMyHandRaised)){
-		  _controlButtons.getNextManager();  
+		  //_controlButtons.getNextManager();  
 	  }	else if (UsersUtil.amIModerator() || UsersUtil.amIPresenter()){
-		  trace("*** I am MODERATOR");
-		  _controlButtons.goToPrivateChat();
-	  } else {
-		  trace("*** I am VIEWER");
 		  
-		  var timer:Timer = new Timer(7000);
+		 
+		  
+		  trace("*** I am MODERATOR: privatePresenter"+manager.presenterForPrivateChat+"   managerID:"+manager.userID);
+		  if (privatePresenter==me.userID){
+			  trace("----*** I am manager for private chat");
+			  dispatcher.dispatchEvent(new LeaveVoiceConferenceCommand());
+			  
+			  dispatcher.dispatchEvent(new ShortcutEvent(ShortcutEvent.SHARE_MICROPHONE));
+			  
+		  }
+		  //_controlButtons.goToPrivateChat();
+	  } else {
+		  trace("*** I am VIEWER with raiseHand");
+	  		if(me.userID==map.userId){		  
+		  		dispatcher.dispatchEvent(new ShortcutEvent(ShortcutEvent.SHARE_MICROPHONE));
+				var eventChat:CoreEvent = new CoreEvent(EventConstants.START_PRIVATE_CHAT);
+				eventChat.message.chatWith = privatePresenter;
+				dispatcher.dispatchEvent(eventChat);
+			}
+		  /*var timer:Timer = new Timer(7000);
 		  timer.addEventListener(TimerEvent.TIMER, _controlButtons.joinPrivateChatViewer); 
-		  timer.start();
+		  timer.start();*/
 	  }
 	       
       UserManager.getInstance().getConference().raiseHand(map.userId, false);
+	  dispatcher.dispatchEvent(privatChatEvent);
     }
 	
     private function handleUserSharedWebcam(msg: Object):void {

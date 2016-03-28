@@ -431,9 +431,10 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				 */	 	
 				var d:Date = new Date();
 				var curTime:Number = d.getTime();	
-				var uid:String = UserManager.getInstance().getConference().getMyUserId();
+				var uid:String = UserManager.getInstance().getConference().getMyUserId().split('_')[0];
 				var res:String = camWidth + "x" + camHeight;
-				this.streamName = res.concat("-" + uid) + "-" + curTime;
+				this.streamName = res.concat("-" + uid);
+				//this.streamName = res.concat("-" + uid) + "-" + curTime;
 			}
 			
 			private function isPresenter():Boolean{

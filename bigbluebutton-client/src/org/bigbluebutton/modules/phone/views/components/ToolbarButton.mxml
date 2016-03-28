@@ -35,6 +35,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
   <mate:Listener type="{WebRTCCallEvent.WEBRTC_CALL_STARTED}" method="handleWebRTCCallStartedEvent" />
   <mate:Listener type="{WebRTCCallEvent.WEBRTC_CALL_ENDED}" method="handleWebRTCCallEndedEvent" />
   <mate:Listener type="{AudioSelectionWindowEvent.CLOSED_AUDIO_SELECTION}" method="handleClosedAudioSelectionWindowEvent" />
+	<mate:Listener type="{ShortcutEvent.SHARE_MICROPHONE}" method="remoteClick" />
   
 	<mx:Script>
 		<![CDATA[
@@ -56,6 +57,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			import org.bigbluebutton.modules.phone.events.LeaveVoiceConferenceCommand;
 			import org.bigbluebutton.modules.phone.events.WebRTCCallEvent;
 			import org.bigbluebutton.util.i18n.ResourceUtil;
+			
 			
       private static const LOG:String = "Phone::ToolbarButton - ";
       
@@ -123,7 +125,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 					if (phoneOptions.skipCheck || thisUser.disableMyMic) {
 						var command:JoinVoiceConferenceCommand = new JoinVoiceConferenceCommand();
 						if (
-							(phoneOptions.presenterShareOnly && !UsersUtil.amIPresenter() && !UsersUtil.amIModerator())
+							(phoneOptions.presenterShareOnly && !UsersUtil.amIPresenter() && !UsersUtil.amIModerator()&&!thisUser.isPrivateChat)
 							|| thisUser.disableMyMic
 						) {
 							command.mic = false;
@@ -138,7 +140,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 					}
 				}
 			}
-
+			
       private function onUserJoinedConference():void {
         this.selected = true;
         this.enabled = true;

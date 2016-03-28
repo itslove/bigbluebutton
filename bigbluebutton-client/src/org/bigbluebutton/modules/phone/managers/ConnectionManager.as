@@ -25,14 +25,15 @@ package org.bigbluebutton.modules.phone.managers {
 	import flash.events.IEventDispatcher;
 	import flash.events.NetStatusEvent;
 	import flash.events.SecurityErrorEvent;
-	import flash.external.*;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 	
 	import org.bigbluebutton.common.LogUtil;
 	import org.bigbluebutton.core.BBB;
 	import org.bigbluebutton.core.UsersUtil;
+	import org.bigbluebutton.core.managers.UserManager;
 	import org.bigbluebutton.main.api.JSLog;
+	import org.bigbluebutton.main.model.users.BBBUser;
 	import org.bigbluebutton.modules.phone.events.ConnectionStatusEvent;
 	import org.bigbluebutton.modules.phone.events.FlashCallConnectedEvent;
 	import org.bigbluebutton.modules.phone.events.FlashCallDisconnectedEvent;
@@ -76,7 +77,13 @@ package org.bigbluebutton.modules.phone.managers {
       trace(LOG + "Setup uid=[" + uid + "] extuid=[" + externUserId + "] name=[" + username + "] uri=[" + uri + "]");
       this.uid = uid;	
       this.username  = username;
-      this.meetingId = meetingId;
+	  var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+	  if (me.role=="VIEWER" ){
+		  trace("==========SETUP PRIVATE CHAT");
+      	this.meetingId = "test";
+	  }else{
+		  this.meetingId = meetingId;
+	  }
       this.uri   = uri;
       this.externUserId = externUserId;
     }
@@ -94,7 +101,10 @@ package org.bigbluebutton.modules.phone.managers {
 			netConnection.client = this;
 			netConnection.addEventListener( NetStatusEvent.NET_STATUS , netStatus );
 			netConnection.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+			var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
 			netConnection.connect(uri, meetingId, externUserId, username);
+			
+			
 		}
 
 		public function disconnect(requestByUser:Boolean):void {
@@ -176,8 +186,15 @@ package org.bigbluebutton.modules.phone.managers {
 		//
 		//********************************************************************************************		
 		public function doCall(dialStr:String, listenOnly:Boolean = false):void {
+			
 			trace(LOG + "in doCall - Calling " + dialStr + (listenOnly? " *listen only*": ""));
-			netConnection.call("voiceconf.call", null, "default", username, dialStr, listenOnly.toString());
+			var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+			if (me.isPrivateChat){
+				trace("==========CONNECT PRIVATE CHAT");
+				netConnection.call("voiceconf.call", null, "default", username, me.voiceBridgeForPrivateChat, listenOnly.toString());
+			}else{		
+				netConnection.call("voiceconf.call", null, "default", username, dialStr, listenOnly.toString());
+			}
 		}
 				
 		public function doHangUp():void {			
