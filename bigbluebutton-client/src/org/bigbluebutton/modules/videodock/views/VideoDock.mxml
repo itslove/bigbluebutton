@@ -523,11 +523,14 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				//var e:CoreEvent = new CoreEvent(EventConstants.START_PRIVATE_CHAT);
 				//e.message.chatWith = sharerUserID;
 				var e:RaiseHandEvent = new RaiseHandEvent(RaiseHandEvent.RAISE_HAND);
+				
 				if (UserManager.getInstance().getConference().isMyHandRaised) {
 					e.raised = false;
 					//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip2');
 				} else {
 					e.raised = true;
+					privateChatBtnVideoDock.setStyle("fillColors", new Array(0x78797a, 0x78797a));
+					privateChatBtnVideoDock.setStyle("fillAlphas", new Array(1.0, 1.0));
 					var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
 					var presenter:BBBUser = UserManager.getInstance().getConference().getPresenter();
 					presenter.presenterForPrivateChat = presenter.userID;
@@ -537,8 +540,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 					//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip');
 				}
 				
-			}
-						
+			}	
 
 		]]>
 	</mx:Script>
