@@ -111,6 +111,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				minimizeBtn.tabIndex = baseIndex+1;
 				maximizeRestoreBtn.tabIndex = baseIndex+2;
 				closeBtn.tabIndex = baseIndex+3;
+				
+				//windowManager.absPos(this, 1, 250);
 			}
 			
 			private function onResizeEndEvent(event:MDIWindowEvent):void {
@@ -132,6 +134,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
                 if (cursor.y > videoHolder.y + videoHolder.height) cursor.y = videoHolder.y + videoHolder.height;
                 cursorImg.x = cursor.x;
                 cursorImg.y = cursor.y;
+				//windowManager.absPos(this, 1, 250);
 			}
 			
 			public function startVideo(connection:NetConnection, stream:String, width:Number, height:Number):void{
@@ -154,7 +157,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				ns.play(stream);	
 				this.stream = stream;
 				this.title = "Viewing Remote Desktop";
-       
+				//windowManager.absPos(this, 1, 250);
 			}
 			
       protected function updateButtonsPosition():void {
@@ -201,7 +204,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			}
 			
 			public function getPrefferedPosition():String{
-				return MainCanvas.TOP_RIGHT;
+				return MainCanvas.DESKTOP_SHARING_VIEW;
 			}
 												
 			/**
@@ -233,6 +236,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				videoHolder.height = videoHeight;			
 				this.height = videoHeight + VIDEO_HEIGHT_PADDING;
 				this.width = videoWidth + VIDEO_WIDTH_PADDING;
+				//windowManager.absPos(this, 1, 250);
 			}
 			
 			private function videoIsSmallerThanWindow():Boolean {

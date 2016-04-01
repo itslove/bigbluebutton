@@ -152,6 +152,10 @@ package org.bigbluebutton.modules.deskshare.services.red5
 			uri = p_URI;
 		}
 		
+		public function setRoom(p_room:String):void{
+			room=p_room;
+		}
+		
 		public function getURI():String{
 			return uri;
 		}
@@ -247,7 +251,7 @@ package org.bigbluebutton.modules.deskshare.services.red5
      * 
      */		
     private function checkIfStreamIsPublishing(room: String):void{
-      trace(LOG + "checking if desk share stream is publishing");
+      trace(LOG + "checking if desk share stream is publishing. room="+room);
       var event:ConnectionEvent = new ConnectionEvent();
       event.status = ConnectionEvent.CHECK_FOR_DESKSHARE_STREAM;
       dispatcher.dispatchEvent(event);
@@ -309,11 +313,12 @@ package org.bigbluebutton.modules.deskshare.services.red5
     }
     
     public function sendStartedViewingNotification(stream:String):void{
-      trace(LOG + "Sending start viewing to server");
+      trace(LOG + "Sending start viewing to server. streem="+stream);
       nc.call("deskshare.startedToViewStream", null, stream);
     }
     
     public function stopSharingDesktop(meetingId: String, stream: String):void {
+		trace(LOG + "Stop SharingDesktop. streem="+stream+" meetengID="+meetingId);
       nc.call("deskshare.stopSharingDesktop", null, meetingId);
     }
     

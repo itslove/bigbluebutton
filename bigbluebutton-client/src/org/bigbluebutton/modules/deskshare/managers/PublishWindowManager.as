@@ -28,6 +28,8 @@ package org.bigbluebutton.modules.deskshare.managers
 	import org.bigbluebutton.common.LogUtil;
 	import org.bigbluebutton.common.events.CloseWindowEvent;
 	import org.bigbluebutton.common.events.OpenWindowEvent;
+	import org.bigbluebutton.core.managers.UserManager;
+	import org.bigbluebutton.main.model.users.BBBUser;
 	import org.bigbluebutton.modules.deskshare.services.DeskshareService;
 	import org.bigbluebutton.modules.deskshare.view.components.DesktopPublishWindow;
 			
@@ -44,7 +46,7 @@ package org.bigbluebutton.modules.deskshare.managers
 		private var autoPublishTimer:Timer;
 		
 		public function PublishWindowManager(service:DeskshareService) {
-			LogUtil.debug("PublishWindowManager init");
+			trace("PublishWindowManager init");
 			globalDispatcher = new Dispatcher();
 			this.service = service;
 		}
@@ -54,9 +56,16 @@ package org.bigbluebutton.modules.deskshare.managers
 		}
 																			
 		public function startSharing(uri:String, room:String, autoStart:Boolean, autoFullScreen:Boolean):void {
-			LogUtil.debug("DS:PublishWindowManager::opening desk share window, autostart=" + autoStart + " autoFullScreen=" + autoFullScreen);
+			trace("DS:PublishWindowManager::opening desk share window, autostart=" + autoStart + " autoFullScreen=" + autoFullScreen+" room="+room);
 			shareWindow = new DesktopPublishWindow();
-			shareWindow.initWindow(service.getConnection(), uri, room, autoStart, autoFullScreen);
+			var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+			if (me.isPrivateChat){
+				shareWindow.initWindow(service.getConnection(), uri, me.voiceBridgeForPrivateChat, autoStart, autoFullScreen);
+			}else{
+				shareWindow.initWindow(service.getConnection(), uri, room, autoStart, autoFullScreen);
+			}
+			
+			
 			shareWindow.visible = true;
 			openWindow(shareWindow);
 			if (autoStart || autoFullScreen) {

@@ -78,12 +78,15 @@ package org.bigbluebutton.modules.phone.managers {
       this.uid = uid;	
       this.username  = username;
 	  var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+	  /*
 	  if (me.role=="VIEWER" ){
 		  trace("==========SETUP PRIVATE CHAT");
       	this.meetingId = "test";
 	  }else{
 		  this.meetingId = meetingId;
 	  }
+	  */
+	  this.meetingId = meetingId;
       this.uri   = uri;
       this.externUserId = externUserId;
     }
