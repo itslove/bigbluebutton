@@ -141,7 +141,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				maximizeRestoreBtn.tabIndex = baseIndex+2;
 				closeBtn.tabIndex = baseIndex+3;
 				
-				windowManager.absPos(this, 1, this.height/3);
+				//windowManager.absPos(this, 1, this.height/3);
 			}
 			
 			private function remoteFocus(e:ShortcutEvent):void{
