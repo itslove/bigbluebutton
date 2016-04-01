@@ -28,6 +28,7 @@ package org.bigbluebutton.modules.deskshare.managers
 	import org.bigbluebutton.main.model.users.BBBUser;
 	import org.bigbluebutton.modules.deskshare.model.DeskshareOptions;
 	import org.bigbluebutton.modules.deskshare.services.DeskshareService;
+	import org.bigbluebutton.core.events.PrivateChatEvent;
 			
 	public class DeskshareManager {		
 		private var publishWindowManager:PublishWindowManager;
@@ -47,7 +48,7 @@ package org.bigbluebutton.modules.deskshare.managers
 		}
 		
 		public function handleStartModuleEvent(module:DeskShareModule):void {
-			LogUtil.debug("Deskshare Module starting");
+			trace("DeskshareManager-Deskshare Module starting");
 			this.module = module;			
 			service.handleStartModuleEvent(module);
       
@@ -58,24 +59,25 @@ package org.bigbluebutton.modules.deskshare.managers
 		}
 		
 		public function handleStopModuleEvent():void {
-			LogUtil.debug("Deskshare Module stopping");
+			trace("DeskshareManager-Deskshare Module stopping");
 			publishWindowManager.stopSharing();
 			viewWindowManager.stopViewing();		
 			service.disconnect();
 		}
 		
     public function handleStreamStoppedEvent():void {
-      LogUtil.debug("Sending deskshare stopped command");
+      trace("DeskshareManager-Sending deskshare stopped command");
       service.stopSharingDesktop(module.getRoom(), module.getRoom());
     }
     
 		public function handleStreamStartedEvent(videoWidth:Number, videoHeight:Number):void {
-			LogUtil.debug("Sending startViewing command");
+			trace("DeskshareManager-Sending startViewing command");
 			service.sendStartViewingNotification(videoWidth, videoHeight);
 		}
 		    
 		public function handleStartedViewingEvent(stream:String):void {
-			LogUtil.debug("handleStartedViewingEvent [" + stream + "]");
+			trace("DeskshareManager-handleStartedViewingEvent [" + stream + "]");
+			
 			service.sendStartedViewingNotification(stream);
 		}
 		
@@ -92,12 +94,12 @@ package org.bigbluebutton.modules.deskshare.managers
     }
     
 		public function handleMadePresenterEvent(e:MadePresenterEvent):void {
-			LogUtil.debug("Got MadePresenterEvent ");
+			trace("DeskshareManager-Got MadePresenterEvent ");
       initDeskshare();
 		}
 		
 		public function handleMadeViewerEvent(e:MadePresenterEvent):void{
-			LogUtil.debug("Got MadeViewerEvent ");
+			trace("DeskshareManager-Got MadeViewerEvent ");
 			if(UsersUtil.amIModerator()){
 				initDeskshare();
 			}else{
@@ -113,12 +115,19 @@ package org.bigbluebutton.modules.deskshare.managers
 		}
 		
 		public function handleStartSharingEvent(autoStart:Boolean):void {
-			LogUtil.debug("DeskshareManager::handleStartSharingEvent");
+			trace("DeskshareManager-DeskshareManager::handleStartSharingEvent");
 			//toolbarButtonManager.disableToolbarButton();
 			toolbarButtonManager.startedSharing();
 			var option:DeskshareOptions = new DeskshareOptions();
 			option.parseOptions();
-			publishWindowManager.startSharing(module.getCaptureServerUri(), module.getRoom(), autoStart, option.autoFullScreen);
+			var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+			if (me.isPrivateChat){
+				publishWindowManager.startSharing(module.getCaptureServerUri(),  me.voiceBridgeForPrivateChat, autoStart, option.autoFullScreen);
+			}else{
+				publishWindowManager.startSharing(module.getCaptureServerUri(), module.getRoom(), autoStart, option.autoFullScreen);
+			}
+
+			//publishWindowManager.startSharing(module.getCaptureServerUri(), module.getRoom(), autoStart, option.autoFullScreen);
 			sharing = true;
 		}
 		
@@ -130,14 +139,27 @@ package org.bigbluebutton.modules.deskshare.managers
 		}
 					
 		public function handleViewWindowCloseEvent():void {
-			LogUtil.debug("Received stop viewing command");		
+			trace("DeskshareManager-Received stop viewing command");		
 			viewWindowManager.handleViewWindowCloseEvent();		
 		}
 					
 		public function handleStreamStartEvent(videoWidth:Number, videoHeight:Number):void{
 			if (sharing) return;
-			LogUtil.debug("Received start vieweing command");
-			viewWindowManager.startViewing(module.getRoom(), videoWidth, videoHeight);
+			
+			trace("DeskshareManager-Received start vieweing command");
+			var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+			if (me.isPrivateChat){
+				viewWindowManager.startViewing(me.voiceBridgeForPrivateChat, videoWidth, videoHeight);
+			}else{
+				viewWindowManager.startViewing(module.getRoom(), videoWidth, videoHeight);
+			}
+			//viewWindowManager.startViewing(module.getRoom(), videoWidth, videoHeight);
+		}
+		
+		public function handlePrivateChatEvent(e: PrivateChatEvent):void{
+			trace("DeskshareManager-Received start PRIVATE CHAT event");
+			var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+			service.startPrivateChatNotification(me.voiceBridgeForPrivateChat);
 		}
     
     

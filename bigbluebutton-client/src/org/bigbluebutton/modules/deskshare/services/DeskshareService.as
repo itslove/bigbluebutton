@@ -48,16 +48,18 @@ package org.bigbluebutton.modules.deskshare.services
 		public function handleStartModuleEvent(module:DeskShareModule):void {
 			LogUtil.debug("Deskshare Module starting");
 			this.module = module;			
+			//connect(module.uri,"test");
 			connect(module.uri, module.getRoom());
 		}
 		
 		public function connect(uri:String, room:String):void {
 			this.uri = uri;
-      this.room = room;
+      		this.room = room;//"test"
 			trace("Deskshare Service connecting to " + uri);
 			conn = new Connection(room);
 
 			conn.setURI(uri);
+			//conn.setRoom("test");
 			conn.connect();
 		
 		}
@@ -82,5 +84,9 @@ package org.bigbluebutton.modules.deskshare.services
       conn.stopSharingDesktop(meetingId, stream);
     }
     
+	public function startPrivateChatNotification(newRoom:String):void{
+		conn.setRoom(newRoom);
+		conn.connectionSuccessHandler();
+	}
 	}
 }

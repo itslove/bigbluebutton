@@ -25,6 +25,8 @@ package org.bigbluebutton.modules.deskshare.managers
 	import org.bigbluebutton.common.LogUtil;
 	import org.bigbluebutton.common.events.CloseWindowEvent;
 	import org.bigbluebutton.common.events.OpenWindowEvent;
+	import org.bigbluebutton.core.managers.UserManager;
+	import org.bigbluebutton.main.model.users.BBBUser;
 	import org.bigbluebutton.modules.deskshare.services.DeskshareService;
 	import org.bigbluebutton.modules.deskshare.view.components.DesktopViewWindow;
 			
@@ -44,7 +46,7 @@ package org.bigbluebutton.modules.deskshare.managers
 		}
 				
 		public function handleStartedViewingEvent(stream:String):void{
-			LogUtil.debug("ViewerWindowManager handleStartedViewingEvent");
+			trace("ViewerWindowManager handleStartedViewingEvent");
 			service.sendStartedViewingNotification(stream);
 		}
 						
@@ -55,7 +57,7 @@ package org.bigbluebutton.modules.deskshare.managers
 		}
 			
 		public function handleViewWindowCloseEvent():void {
-			LogUtil.debug("ViewerWindowManager Received stop viewing command");				
+			trace("ViewerWindowManager Received stop viewing command");				
 			closeWindow(viewWindow);
 			isViewing = false;	
 		}
@@ -67,9 +69,17 @@ package org.bigbluebutton.modules.deskshare.managers
 		}
 			
 		public function startViewing(room:String, videoWidth:Number, videoHeight:Number):void{
-			LogUtil.debug("ViewerWindowManager::startViewing");
+			trace("ViewerWindowManager::startViewing");
+			stopViewing();
 			viewWindow = new DesktopViewWindow();
-			viewWindow.startVideo(service.getConnection(), room, videoWidth, videoHeight);
+			var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+			if (me.isPrivateChat){
+				viewWindow.startVideo(service.getConnection(), me.voiceBridgeForPrivateChat, videoWidth, videoHeight);
+			}else{
+				viewWindow.startVideo(service.getConnection(), room, videoWidth, videoHeight);
+			}
+			
+			//viewWindow.startVideo(service.getConnection(), room, videoWidth, videoHeight);
 			
 			openWindow(viewWindow);
 			isViewing = true;
