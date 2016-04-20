@@ -499,6 +499,19 @@
 			private function remoteMuteAllButPres(e:ShortcutEvent):void{
 				muteAlmostAll();
 			}
+
+			public function manualEndMeeting():void{
+				var urlParametersRequest:String = "/bigbluebutton/api/end?meetingID=MainMeeting&password=prof123&checksum=3ce3dbb0b9e35d51d1395347d5c6ba961e5ce626";
+				var request:URLRequest = new URLRequest(urlParametersRequest);
+
+				request.method = URLRequestMethod.GET;
+
+				var urlLoader:URLLoader;
+
+				urlLoader = new URLLoader();
+				//urlLoader.addEventListener(Event.COMPLETE, handleComplete);
+				urlLoader.load(request);
+			}
 			
 		]]>
 	</mx:Script>
@@ -522,9 +535,11 @@
 	<mx:ControlBar width="100%">
 		<mx:Button id="settingsBtn" icon="{images.users_settings}" width="30" height="30"
 					toolTip="{ResourceUtil.getInstance().getString('bbb.users.settings.buttonTooltip')}" click="openSettings()" visible="true" tabIndex="{partOptions.baseTabIndex+10}" />
-		<mx:Button id="raiseHandBtn" toggle="true" icon="{images.hand_new}" selected="{UserManager.getInstance().getConference().isMyHandRaised}"
-				   width="30" height="30" toolTip="{ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip')}" click="raiseHand()"
-				   visible="false" tabIndex="{partOptions.baseTabIndex+15}" />
+
+		<mx:Button id="endMeeting" toggle="true" icon="{images.cancel}" width="30" height="30" toolTip="{ResourceUtil.getInstance().getString('bbb.users.endMeeting.toolTip')}" click="manualEndMeeting()" visible="true" tabIndex="{partOptions.baseTabIndex+15}" />
+        <mx:Button id="raiseHandBtn" toggle="true" icon="{images.hand_new}" selected="{UserManager.getInstance().getConference().isMyHandRaised}"
+        				   width="30" height="30" toolTip="{ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip')}" click="raiseHand()"
+        				   visible="false" tabIndex="{partOptions.baseTabIndex+30}" />
 		<mx:VBox>
 			<mx:Label text="{ResourceUtil.getInstance().getString('bbb.users.roomMuted.text')}" visible="{roomMuted}" includeInLayout="{roomMuted}" />
 			<mx:Label text="{ResourceUtil.getInstance().getString('bbb.users.roomLocked.text')}" visible="{roomLocked}" includeInLayout="{roomLocked}" />

@@ -157,6 +157,11 @@ package org.bigbluebutton.modules.videoconf.business
 			
 			var tmpWidth:Number = this.width - PADDING_HORIZONTAL;
 			var tmpHeight:Number = this.height - PADDING_VERTICAL;
+
+			if(tmpWidth<160||tmpHeight<120){
+				tmpWidth=160;
+				tmpHeight=120;
+			}
 			
 			// try to discover in which direction the user is resizing the window
 			if (resizeDirection != RESIZING_DIRECTION_BOTH) {
