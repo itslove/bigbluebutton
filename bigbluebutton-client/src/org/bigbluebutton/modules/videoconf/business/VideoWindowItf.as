@@ -36,6 +36,7 @@ package org.bigbluebutton.modules.videoconf.business
 	import org.bigbluebutton.common.IBbbModuleWindow;
 	import org.bigbluebutton.common.Images;
 	import org.bigbluebutton.common.LogUtil;
+	import org.bigbluebutton.main.api.JSLog;
 	import org.bigbluebutton.common.events.CloseWindowEvent;
 	import org.bigbluebutton.common.events.DragWindowEvent;
 	import org.bigbluebutton.core.EventConstants;
@@ -149,20 +150,20 @@ package org.bigbluebutton.modules.videoconf.business
 		}
 		
 		protected function onResize():void {
-			if (_video == null || _videoHolder == null || this.minimized) return;
+			var logData:Object = new Object();
+
+			JSLog.debug("****resize",logData);
+			//if (_video == null || _videoHolder == null || this.minimized) return;
+			if (_video == null || _videoHolder == null) return;
 			
 			// limits the window size to the parent size
 			this.width = (this.parent != null? Math.min(this.width, this.parent.width): this.width);
-			this.height = (this.parent != null? Math.min(this.height, this.parent.height): this.height); 
-			
+			this.height = (this.parent != null? Math.min(this.height, this.parent.height): this.height);
+			logData.width = this.width;
+			logData.height = this.height;
 			var tmpWidth:Number = this.width - PADDING_HORIZONTAL;
 			var tmpHeight:Number = this.height - PADDING_VERTICAL;
 
-			if(tmpWidth<160||tmpHeight<120){
-				tmpWidth=160;
-				tmpHeight=120;
-			}
-			
 			// try to discover in which direction the user is resizing the window
 			if (resizeDirection != RESIZING_DIRECTION_BOTH) {
 				if (tmpWidth == _video.width && tmpHeight != _video.height)
@@ -187,16 +188,26 @@ package org.bigbluebutton.modules.videoconf.business
 					tmpHeight = Math.min (tmpHeight, Math.floor(tmpWidth / aspectRatio));
 					break;
 			}
-			
+			if(tmpWidth<240 || tmpHeight<180){
+				tmpWidth = 240;
+				tmpHeight = 180;
+				this.width = 240;
+				this.height = 180;
+			}
+			logData.tmpwidth = tmpWidth;
+			logData.tmpheight = tmpHeight;
+			JSLog.debug("****resize WIDTH= & HEIGHT=",logData);
 			_video.width = _videoHolder.width = tmpWidth;
 			_video.height = _videoHolder.height = tmpHeight;
 			
 			if (!keepAspect || this.maximized) {
 				// center the video in the window
+				JSLog.debug("****center the video in the window",logData);
 				_video.x = Math.floor ((this.width - PADDING_HORIZONTAL - tmpWidth) / 2);
 				_video.y = Math.floor ((this.height - PADDING_VERTICAL - tmpHeight) / 2);
 			} else {
 				// fit window dimensions on video
+				JSLog.debug("****fit window dimensions on video",logData);
 				_video.x = 0;
 				_video.y = 0;
 				this.width = tmpWidth + PADDING_HORIZONTAL;
