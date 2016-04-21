@@ -152,7 +152,7 @@ package org.bigbluebutton.modules.videoconf.business
 		protected function onResize():void {
 			var logData:Object = new Object();
 
-			JSLog.debug("****resize",logData);
+			//JSLog.debug("****resize",logData);
 			//if (_video == null || _videoHolder == null || this.minimized) return;
 			if (_video == null || _videoHolder == null) return;
 			
@@ -196,18 +196,18 @@ package org.bigbluebutton.modules.videoconf.business
 			}
 			logData.tmpwidth = tmpWidth;
 			logData.tmpheight = tmpHeight;
-			JSLog.debug("****resize WIDTH= & HEIGHT=",logData);
+			//JSLog.debug("****resize WIDTH= & HEIGHT=",logData);
 			_video.width = _videoHolder.width = tmpWidth;
 			_video.height = _videoHolder.height = tmpHeight;
 			
 			if (!keepAspect || this.maximized) {
 				// center the video in the window
-				JSLog.debug("****center the video in the window",logData);
+				//JSLog.debug("****center the video in the window",logData);
 				_video.x = Math.floor ((this.width - PADDING_HORIZONTAL - tmpWidth) / 2);
 				_video.y = Math.floor ((this.height - PADDING_VERTICAL - tmpHeight) / 2);
 			} else {
 				// fit window dimensions on video
-				JSLog.debug("****fit window dimensions on video",logData);
+				//JSLog.debug("****fit window dimensions on video",logData);
 				_video.x = 0;
 				_video.y = 0;
 				this.width = tmpWidth + PADDING_HORIZONTAL;
