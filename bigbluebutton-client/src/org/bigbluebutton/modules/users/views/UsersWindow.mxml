@@ -37,6 +37,7 @@
 	<mate:Listener type="{LockControlEvent.CHANGED_LOCK_SETTINGS}" method="handleChangedLockSettingsEvent" />
 	<mx:Script>
 		<![CDATA[
+			import com.adobe.crypto.SHA1;
 			import com.asfusion.mate.events.Dispatcher;
 			
 			import mx.binding.utils.BindingUtils;
@@ -47,6 +48,7 @@
 			import mx.events.ListEvent;
 			import mx.events.MenuEvent;
 			import mx.managers.PopUpManager;
+			import mx.utils.StringUtil;
 			
 			import org.bigbluebutton.common.Images;
 			import org.bigbluebutton.common.LogUtil;
@@ -71,6 +73,8 @@
 			import org.bigbluebutton.modules.users.events.UsersRollEvent;
 			import org.bigbluebutton.modules.users.model.UsersOptions;
 			import org.bigbluebutton.util.i18n.ResourceUtil;
+			import org.bigbluebutton.main.views.MainApplicationShell;
+			import org.bigbluebutton.main.api.JSLog;
 			
 			private var dispatcher:Dispatcher;
 			
@@ -501,7 +505,17 @@
 			}
 
 			public function manualEndMeeting():void{
-				var urlParametersRequest:String = "/bigbluebutton/api/end?meetingID=MainMeeting&password=prof123&checksum=3ce3dbb0b9e35d51d1395347d5c6ba961e5ce626";
+				//var controller:MainApplicationShell =new MainApplicationShell();
+				//controller.sendReloadAllModuleStartedEvent();
+				var logData:Object = new Object();
+
+				JSLog.debug("manualEndMeeting "+UsersUtil.getExternalMeetingID(), logData);
+				var salt:String ="eb7c5c72b730112644db1a12db84267e";
+				var meetingID:String = UsersUtil.getExternalMeetingID();
+				var urlParameters: String = "endmeetingID="+meetingID+"&password=prof123"+salt;
+				var checksum:String = SHA1.hash(urlParameters);
+				JSLog.debug("manualEndMeeting checksum "+checksum +"  urlParam "+urlParameters, logData);
+				var urlParametersRequest:String = "/bigbluebutton/api/end?meetingID="+meetingID+"&password=prof123&checksum="+checksum;
 				var request:URLRequest = new URLRequest(urlParametersRequest);
 
 				request.method = URLRequestMethod.GET;
@@ -511,6 +525,7 @@
 				urlLoader = new URLLoader();
 				//urlLoader.addEventListener(Event.COMPLETE, handleComplete);
 				urlLoader.load(request);
+
 			}
 			
 		]]>

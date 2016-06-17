@@ -248,6 +248,12 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				var dispatcher:Dispatcher = new Dispatcher();
 				dispatcher.dispatchEvent(new ModuleLoadEvent(ModuleLoadEvent.START_ALL_MODULES));	
 			}
+
+			public function sendReloadAllModuleStartedEvent():void{
+				trace("Sending start all modules event");
+				var dispatcher:Dispatcher = new Dispatcher();
+				dispatcher.dispatchEvent(new ModuleLoadEvent(ModuleLoadEvent.RELOAD_ALL_MODULES));
+			}
 			
 			private function fullScreenHandler(evt:FullScreenEvent):void {
 				dispState = stage.displayState + " (fullScreen=" + evt.fullScreen.toString() + ")";

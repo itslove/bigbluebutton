@@ -373,9 +373,9 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
   <mx:Label id="meetingNameLbl" styleName="meetingNameLabelStyle" />
   <mx:Spacer width="50%"/>
 
-<!--
-  <mx:Button label="DISCONNECT!" click="BBB.initConnectionManager().forceClose()" height="22" toolTip="Click to simulate disconnection" />
--->
+
+  <mx:Button label="DISCONNECT!" click="BBB.initConnectionManager().connectToNextRoom()" height="22" toolTip="Click to simulate disconnection" />
+
 	<mx:Button id="shortcutKeysBtn" label="{ResourceUtil.getInstance().getString('bbb.mainToolbar.shortcutBtn')}" styleName="shortcutButtonStyle"
              click="onShortcutButtonClick()" height="22" 
              toolTip="{ResourceUtil.getInstance().getString('bbb.mainToolbar.shortcutBtn.toolTip')}" 

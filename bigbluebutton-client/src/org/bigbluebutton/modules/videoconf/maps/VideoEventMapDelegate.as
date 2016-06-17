@@ -63,6 +63,7 @@ package org.bigbluebutton.modules.videoconf.maps
   import org.bigbluebutton.modules.videoconf.views.VideoWindow;
   import org.flexunit.runner.manipulation.filters.IncludeAllFilter;
   import org.bigbluebutton.main.events.PresenterStatusEvent;
+  import org.bigbluebutton.main.api.JSLog;
 
   public class VideoEventMapDelegate
   {
@@ -446,6 +447,16 @@ package org.bigbluebutton.modules.videoconf.maps
     
     public function connectToVideoApp():void {
       proxy = new VideoProxy(uri);
+      proxy.connect();
+    }
+
+    public function connectToNextManagerVideo():void{
+
+      var logData:Object = new Object();
+
+      JSLog.debug("-=-=-=-=-=connectToNextManagerVideo ", logData);
+      closeAllWindows();
+      proxy.disconnect();
       proxy.connect();
     }
     

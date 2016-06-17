@@ -1,14 +1,14 @@
 <?xml version="1.0" ?>
 <config>
     <localeversion suppressWarning="false">0.9.0</localeversion>
-    <version>268</version>
-    <help url="https://manager.inna.ru/help.html"/>
-    <javaTest url="https://manager.inna.ru/testjava.html"/>
-    <porttest host="manager.inna.ru" application="video/portTest" timeout="10000"/>    
-    <bwMon server="192.168.0.91" application="video/bwTest"/>
-    <application uri="rtmp://manager.inna.ru/bigbluebutton" host="https://manager.inna.ru/bigbluebutton/api/enter"/>
+    <version>269</version>
+    <help url="http://192.168.1.178/help.html"/>
+    <javaTest url="http://192.168.1.178/testjava.html"/>
+    <porttest host="192.168.1.178" application="video/portTest" timeout="10000"/>
+    <bwMon server="192.168.1.178" application="video/bwTest"/>
+    <application uri="rtmp://192.168.1.178/bigbluebutton" host="http://192.168.1.178/bigbluebutton/api/enter"/>
     <language userSelectionEnabled="true" />
-    <skinning enabled="true" url="https://manager.inna.ru/client/branding/css/BBBDefault.css.swf" />
+    <skinning enabled="true" url="http://192.168.1.178/client/branding/css/BBBDefault.css.swf" />
     <shortcutKeys showButton="true" />
     <browserVersions chrome="41" firefox="36" flash="17" java="1.7.0_51" />
     <layout showLogButton="false" defaultLayout="bbb.layout.name.defaultlayout"
@@ -21,8 +21,8 @@
             
 		<modules>
 		 
-		<module name="ChatModule" url="https://manager.inna.ru/client/ChatModule.swf?v=268" 
-			uri="rtmp://manager.inna.ru/bigbluebutton" 
+		<module name="ChatModule" url="http://192.168.1.178/client/ChatModule.swf?v=268"
+			uri="rtmp://192.168.1.178/bigbluebutton"
 			dependsOn="UsersModule"	
 			privateEnabled="false"  
 			fontSize="12"
@@ -31,8 +31,8 @@
 			colorPickerIsVisible="false"
 		/>
 
-		<module name="UsersModule" url="https://manager.inna.ru/client/UsersModule.swf?v=268" 
-			uri="rtmp://manager.inna.ru/bigbluebutton" 
+		<module name="UsersModule" url="http://192.168.1.178/client/UsersModule.swf?v=268"
+			uri="rtmp://192.168.1.178/bigbluebutton"
 			allowKickUser="true"
 			enableRaiseHand="true"
 			enableSettingsButton="true"
@@ -41,16 +41,16 @@
 
 		
 		<module name="DeskShareModule" 
-			url="https://manager.inna.ru/client/DeskShareModule.swf?v=268" 
-			uri="rtmp://manager.inna.ru/deskShare"
+			url="http://192.168.1.178/client/DeskShareModule.swf?v=268"
+			uri="rtmp://192.168.1.178/deskShare"
 			showButton="true"
 			autoStart="false"
 			autoFullScreen="false"
 			baseTabIndex="201"
 		/>
 		
- 	<module name="PhoneModule" url="https://manager.inna.ru/client/PhoneModule.swf?v=268" 
-			uri="rtmp://manager.inna.ru/sip" 
+ 	<module name="PhoneModule" url="http://192.168.1.178/client/PhoneModule.swf?v=268"
+			uri="rtmp://192.168.1.178/sip"
 			autoJoin="true"
 			listenOnlyMode="true"
 			presenterShareOnly="true"
@@ -63,8 +63,8 @@
 			dependsOn="UsersModule"
 		/>
 
-		<module name="VideoconfModule" url="https://manager.inna.ru/client/VideoconfModule.swf?v=268" 
-			uri="rtmp://manager.inna.ru/video"
+		<module name="VideoconfModule" url="http://192.168.1.178/client/VideoconfModule.swf?v=268"
+			uri="rtmp://192.168.1.178/video"
 			dependson = "UsersModule"
 			videoQuality = "100"
 			presenterShareOnly = "false"
@@ -95,7 +95,7 @@
 			glowBlurSize = "30.0"	
 		/>
 <!--		
-		<module name="WhiteboardModule" url="https://manager.inna.ru/client/WhiteboardModule.swf?v=268" 
+		<module name="WhiteboardModule" url="http://manager.inna.ru/client/WhiteboardModule.swf?v=268" 
 			uri="rtmp://manager.inna.ru/bigbluebutton" 
 			dependsOn="PresentModule"
 			baseTabIndex="601"
@@ -104,15 +104,15 @@
 		/>
 
 
-    <module name="PollingModule" url="https://manager.inna.ru/client/PollingModule.swf?v=268" 
+    <module name="PollingModule" url="http://manager.inna.ru/client/PollingModule.swf?v=268" 
       uri="rtmp://manager.inna.ru/bigbluebutton" 
       dependsOn="PresentModule"
     />
     		
 
-		<module name="PresentModule" url="https://manager.inna.ru/client/PresentModule.swf?v=268" 
+		<module name="PresentModule" url="http://manager.inna.ru/client/PresentModule.swf?v=268" 
 			uri="rtmp://manager.inna.ru/bigbluebutton" 
-			host="https://manager.inna.ru" 
+			host="http://manager.inna.ru" 
 			showPresentWindow="true"
 			showWindowControls="true"
 			openExternalFileUploadDialog="false"
@@ -121,8 +121,8 @@
 			maxFileSize="30"
 		/>
 -->
-		<module name="VideodockModule" url="https://manager.inna.ru/client/VideodockModule.swf?v=268"
-			uri="rtmp://manager.inna.ru/bigbluebutton" 
+		<module name="VideodockModule" url="http://192.168.1.178/client/VideodockModule.swf?v=268"
+			uri="rtmp://192.168.1.178/bigbluebutton"
 			dependsOn="VideoconfModule, UsersModule"
 			autoDock="true"
 			showControls="true"
@@ -135,21 +135,21 @@
 			baseTabIndex="401"
 		/>
 		
-		<module name="LayoutModule" url="https://manager.inna.ru/client/LayoutModule.swf?v=268"
-			uri="rtmp://manager.inna.ru/bigbluebutton"
-			layoutConfig="https://manager.inna.ru/client/conf/layout.xml"
+		<module name="LayoutModule" url="http://192.168.1.178/client/LayoutModule.swf?v=268"
+			uri="rtmp://192.168.1.178/bigbluebutton"
+			layoutConfig="http://192.168.1.178/client/conf/layout.xml"
 			enableEdit="true"
 		/>
 
 <!--
-    <module name="NotesModule" url="https://manager.inna.ru/client/NotesModule.swf?v=268"
-      saveURL="https://manager.inna.ru"
+    <module name="NotesModule" url="http://manager.inna.ru/client/NotesModule.swf?v=268"
+      saveURL="http://manager.inna.ru"
       position="top-left"
     />
     
-    <module name="BroadcastModule" url="https://manager.inna.ru/client/BroadcastModule.swf?v=268"
+    <module name="BroadcastModule" url="http://manager.inna.ru/client/BroadcastModule.swf?v=268"
       uri="rtmp://manager.inna.ru/bigbluebutton"
-      streamsUri="https://manager.inna.ru/streams.xml"
+      streamsUri="http://manager.inna.ru/streams.xml"
       position="top-left"
       showStreams="true"
       autoPlay="false"
