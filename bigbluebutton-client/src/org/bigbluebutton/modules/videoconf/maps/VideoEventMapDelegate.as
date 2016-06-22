@@ -31,7 +31,8 @@ package org.bigbluebutton.modules.videoconf.maps
   import org.bigbluebutton.common.events.CloseWindowEvent;
   import org.bigbluebutton.common.events.OpenWindowEvent;
   import org.bigbluebutton.common.events.ToolbarButtonEvent;
-  import org.bigbluebutton.core.UsersUtil;
+import org.bigbluebutton.core.UsersUtil;
+import org.bigbluebutton.core.UsersUtil;
   import org.bigbluebutton.core.events.ConnectAppEvent;
   import org.bigbluebutton.core.events.PrivateChatEvent;
   import org.bigbluebutton.core.managers.UserManager;
@@ -96,6 +97,9 @@ package org.bigbluebutton.modules.videoconf.maps
     
     public function start(uri:String):void {
       trace("VideoEventMapDelegate:: [" + me + "] Video Module Started.");
+      var logData:Object = new Object();
+
+      JSLog.debug("))__)__)_))_)__)VideoConf start uri: "+uri, logData);
       this.uri = uri;
     }
         
@@ -446,6 +450,21 @@ package org.bigbluebutton.modules.videoconf.maps
     }
     
     public function connectToVideoApp():void {
+      var logData:Object = new Object();
+
+      JSLog.debug("1111117890--0-0-0-0connectToVideoApp: "+UsersUtil.getInternalMeetingID(), logData);
+      proxy = new VideoProxy(uri);
+      proxy.connect();
+    }
+
+    public function connectToNextManagerVideo():void{
+
+      var logData:Object = new Object();
+
+      JSLog.debug("-=-=-=-=-=connectToNextManagerVideo "+UsersUtil.getInternalMeetingID(), logData);
+      UserManager.getInstance().getConference().removeAllParticipants();
+      closeAllWindows();
+      proxy.disconnect();
       proxy = new VideoProxy(uri);
       proxy.connect();
     }

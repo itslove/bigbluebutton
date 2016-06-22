@@ -55,6 +55,7 @@ package org.bigbluebutton.main.model.users
 		private var tried_tunneling:Boolean = false;
 		private var logoutOnUserCommand:Boolean = false;
 		private var backoff:Number = 2000;
+		private var goToNextManager:Boolean = false;
 		
 		private var dispatcher:Dispatcher;    
     private var _messageListeners:Array = new Array();
@@ -63,6 +64,9 @@ package org.bigbluebutton.main.model.users
     
 		public function NetConnectionDelegate():void
 		{
+			var logData:Object = new Object();
+
+			JSLog.critical("*********NetConnectionDelegate INIT", logData);
 			dispatcher = new Dispatcher();
 			
 			_netConnection = new NetConnection();				
@@ -243,6 +247,10 @@ package org.bigbluebutton.main.model.users
 			this.logoutOnUserCommand = logoutOnUserCommand;
 			_netConnection.close();
 		}
+
+		public function connectToNextRoom():void{
+			this.goToNextManager = true;
+		}
 		
     
     public function forceClose():void {
@@ -272,7 +280,7 @@ package org.bigbluebutton.main.model.users
 
       var logData:Object = new Object();
       logData.user = UsersUtil.getUserData();
-      
+			JSLog.debug("STATUS of NetConnection: "+statusCode, logData);
 			switch (statusCode) {
 				case "NetConnection.Connect.Success":
 					trace(LOG + ":Connection to viewers application succeeded.");
@@ -353,23 +361,29 @@ package org.bigbluebutton.main.model.users
       
 			LogUtil.debug("Asynchronous code error - " + event.toString() );
 			sendConnectionFailedEvent(ConnectionFailedEvent.UNKNOWN_REASON);
-		}	
-			
-		private function sendConnectionFailedEvent(reason:String):void{
-      var logData:Object = new Object();
-      
+		}
+
+		private function sendConnectionFailedEvent(reason:String):void {
+			var logData:Object = new Object();
+
 			if (this.logoutOnUserCommand) {
-        logData.reason = "User requested.";
-        logData.user = UsersUtil.getUserData();
-        JSLog.debug("User logged out from BBB App.", logData);
+				logData.reason = "User requested.";
+				logData.user = UsersUtil.getUserData();
+				JSLog.debug("User logged out from BBB App.", logData);
 				sendUserLoggedOutEvent();
 			} else {
-        logData.reason = reason;
-        logData.user = UsersUtil.getUserData();
-        JSLog.warn("User disconnected from BBB App.", logData);
-        var e:ConnectionFailedEvent = new ConnectionFailedEvent(reason);
-        dispatcher.dispatchEvent(e);        
-      }
+				if(this.goToNextManager){
+					JSLog.debug("USER DISCONNECTED and go TO NEXT MANAGER", logData);
+
+				}else{
+					logData.reason = reason;
+					logData.user = UsersUtil.getUserData();
+					JSLog.warn("User disconnected from BBB App.", logData);
+					var e:ConnectionFailedEvent = new ConnectionFailedEvent(reason);
+					dispatcher.dispatchEvent(e);
+				}
+
+			}
 		}
 		
 		private function sendUserLoggedOutEvent():void{

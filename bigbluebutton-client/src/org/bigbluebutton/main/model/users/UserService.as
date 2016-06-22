@@ -52,6 +52,7 @@ package org.bigbluebutton.main.model.users
 	import org.bigbluebutton.main.model.users.events.UsersConnectionEvent;
 	import org.bigbluebutton.modules.users.services.MessageReceiver;
 	import org.bigbluebutton.modules.users.services.MessageSender;
+	import org.bigbluebutton.main.api.JSLog;
 
 	public class UserService {
     private static const LOG:String = "Users::UserService - ";
@@ -72,6 +73,9 @@ package org.bigbluebutton.main.model.users
 		}
 		
 		public function startService(e:UserServicesEvent):void {
+			var logData:Object = new Object();
+
+			JSLog.debug("applicationURI: " + e.applicationURI+" e.hostURI: "+e.hostURI, logData);
 			applicationURI = e.applicationURI;
 			hostURI = e.hostURI;
 			BBB.initConnectionManager().isTunnelling = e.isTunnelling;

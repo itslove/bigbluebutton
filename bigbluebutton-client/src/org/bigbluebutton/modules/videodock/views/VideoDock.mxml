@@ -305,13 +305,18 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			}
 			
 			private function updateChildrenDimensions(children:Array):void {
+				var padding:int = 0;
+				
 				if (children.length == 0) return;
 				
 				const horizontalGap:int = getStyle("horizontalGap");
 				const verticalGap:int = getStyle("verticalGap");
 				
 				var availableWidth:int = this.width - this.borderMetrics.left - this.borderMetrics.right;
-				var availableHeight:int = this.height-31 - this.borderMetrics.top - this.borderMetrics.bottom;
+				if (!UsersUtil.amIModerator()){
+					padding = 60;
+				}
+				var availableHeight:int = this.height-padding - this.borderMetrics.top - this.borderMetrics.bottom;
 				
 				var borderTop:int = 0;
 				var borderLeft:int = 0;
@@ -517,11 +522,14 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				//var e:CoreEvent = new CoreEvent(EventConstants.START_PRIVATE_CHAT);
 				//e.message.chatWith = sharerUserID;
 				var e:RaiseHandEvent = new RaiseHandEvent(RaiseHandEvent.RAISE_HAND);
+				
 				if (UserManager.getInstance().getConference().isMyHandRaised) {
 					e.raised = false;
 					//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip2');
 				} else {
 					e.raised = true;
+					privateChatBtnVideoDock.setStyle("fillColors", new Array(0x78797a, 0x78797a));
+					privateChatBtnVideoDock.setStyle("fillAlphas", new Array(1.0, 1.0));
 					var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
 					var presenter:BBBUser = UserManager.getInstance().getConference().getPresenter();
 					presenter.presenterForPrivateChat = presenter.userID;
@@ -530,9 +538,9 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 					gd.dispatchEvent(e);
 					//raiseHandBtn.accessibilityName = ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip');
 				}
-				
+
 			}
-						
+
 		]]>
 	</mx:Script>
 	

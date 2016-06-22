@@ -27,6 +27,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
+			import org.bigbluebutton.core.events.PrivateChatEvent;
 			import org.bigbluebutton.main.events.BBBEvent;
 			import org.bigbluebutton.main.events.MadePresenterEvent;
 			import org.bigbluebutton.modules.deskshare.events.ModuleEvent;
@@ -37,6 +38,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			import org.bigbluebutton.modules.deskshare.events.ViewStreamEvent;
 			import org.bigbluebutton.modules.deskshare.events.ViewWindowEvent;
 			import org.bigbluebutton.modules.deskshare.managers.DeskshareManager;
+			import org.bigbluebutton.modules.videoconf.maps.VideoEventMapDelegate;
 		]]>
 	</mx:Script>
 	<EventHandlers type="{FlexEvent.PREINITIALIZE}">
@@ -92,6 +94,10 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 
 	<EventHandlers type="{ModuleEvent.START}">		
 		<MethodInvoker generator="{DeskshareManager}" method="handleStartModuleEvent" arguments="{event.module}"/>
+	</EventHandlers>
+	
+	<EventHandlers type="{PrivateChatEvent.PRIVATE_CHAT}">
+		<MethodInvoker generator="{DeskshareManager}" method="handlePrivateChatEvent"  arguments="{event}"/>
 	</EventHandlers>
 
   	
