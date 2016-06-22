@@ -412,8 +412,6 @@ package org.bigbluebutton.modules.videoconf.maps
 		
 		trace("stream name before:"+bbbUser.streamName);
 		trace("presenter id:"+UsersUtil.getPresenterUserID());
-		var streamPresenter: String = "320x240-"+UsersUtil.getPresenterUserID();
-		trace("stream name after:"+streamPresenter);
 		
 		window.startVideo(proxy.connection, bbbUser.streamName);
 		/*
