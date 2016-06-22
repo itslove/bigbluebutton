@@ -77,13 +77,13 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			import org.bigbluebutton.modules.videoconf.model.VideoConfOptions;
 			import org.bigbluebutton.util.i18n.ResourceUtil;
 				
-			[Bindable] private var defaultWidth:Number = 320;
-			[Bindable] private var defaultHeight:Number = 240;
+			[Bindable] private var defaultWidth:Number = 640;//320;
+			[Bindable] private var defaultHeight:Number = 480;//240;
 			
 			
 			public var camIndex:int = 0;
-			private var camWidth:Number = 320;
-			private var camHeight:Number = 240;
+			private var camWidth:Number = 640;//320;
+			private var camHeight:Number = 480;//240;
 			private var _camera:Camera = null;
 			public var quality:Number = 0;
 			public var chromePermissionDenied:Boolean = false;
@@ -421,8 +421,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			}
 			
 			public function setResolution(width:int, height:int):void {
-				camWidth = width;
-				camHeight = height;
+				camWidth = 640;//width;
+				camHeight = 480;//height;
 				setAspectRatio(camWidth, camHeight);
 				
 				/**

@@ -63,6 +63,7 @@ package org.bigbluebutton.modules.videoconf.maps
   import org.bigbluebutton.modules.videoconf.views.VideoWindow;
   import org.flexunit.runner.manipulation.filters.IncludeAllFilter;
   import org.bigbluebutton.main.events.PresenterStatusEvent;
+  import org.bigbluebutton.main.api.JSLog;
 
   public class VideoEventMapDelegate
   {
@@ -178,7 +179,7 @@ package org.bigbluebutton.modules.videoconf.maps
         var resInts:Array = [Number(resStr[0]), Number(resStr[1])];
         return resInts;
       } else {
-        return [Number("320"), Number("240")];
+        return [Number("640"), Number("480")];
       }
     }
         
@@ -298,37 +299,38 @@ package org.bigbluebutton.modules.videoconf.maps
         trace("VideoEventMapDelegate:: [" + me + "] closeWindow:: Not Closing. No window for [" + userID + "] [" + UsersUtil.getUserName(userID) + "]");
       }
     }
-    /*
+
     private function openViewWindowFor(userID:String):void {
       trace("VideoEventMapDelegate:: [" + me + "] openViewWindowFor:: Opening VIEW window for [" + userID + "]");
-      
-      var window:VideoWindow = new VideoWindow();
-      window.userID = userID.split('_')[0];
-      window.videoOptions = options;       
-      window.resolutions = options.resolutions.split(",");
-      window.title = "Manager"
-      
-      closeWindow(userID.split('_')[0]);
-            
 
-	  var streamPresenter: String = "320x240-"+userID.split('_')[0];
-      trace("stream name after:"+streamPresenter);
-	  
-	  window.startVideo(proxy.connection, streamPresenter);
+      var window:VideoWindow = new VideoWindow();
+      window.userID = userID;
+      window.videoOptions = options;
+      window.resolutions = options.resolutions.split(",");
+      window.title = UsersUtil.getUserName(userID);
+
+      closeWindow(userID);
+
+      var bbbUser:BBBUser = UsersUtil.getUser(userID);
+      trace("stream name before:"+bbbUser.streamName);
+      var logData:Object = new Object();
+      JSLog.critical("stream name before:"+bbbUser.streamName, logData);
+      window.startVideo(proxy.connection, bbbUser.streamName);
+
 	  /*
 	  window.startVideo(proxy.connection, streamPresenter);
 	  var user:BBBUser = UserManager.getInstance().getConference().getUser(UsersUtil.getMyUserID());
 	  var streemUser:BBBUser = UserManager.getInstance().getConference().getUser(window.userID);
 	  if (!user.isPrivateChat&&!streemUser.presenter){
 		  return;
-	  }
+	  }*/
 	  //
       webcamWindows.addWindow(window);        
       openWindow(window);
       dockWindow(window);  
     }
 	
-	*/
+	/*
 	private function openViewWindowFor(userID:String):void {
 		var user:BBBUser = UserManager.getInstance().getConference().getUser(UsersUtil.getMyUserID());
 		var bbbUser:BBBUser = UsersUtil.getUser(userID);
@@ -370,18 +372,19 @@ package org.bigbluebutton.modules.videoconf.maps
 	trace("stream name after:"+streamPresenter);
 	
 	window.startVideo(proxy.connection, bbbUser.streamName);
-	/*
-	window.startVideo(proxy.connection, streamPresenter);
-	var user:BBBUser = UserManager.getInstance().getConference().getUser(UsersUtil.getMyUserID());
-	var streemUser:BBBUser = UserManager.getInstance().getConference().getUser(window.userID);
-	if (!user.isPrivateChat&&!streemUser.presenter){
-	return;
-	}
-	//*/
+
+	//window.startVideo(proxy.connection, streamPresenter);
+	//var user:BBBUser = UserManager.getInstance().getConference().getUser(UsersUtil.getMyUserID());
+	//var streemUser:BBBUser = UserManager.getInstance().getConference().getUser(window.userID);
+	//if (!user.isPrivateChat&&!streemUser.presenter){
+	//return;
+	//}
+	//
 	webcamWindows.addWindow(window);        
 	openWindow(window);
 	dockWindow(window);  
-  } 
+  }
+    */
 	public function handlePrivateChatEvent(event:PrivateChatEvent):void{
 		trace("-------handle Private Chat Event for manager :"+event.managerID);
 		var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
@@ -558,10 +561,11 @@ package org.bigbluebutton.modules.videoconf.maps
     public function switchToPresenter(event:MadePresenterEvent):void{
       trace("VideoEventMapDelegate:: [" + me + "] Got Switch to presenter event. ready = [" + _ready + "]");
 	  var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
-	  if(!me.isPrivateChat&&!UsersUtil.amIModerator()){
+	  /*
+      if(!me.isPrivateChat&&!UsersUtil.amIModerator()){
 		  handlePresenterNameChange(event.userID); 
 	  }	  
-	  	
+	  	*/
       if (options.showButton) {
         displayToolbarButton();
       }  
@@ -570,9 +574,11 @@ package org.bigbluebutton.modules.videoconf.maps
     public function switchToViewer(event:MadePresenterEvent):void{
       trace("VideoEventMapDelegate:: [" + me + "] Got Switch to viewer event. ready = [" + _ready + "]");
 	  var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
-	  if(!me.isPrivateChat&&!UsersUtil.amIModerator()){
+	  /*
+      if(!me.isPrivateChat&&!UsersUtil.amIModerator()){
 		  handlePresenterNameChange(event.userID); 
-	  }	  
+	  }
+	    */
       if (options.showButton){
         LogUtil.debug("****************** Switching to viewer. Show video button?=[" + UsersUtil.amIPresenter() + "]");
         displayToolbarButton();
