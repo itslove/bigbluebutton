@@ -37,6 +37,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 		import org.bigbluebutton.core.events.CoreEvent;
 		import org.bigbluebutton.core.events.LockControlEvent;
 		import org.bigbluebutton.core.events.VoiceConfEvent;
+		import org.bigbluebutton.main.events.ModuleLoadEvent;
 		import org.bigbluebutton.core.managers.UserManager;
 		import org.bigbluebutton.main.model.users.BBBUser;
 		import org.bigbluebutton.main.model.users.Conference;
@@ -208,13 +209,13 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			var urlLoader:URLLoader;
 			
 			urlLoader = new URLLoader();
-			urlLoader.addEventListener(Event.COMPLETE, getNetxManagerId);	
-			//urlLoader.load(request);
-			redirectToNextManager(nextMitingId);
+			urlLoader.addEventListener(Event.COMPLETE,function(e:Event) : void { getNetxMeetingInfo(e, nextMitingId) } );
+			urlLoader.load(request);
+
 			
 		}
 		
-		private function getNetxManagerId(e:Event):void{
+		private function getNetxMeetingInfo(e:Event,nextMitingId:String):void{
 			var xml:XML = new XML(e.target.data);
 			LogUtil.debug("load URL complete: " + xml);
 			var logData:Object = new Object();
@@ -295,7 +296,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				var _connectionManager:ConnectionManager = BBB.initConnectionManager();
       			_connectionManager.setUri(applicationURI);
 	  			_connectionManager.connect(_conferenceParameters);
-	        */
+
 			//-----------------end re-init
 			var attendees:XMLList = xml.attendees.children();
 			var nextManagerID:String = '';
@@ -310,9 +311,13 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			event.managerID=nextManagerID;
 			var gd:Dispatcher = new Dispatcher();
 			gd.dispatchEvent(event);
+			*/
+			var voicebridge:String = xml.voiceBridge;
+			redirectToNextManager(nextMitingId,voicebridge);
 		}
 		
-		private function redirectToNextManager(nextManager:String):void {
+		private function redirectToNextManager(nextManager:String,voicebridge:String):void {
+
 			var  me:String = UsersUtil.getMyUsername();
 			var urlParametersRequest:String = "/bigbluebutton/api/join?meetingID=" + nextManager + "&fullName=" + me + "&redirect=false&password=" + attendeePW + "&checksum=";
 			var urlParameters:String = "joinmeetingID=" + nextManager + "&fullName=" + me + "&redirect=false&password=" + attendeePW + salt;
@@ -328,12 +333,12 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			var urlLoader:URLLoader;
 
 			urlLoader = new URLLoader();
-			urlLoader.addEventListener(Event.COMPLETE, handleLoginToNextManagerRoom);
+			urlLoader.addEventListener(Event.COMPLETE, function(e:Event) : void { handleLoginToNextManagerRoom(e, nextManager,voicebridge) });
 			urlLoader.load(request);
 			
 		}
 
-		private function handleLoginToNextManagerRoom(e:Event):void{
+		private function handleLoginToNextManagerRoom(e:Event,nextManager:String,voicebridge:String):void{
 			var xml:XML = new XML(e.target.data);
 			LogUtil.debug("load URL complete: " + xml);
 			var logData:Object = new Object();
@@ -346,6 +351,28 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 
 				return;
 			}
+
+				var newMeetingId:String = xml.meeting_id;
+				var newUserId:String = xml.user_id;
+				var newAuthToken:String = xml.auth_token;
+
+				UserManager.getInstance().getConference().setMyRoom(newMeetingId);
+				UserManager.getInstance().getConference().setMyAuthToken(newAuthToken);
+
+
+				UserManager.getInstance().getConference().setMyUserid(newUserId+"_2");
+
+				UserManager.getInstance().getConference().externalMeetingID = nextManager;
+				UserManager.getInstance().getConference().meetingName = nextManager;
+				UserManager.getInstance().getConference().internalMeetingID = newMeetingId;
+				UserManager.getInstance().getConference().externalUserID = newUserId;
+				UserManager.getInstance().getConference().voiceBridge = voicebridge;
+
+
+			//ModuleLoadEvent.RELOAD_ALL_MODULES
+			//var event:ModuleLoadEvent = new ModuleLoadEvent(ModuleLoadEvent.RELOAD_ALL_MODULES);
+			//	var gd:Dispatcher = new Dispatcher();
+			//gd.dispatchEvent(event);
 			BBB.initConnectionManager().connectToNextRoom();
 			new ModulesProxy();
 

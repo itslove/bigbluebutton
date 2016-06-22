@@ -70,7 +70,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
   </EventHandlers>
 
 	<EventHandlers type="{ModuleLoadEvent.RELOAD_ALL_MODULES}" >
-		<!--MethodInvoker generator="{ModulesProxy}" method="reloadAllModules"  /-->
+		<MethodInvoker generator="{ModulesProxy}" method="reloadAllModules"  />
 	</EventHandlers>
 
 
