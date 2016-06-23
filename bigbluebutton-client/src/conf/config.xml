@@ -2,13 +2,13 @@
 <config>
     <localeversion suppressWarning="false">0.9.0</localeversion>
     <version>269</version>
-    <help url="http://﻿50.112.40.75/help.html"/>
-    <javaTest url="http://﻿50.112.40.75/testjava.html"/>
-    <porttest host="﻿50.112.40.75" application="video/portTest" timeout="10000"/>
+    <help url="http://50.112.40.75/help.html"/>
+    <javaTest url="http://50.112.40.75/testjava.html"/>
+    <porttest host="50.112.40.75" application="video/portTest" timeout="10000"/>
     <bwMon server="172.31.39.30" application="video/bwTest"/>
-    <application uri="rtmp://﻿50.112.40.75/bigbluebutton" host="http://﻿50.112.40.75/bigbluebutton/api/enter"/>
+    <application uri="rtmp://50.112.40.75/bigbluebutton" host="http://50.112.40.75/bigbluebutton/api/enter"/>
     <language userSelectionEnabled="true" />
-    <skinning enabled="true" url="http://﻿50.112.40.75/client/branding/css/BBBDefault.css.swf" />
+    <skinning enabled="true" url="http://50.112.40.75/client/branding/css/BBBDefault.css.swf" />
 
     <shortcutKeys showButton="true" />
     <browserVersions chrome="41" firefox="36" flash="17" java="1.7.0_51" />
@@ -22,8 +22,8 @@
             
 		<modules>
 
-		<module name="ChatModule" url="http://﻿50.112.40.75/client/ChatModule.swf?v=268"
-			uri="rtmp://﻿50.112.40.75/bigbluebutton"
+		<module name="ChatModule" url="http://50.112.40.75/client/ChatModule.swf?v=268"
+			uri="rtmp://50.112.40.75/bigbluebutton"
 			dependsOn="UsersModule"	
 			privateEnabled="false"  
 			fontSize="12"
@@ -32,8 +32,8 @@
 			colorPickerIsVisible="false"
 		/>
 
-		<module name="UsersModule" url="http://﻿50.112.40.75/client/UsersModule.swf?v=268"
-			uri="rtmp://﻿50.112.40.75/bigbluebutton"
+		<module name="UsersModule" url="http://50.112.40.75/client/UsersModule.swf?v=268"
+			uri="rtmp://50.112.40.75/bigbluebutton"
 			allowKickUser="true"
 			enableRaiseHand="true"
 			enableSettingsButton="true"
@@ -42,8 +42,8 @@
 
 		
 		<module name="DeskShareModule"
-			url="http://﻿50.112.40.75/client/DeskShareModule.swf?v=268"
-			uri="rtmp://﻿50.112.40.75/deskShare"
+			url="http://50.112.40.75/client/DeskShareModule.swf?v=268"
+			uri="rtmp://50.112.40.75/deskShare"
 			showButton="true"
 			autoStart="false"
 			autoFullScreen="false"
@@ -51,8 +51,8 @@
 		/>
 		
 
- 	<module name="PhoneModule" url="http://﻿50.112.40.75/client/PhoneModule.swf?v=268"
-			uri="rtmp://﻿50.112.40.75/sip"
+ 	<module name="PhoneModule" url="http://50.112.40.75/client/PhoneModule.swf?v=268"
+			uri="rtmp://50.112.40.75/sip"
 			autoJoin="true"
 			listenOnlyMode="true"
 			presenterShareOnly="true"
@@ -65,8 +65,8 @@
 			dependsOn="UsersModule"
 		/>
 
-		<module name="VideoconfModule" url="http://﻿50.112.40.75/client/VideoconfModule.swf?v=268"
-			uri="rtmp://﻿50.112.40.75/video"
+		<module name="VideoconfModule" url="http://50.112.40.75/client/VideoconfModule.swf?v=268"
+			uri="rtmp://50.112.40.75/video"
 			dependson = "UsersModule"
 			videoQuality = "100"
 			presenterShareOnly = "false"
@@ -125,8 +125,8 @@
 		/>
 -->
 
-		<module name="VideodockModule" url="http://﻿50.112.40.75/client/VideodockModule.swf?v=268"
-			uri="rtmp://﻿50.112.40.75/bigbluebutton"
+		<module name="VideodockModule" url="http://50.112.40.75/client/VideodockModule.swf?v=268"
+			uri="rtmp://50.112.40.75/bigbluebutton"
 			dependsOn="VideoconfModule, UsersModule"
 			autoDock="true"
 			showControls="true"
@@ -140,9 +140,9 @@
 		/>
 		
 
-		<module name="LayoutModule" url="http://﻿50.112.40.75/client/LayoutModule.swf?v=268"
-			uri="rtmp://﻿50.112.40.75/bigbluebutton"
-			layoutConfig="http://﻿50.112.40.75/client/conf/layout.xml"
+		<module name="LayoutModule" url="http://50.112.40.75/client/LayoutModule.swf?v=268"
+			uri="rtmp://50.112.40.75/bigbluebutton"
+			layoutConfig="http://50.112.40.75/client/conf/layout.xml"
 			enableEdit="true"
 		/>
 
