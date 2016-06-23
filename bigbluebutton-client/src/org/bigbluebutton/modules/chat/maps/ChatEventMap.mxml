@@ -29,6 +29,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
       import org.bigbluebutton.common.events.OpenWindowEvent;
       import org.bigbluebutton.core.EventConstants;
       import org.bigbluebutton.main.events.ModuleStartedEvent;
+      import org.bigbluebutton.main.events.ModuleLoadEvent;
       import org.bigbluebutton.modules.chat.events.ChatEvent;
       import org.bigbluebutton.modules.chat.events.SendPrivateChatMessageEvent;
       import org.bigbluebutton.modules.chat.events.SendPublicChatMessageEvent;
@@ -78,7 +79,10 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
   
   <EventHandlers type="{TranscriptEvent.TRANSCRIPT_EVENT}" >
     <MethodInvoker generator="{ChatMessageService}" method="sendWelcomeMessage"/>
-  </EventHandlers>      
+  </EventHandlers>
+    <EventHandlers type="{ModuleLoadEvent.RELOAD_ALL_MODULES}" >
+        <MethodInvoker generator="{ChatEventMapDelegate}" method="reloadChatModule"  />
+    </EventHandlers>
   
   <Injectors target="{ChatMessageService}">
     <PropertyInjector targetKey="dispatcher" source="{scope.dispatcher}"/>
@@ -93,5 +97,5 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
   <Injectors target="{MessageSender}">
     <PropertyInjector targetKey="dispatcher" source="{scope.dispatcher}"/>
   </Injectors>
-  
+
 </EventMap>

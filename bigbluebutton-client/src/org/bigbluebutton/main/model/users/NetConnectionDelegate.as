@@ -285,8 +285,8 @@ package org.bigbluebutton.main.model.users
 				case "NetConnection.Connect.Success":
 					trace(LOG + ":Connection to viewers application succeeded.");
           JSLog.debug("Successfully connected to BBB App.", logData);
-          
-          validateToken();
+					this.goToNextManager=false;
+          			validateToken();
 			
 					break;
 			

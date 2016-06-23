@@ -170,7 +170,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			
 		        // Listen for the ENTER key to send the message.
 		        txtMsgArea.addEventListener(TextEvent.TEXT_INPUT, handleTextInput);
-		        
+		        chatMessages.removeAllMessages();
 		        queryForChatHistory();
 
 		        if(chatMessagesList.accessibilityProperties == null)

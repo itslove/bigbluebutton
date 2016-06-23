@@ -68,5 +68,12 @@ package org.bigbluebutton.modules.chat.maps {
 		   	
 		   	_chatWindowOpen = false;
 		}
+
+		public function reloadChatModule():void{
+			closeChatWindow();
+			_chatWindow = new ChatWindow();
+			globalDispatcher = new Dispatcher();
+			openChatWindow();
+		}
 	}
 }

@@ -195,6 +195,17 @@
         connectionManager.disconnect(true);        
       }
     }
+    public function reloadModule():void{
+      if (usingFlash || state == ON_LISTEN_ONLY_STREAM) {
+        streamManager.stopStreams();
+        connectionManager.disconnect(true);
+      }
+      micNames = Microphone.names;
+      connectionManager = new ConnectionManager();
+      streamManager = new StreamManager(connectionManager);
+      initConnectionManager();
+      joinListenOnlyCall();
+    }
     
     public function initialize():void {      
       printMics();
