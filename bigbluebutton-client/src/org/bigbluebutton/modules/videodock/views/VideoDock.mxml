@@ -148,7 +148,7 @@
 				
 				closeBtn.tabIndex = baseIndex+3;
 				
-				showPrivateChatButtonVideoDock();
+				//showPrivateChatButtonVideoDock();
 				showNextManagerButton();
 				
 				if (options.maximize) this.maximize();
@@ -760,7 +760,7 @@
 
             <mate:Listener type="{OpenVideoWindowEvent.OPEN_VIDEO_WINDOW_EVENT}" method="onOpenWindow" />
             <mate:Listener type="{CloseWindowEvent.CLOSE_WINDOW_EVENT}" method="onCloseWindow" />
-            <mx:Button label="Следующий менеджер" id="nextManagerBtn" toolTip="go to next manager" paddingTop="2" bottom="1" left="5" click="onNextManagerClicked(event)"/>
-            <mx:Button label="{ResourceUtil.getInstance().getString('bbb.videodock.privateChatBtn')}" id="privateChatBtnVideoDock" toolTip="{ResourceUtil.getInstance().getString('bbb.videodock.privateChatBtn.toolTip')}" paddingTop="2" bottom="1" right="5" click="onPrivateChatClicked(event)"/>
+            <mx:Button label="{ResourceUtil.getInstance().getString('bbb.videodock.nextManagerBtn')}" id="nextManagerBtn" toolTip="{ResourceUtil.getInstance().getString('bbb.videodock.nextManagerBtn.toolTip')}" paddingTop="2" bottom="1" right="5" click="onNextManagerClicked(event)"/>
+            <mx:Button visible="false" label="{ResourceUtil.getInstance().getString('bbb.videodock.privateChatBtn')}" id="privateChatBtnVideoDock" toolTip="{ResourceUtil.getInstance().getString('bbb.videodock.privateChatBtn.toolTip')}" paddingTop="2" bottom="1" right="5" click="onPrivateChatClicked(event)"/>
 
         </CustomMdiWindow>
