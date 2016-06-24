@@ -108,7 +108,7 @@
 			private var confOptions:VideoConfOptions = new VideoConfOptions();
 			private var dispatcher:Dispatcher;			
 			private var keyCombos:Object;
-			 private var isNextManagerClicked=false;
+			 private var isNextManagerClicked:Boolean=false;
 			
 			[Bindable] 
 			private var baseIndex:int;

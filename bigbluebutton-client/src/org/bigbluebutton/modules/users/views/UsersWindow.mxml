@@ -510,7 +510,7 @@
 				//var logData:Object = new Object();
 
 				//JSLog.debug("manualEndMeeting "+UsersUtil.getExternalMeetingID(), logData);
-				var salt:String ="eb7c5c72b730112644db1a12db84267e";
+				var salt:String ="2d75e011711511fb656d2eadf7a5ff29";//"eb7c5c72b730112644db1a12db84267e";
 				var meetingID:String = UsersUtil.getExternalMeetingID();
 				var urlParameters: String = "endmeetingID="+meetingID+"&password=prof123"+salt;
 				var checksum:String = SHA1.hash(urlParameters);
