@@ -505,6 +505,10 @@
 			}
 
 			public function manualEndMeeting():void{
+				var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+				if(!UsersUtil.amIModerator()){
+					return;
+				}
 				//var controller:MainApplicationShell =new MainApplicationShell();
 				//controller.sendReloadAllModuleStartedEvent();
 				//var logData:Object = new Object();
