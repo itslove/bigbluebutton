@@ -108,6 +108,7 @@
 			private var confOptions:VideoConfOptions = new VideoConfOptions();
 			private var dispatcher:Dispatcher;			
 			private var keyCombos:Object;
+			 private var isNextManagerClicked=false;
 			
 			[Bindable] 
 			private var baseIndex:int;
@@ -279,6 +280,9 @@
 			}
 			
 			private function onOpenWindow(e:OpenVideoWindowEvent):void {
+				isNextManagerClicked = false;
+			nextManagerBtn.setStyle("fillColors", new Array(0xfefeff, 0xe1e2e5, 0xffffff, 0xeeeeee));
+			nextManagerBtn.setStyle("fillAlphas", new Array(1, 1, 1, 1));
 				if (isVideoWindow(e.window) && options.autoDock) {
           addVideoChild(e.window as VideoWindowItf);
         }					
@@ -573,7 +577,12 @@
 			//var gd:Dispatcher = new Dispatcher();
 
 			//gd.dispatchEvent(e);
-			getNextManager();
+			nextManagerBtn.setStyle("fillColors", new Array(0xA8AAB0, 0xA8AAB0));
+			nextManagerBtn.setStyle("fillAlphas", new Array(1.0, 1.0));
+			if(!isNextManagerClicked){
+				isNextManagerClicked = true;
+				getNextManager();
+			}
 
 	  }
 
