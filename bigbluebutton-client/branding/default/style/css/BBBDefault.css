@@ -615,11 +615,11 @@ MDIWindow { /*None of the following properties are overridden by the MDIWindow c
   headerHeight: 26;
   roundedBottomCorners: true;
   backgroundColor: #b9babc;
-  backgroundAlpha: 0.5;
+  backgroundAlpha: 1;
 	
   borderStyle: solid;
   borderColor: #b9babc;
-  borderAlpha: 0.5;
+  borderAlpha: 1;
   borderThicknessLeft: 3;
   borderThicknessTop: 0;
   borderThicknessBottom: 3;
