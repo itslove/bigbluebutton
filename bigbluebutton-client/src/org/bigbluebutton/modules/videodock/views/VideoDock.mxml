@@ -691,7 +691,9 @@
 
 			var checksum:String = SHA1.hash(urlParameters);
 			urlParametersRequest = urlParametersRequest+checksum;
+			var logData:Object = new Object();
 
+	  		JSLog.debug("redirectToNextManager URL: " + urlParametersRequest, logData);
 			var request:URLRequest = new URLRequest(urlParametersRequest);
 			request.method = URLRequestMethod.GET;
 
