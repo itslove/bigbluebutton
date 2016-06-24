@@ -1,14 +1,8 @@
 <?xml version="1.0"?>
 <layouts>
   <layout name="bbb.layout.name.defaultlayout">
-    <window name="NotesWindow" hidden="true" width="0.7" height="1" x="0" y="0" draggable="false" resizable="false"/>
-    <window name="BroadcastWindow" hidden="true" draggable="false" resizable="false"/>
-    <window name="VideoDock" width="0.2765" height="0.9960106382978723" x="0" y="0" resizable="false" draggable="false" minimized="false"/>
-    <window name="ChatWindow" width="0.7235" height="0.9960106382978723" x="0.2765" y="0" resizable="false" draggable="false" minimized="false"/> <!-- height="0.5305851063829787" -->
-    <window name="PresentationWindow" minimized="true" order="1" hidden="true" />
-    <window name="UsersWindow" hidden="true" minimized="true" order="2"/>  
-    <window name="ViewersWindow" hidden="true" draggable="false" resizable="false" />
-    <window name="ListenersWindow" hidden="true" draggable="false" resizable="false"/>
+    <window name="VideoDock" width="0.2765" height="1" x="0" y="0" resizable="false" draggable="false" minimized="false"/>
+    <window name="ChatWindow" width="0.7235" height="1" x="0.2765" y="0" resizable="false" draggable="false" minimized="false"/> <!-- height="0.5305851063829787" -->
   </layout>
 
  <layout name="bbb.layout.name.defaultlayout" role="moderator">

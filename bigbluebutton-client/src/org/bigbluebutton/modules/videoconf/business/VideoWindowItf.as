@@ -188,12 +188,14 @@ package org.bigbluebutton.modules.videoconf.business
 					tmpHeight = Math.min (tmpHeight, Math.floor(tmpWidth / aspectRatio));
 					break;
 			}
+			/*
 			if(tmpWidth<240 || tmpHeight<180){
 				tmpWidth = 240;
 				tmpHeight = 180;
 				this.width = 240;
 				this.height = 180;
 			}
+			*/
 			logData.tmpwidth = tmpWidth;
 			logData.tmpheight = tmpHeight;
 			//JSLog.debug("****resize WIDTH= & HEIGHT=",logData);
