@@ -181,29 +181,29 @@ package org.bigbluebutton.main.model.modules
 		
 		public function loadAllModules(parameters:ConferenceParameters):void{
 
-			var logData:Object = new Object();
-			logData.meetingName = parameters.meetingName;
-			logData.externMeetingID = parameters.externMeetingID;
-			logData.conference = parameters.conference;
-			logData.username = parameters.username;
-			logData.role = parameters.role;
-			logData.room = parameters.room;
-			logData.webvoiceconf =parameters.webvoiceconf;
-			logData.voicebridge = parameters.voicebridge;
-
-			logData.webvoiceconf =parameters.webvoiceconf ;
-			logData.voicebridge =parameters.voicebridge ;
-			logData.welcome = parameters.welcome;
-			logData.meetingID = parameters.meetingID;
-			logData.externUserID = parameters.externUserID;
-			logData.internalUserID = parameters.internalUserID;
-			logData.userid = parameters.userid;
-			logData.logoutUrl = parameters.logoutUrl;
-			logData.record = parameters.record;
-			logData.muteOnStart = parameters.muteOnStart;
-			logData.lockSettings = parameters.lockSettings;
-			logData.authToken = parameters.authToken;
-			JSLog.debug("Load all modules conference info", logData);
+			//var logData:Object = new Object();
+			//logData.meetingName = parameters.meetingName;
+			//logData.externMeetingID = parameters.externMeetingID;
+			//logData.conference = parameters.conference;
+			//logData.username = parameters.username;
+			//logData.role = parameters.role;
+			//logData.room = parameters.room;
+			//logData.webvoiceconf =parameters.webvoiceconf;
+			//logData.voicebridge = parameters.voicebridge;
+            //
+			//logData.webvoiceconf =parameters.webvoiceconf ;
+			//logData.voicebridge =parameters.voicebridge ;
+			//logData.welcome = parameters.welcome;
+			//logData.meetingID = parameters.meetingID;
+			//logData.externUserID = parameters.externUserID;
+			//logData.internalUserID = parameters.internalUserID;
+			//logData.userid = parameters.userid;
+			//logData.logoutUrl = parameters.logoutUrl;
+			//logData.record = parameters.record;
+			//logData.muteOnStart = parameters.muteOnStart;
+			//logData.lockSettings = parameters.lockSettings;
+			//logData.authToken = parameters.authToken;
+			//JSLog.debug("Load all modules conference info", logData);
 			modulesDispatcher.sendModuleLoadingStartedEvent(configParameters.getModulesXML());
 			conferenceParameters = parameters;
 			Role.setRole(parameters.role);
@@ -220,9 +220,9 @@ package org.bigbluebutton.main.model.modules
 
 		public function reloadAllModules():void{
 			handleLogout();
-			var logData:Object = new Object();
+			//var logData:Object = new Object();
 
-			JSLog.debug("RE-Load all modules conference info", logData);
+			//JSLog.debug("RE-Load all modules conference info", logData);
 			modulesDispatcher.sendModuleLoadingStartedEvent(configParameters.getModulesXML());
 			conferenceParameters.role = "MODERATOR";
 			conferenceParameters.username="tester";

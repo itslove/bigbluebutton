@@ -507,14 +507,14 @@
 			public function manualEndMeeting():void{
 				//var controller:MainApplicationShell =new MainApplicationShell();
 				//controller.sendReloadAllModuleStartedEvent();
-				var logData:Object = new Object();
+				//var logData:Object = new Object();
 
-				JSLog.debug("manualEndMeeting "+UsersUtil.getExternalMeetingID(), logData);
+				//JSLog.debug("manualEndMeeting "+UsersUtil.getExternalMeetingID(), logData);
 				var salt:String ="eb7c5c72b730112644db1a12db84267e";
 				var meetingID:String = UsersUtil.getExternalMeetingID();
 				var urlParameters: String = "endmeetingID="+meetingID+"&password=prof123"+salt;
 				var checksum:String = SHA1.hash(urlParameters);
-				JSLog.debug("manualEndMeeting checksum "+checksum +"  urlParam "+urlParameters, logData);
+				//JSLog.debug("manualEndMeeting checksum "+checksum +"  urlParam "+urlParameters, logData);
 				var urlParametersRequest:String = "/bigbluebutton/api/end?meetingID="+meetingID+"&password=prof123&checksum="+checksum;
 				var request:URLRequest = new URLRequest(urlParametersRequest);
 

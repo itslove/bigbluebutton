@@ -64,9 +64,9 @@ package org.bigbluebutton.main.model.users
     
 		public function NetConnectionDelegate():void
 		{
-			var logData:Object = new Object();
+			//var logData:Object = new Object();
 
-			JSLog.critical("*********NetConnectionDelegate INIT", logData);
+			//JSLog.critical("*********NetConnectionDelegate INIT", logData);
 			dispatcher = new Dispatcher();
 			
 			_netConnection = new NetConnection();				
@@ -151,9 +151,9 @@ package org.bigbluebutton.main.model.users
       var tokenValid: Boolean = map.valid as Boolean;
       var userId: String = map.userId as String;
 
-      var logData:Object = new Object();
-      logData.user = UsersUtil.getUserData();
-      JSLog.critical("Validate auth token timed out.", logData);
+      //var logData:Object = new Object();
+      //logData.user = UsersUtil.getUserData();
+      //JSLog.critical("Validate auth token timed out.", logData);
       
       if (tokenValid) {
         authenticated = true;
@@ -280,7 +280,7 @@ package org.bigbluebutton.main.model.users
 
       var logData:Object = new Object();
       logData.user = UsersUtil.getUserData();
-			JSLog.debug("STATUS of NetConnection: "+statusCode, logData);
+			//JSLog.debug("STATUS of NetConnection: "+statusCode, logData);
 			switch (statusCode) {
 				case "NetConnection.Connect.Success":
 					trace(LOG + ":Connection to viewers application succeeded.");

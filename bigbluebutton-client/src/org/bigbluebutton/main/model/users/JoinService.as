@@ -58,8 +58,8 @@ package org.bigbluebutton.main.model.users
 			var date:Date = new Date();
 //			url += "?a=" + date.time
 			LogUtil.debug("JoinService:load(...) " + url);
-			var logData:Object = new Object();
-			JSLog.critical("--URL for get meeting and user info from JoinService:"+url, logData);
+			//var logData:Object = new Object();
+			//JSLog.critical("--URL for get meeting and user info from JoinService:"+url, logData);
       request = new URLRequest(url);
       request.method = URLRequestMethod.GET;		
             

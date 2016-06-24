@@ -73,9 +73,9 @@ package org.bigbluebutton.main.model.users
 		}
 		
 		public function startService(e:UserServicesEvent):void {
-			var logData:Object = new Object();
+			//var logData:Object = new Object();
 
-			JSLog.debug("applicationURI: " + e.applicationURI+" e.hostURI: "+e.hostURI, logData);
+			//JSLog.debug("applicationURI: " + e.applicationURI+" e.hostURI: "+e.hostURI, logData);
 			applicationURI = e.applicationURI;
 			hostURI = e.hostURI;
 			BBB.initConnectionManager().isTunnelling = e.isTunnelling;

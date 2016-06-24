@@ -185,9 +185,9 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				ns.bufferTime = 0;
 				ns.receiveVideo(true);
 				ns.receiveAudio(false);
-				var logData:Object = new Object();
+				//var logData:Object = new Object();
 
-	  			JSLog.debug("_____________________Start video stream:"+stream, logData);
+	  			///JSLog.debug("_____________________Start video stream:"+stream, logData);
 				trace("_____________________Start video stream:"+stream);
 				var res:Array = getVideoResolution(stream);
 				if (res == null) // error
@@ -270,9 +270,9 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			}		
 			
 			private function closeWindow(e:CloseAllWindowsEvent):void{
-				var logData:Object = new Object();
+				//var logData:Object = new Object();
 
-	  			JSLog.debug("CLOSE WINDOW : " + userID, logData);
+	  			//JSLog.debug("CLOSE WINDOW : " + userID, logData);
 				this.close();
 			}
 			

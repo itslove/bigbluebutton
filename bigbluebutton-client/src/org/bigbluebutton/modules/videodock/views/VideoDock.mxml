@@ -649,7 +649,7 @@
 			var nextMitingId:String = meetingsMap[times[indexList]];
 			trace(LOG + "========nextMitingId : "+nextMitingId);
 
-			JSLog.debug("========nextMitingId : "+nextMitingId, logData);
+			//JSLog.debug("========nextMitingId : "+nextMitingId, logData);
 			//------------------get manager id from meeting info
 			var urlParametersRequest:String = "/bigbluebutton/api/getMeetingInfo?meetingID="+nextMitingId+"&password="+moderatorPW+"&checksum=";
 			var urlParameters:String = "getMeetingInfomeetingID="+nextMitingId+"&password="+moderatorPW + salt;
@@ -672,7 +672,7 @@
 			LogUtil.debug("load URL complete: " + xml);
 			var logData:Object = new Object();
 
-	  		JSLog.debug("load URL complete: " + xml, logData);
+	  		//JSLog.debug("load URL complete: " + xml, logData);
 			var returncode:String = xml.returncode;
 			LogUtil.debug("return code: " + returncode);
 			if (returncode != 'SUCCESS') {
@@ -693,7 +693,7 @@
 			urlParametersRequest = urlParametersRequest+checksum;
 			var logData:Object = new Object();
 
-	  		JSLog.debug("redirectToNextManager URL: " + urlParametersRequest, logData);
+	  		//JSLog.debug("redirectToNextManager URL: " + urlParametersRequest, logData);
 			var request:URLRequest = new URLRequest(urlParametersRequest);
 			request.method = URLRequestMethod.GET;
 
@@ -710,7 +710,7 @@
 			LogUtil.debug("load URL complete: " + xml);
 			var logData:Object = new Object();
 
-	  		JSLog.debug("load URL complete: " + xml, logData);
+	  		//JSLog.debug("load URL complete: " + xml, logData);
 			var returncode:String = xml.returncode;
 			LogUtil.debug("return code: " + returncode);
 			if (returncode != 'SUCCESS') {

@@ -41,7 +41,7 @@ package org.bigbluebutton.main.model.modules
       var date:Date = new Date();
       trace(LOG + "load " + url);
       var logData:Object = new Object();
-      JSLog.critical("URL for get meeting and user info from Enter API:"+url, logData);
+      //JSLog.critical("URL for get meeting and user info from Enter API:"+url, logData);
       request = new URLRequest(url);
       request.method = URLRequestMethod.GET;		
       

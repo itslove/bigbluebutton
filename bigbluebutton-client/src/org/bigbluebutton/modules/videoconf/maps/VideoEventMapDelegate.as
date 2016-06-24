@@ -95,9 +95,9 @@ public class VideoEventMapDelegate {
 
     public function start(uri:String):void {
         trace("VideoEventMapDelegate:: [" + me + "] Video Module Started.");
-        var logData:Object = new Object();
+        //var logData:Object = new Object();
 
-        JSLog.debug("))__)__)_))_)__)VideoConf start uri: " + uri, logData);
+        //JSLog.debug("))__)__)_))_)__)VideoConf start uri: " + uri, logData);
         this.uri = uri;
     }
 
@@ -450,18 +450,18 @@ public class VideoEventMapDelegate {
     }
 
     public function connectToVideoApp():void {
-        var logData:Object = new Object();
+        //var logData:Object = new Object();
 
-        JSLog.debug("1111117890--0-0-0-0connectToVideoApp: " + UsersUtil.getInternalMeetingID(), logData);
+       // JSLog.debug("1111117890--0-0-0-0connectToVideoApp: " + UsersUtil.getInternalMeetingID(), logData);
         proxy = new VideoProxy(uri);
         proxy.connect();
     }
 
     public function connectToNextManagerVideo():void {
 
-        var logData:Object = new Object();
+        //var logData:Object = new Object();
 
-        JSLog.debug("-=-=-=-=-=connectToNextManagerVideo " + UsersUtil.getInternalMeetingID(), logData);
+        //JSLog.debug("-=-=-=-=-=connectToNextManagerVideo " + UsersUtil.getInternalMeetingID(), logData);
         UserManager.getInstance().getConference().removeAllParticipants();
         closeAllWindows();
         proxy.disconnect();
