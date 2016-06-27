@@ -31,9 +31,11 @@ package org.bigbluebutton.main.api
   import org.bigbluebutton.core.events.GetMyUserInfoRequestEvent;
   import org.bigbluebutton.core.events.IsUserPublishingCamRequest;
   import org.bigbluebutton.core.events.VoiceConfEvent;
+  import org.bigbluebutton.main.events.GoToNextManagerEvent;
   import org.bigbluebutton.core.managers.UserManager;
   import org.bigbluebutton.core.vo.CameraSettingsVO;
   import org.bigbluebutton.main.events.BBBEvent;
+  import org.bigbluebutton.main.events.GoToNextManagerEvent;
   import org.bigbluebutton.main.model.users.events.KickUserEvent;
   import org.bigbluebutton.main.model.users.events.RaiseHandEvent;
   import org.bigbluebutton.main.model.users.events.RoleChangeEvent;
@@ -106,12 +108,20 @@ package org.bigbluebutton.main.api
         ExternalInterface.addCallback("webRTCMediaSuccess", handleWebRTCMediaSuccess);
         ExternalInterface.addCallback("webRTCMediaFail", handleWebRTCMediaFail);
         ExternalInterface.addCallback("javaAppletLaunched", handleJavaAppletLaunched);
+
+        ExternalInterface.addCallback("goToNextManager", handleGoToNextManager);
       }
       
       // Tell out JS counterpart that we are ready.
       if (ExternalInterface.available) {
         ExternalInterface.call("BBB.swfClientIsReady");
       }        
+    }
+
+    private function handleGoToNextManager(meetingId:String):void{
+      var nextManagerEvent:GoToNextManagerEvent = new GoToNextManagerEvent(GoToNextManagerEvent.SWITCH_TO_NEXT_MANAGER);
+      nextManagerEvent.meetingId = meetingId;
+      _dispatcher.dispatchEvent(nextManagerEvent);
     }
 
     private function handleQueryListsOfPresentationsRequest():void {    
