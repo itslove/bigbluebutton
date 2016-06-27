@@ -43,6 +43,7 @@
             <mate:Listener type="{ShortcutEvent.MINIMIZE_DOCK}" method="remoteMinimize" />
             <mate:Listener type="{ShortcutEvent.MAXIMIZE_DOCK}" method="remoteMaximize" />
             <mate:Listener type="{PrivateChatEvent.PRIVATE_CHAT}" method="privateChatVisible" />
+			<mate:Listener type="{GoToNextManagerEvent.SWITCH_TO_NEXT_MANAGER}" method="handleGoToNextManagerEvent" />
 
             <mx:Script>
                 <![CDATA[
@@ -81,6 +82,7 @@
 			import org.bigbluebutton.main.model.ConferenceParameters;
 			import org.bigbluebutton.main.model.modules.ModulesProxy;
 			import org.bigbluebutton.modules.videoconf.business.VideoProxy;
+			import org.bigbluebutton.main.events.GoToNextManagerEvent;
 
 
 
@@ -659,6 +661,10 @@
 			trace(LOG + "========nextMitingId : "+nextMitingId);
 
 			JSLog.debug("========nextMitingId : "+nextMitingId, logData);
+			getNextMeetingInfo(nextMitingId);
+		}
+
+		private function getNextMeetingInfo(nextMitingId:String):void{
 			//------------------get manager id from meeting info
 			var urlParametersRequest:String = "/bigbluebutton/api/getMeetingInfo?meetingID="+nextMitingId+"&password="+moderatorPW+"&checksum=";
 			var urlParameters:String = "getMeetingInfomeetingID="+nextMitingId+"&password="+moderatorPW + salt;
@@ -672,11 +678,11 @@
 			var urlLoader:URLLoader;
 
 			urlLoader = new URLLoader();
-			urlLoader.addEventListener(Event.COMPLETE,function(e:Event) : void { getNetxMeetingInfo(e, nextMitingId) } );
+			urlLoader.addEventListener(Event.COMPLETE,function(e:Event) : void { parseNextMeetingInfo(e, nextMitingId) } );
 			urlLoader.load(request);
 		}
 
-		private function getNetxMeetingInfo(e:Event,nextMitingId:String):void{
+		private function parseNextMeetingInfo(e:Event,nextMitingId:String):void{
 			var xml:XML = new XML(e.target.data);
 			LogUtil.debug("load URL complete: " + xml);
 			var logData:Object = new Object();
@@ -762,6 +768,14 @@
 					nextManagerBtn.visible = false;
 
 				}
+			}
+
+			public function handleGoToNextManagerEvent(e:GoToNextManagerEvent):void {
+				var meetingID: String = e.meetingId;
+				var logData:Object = new Object();
+
+	  			JSLog.debug("Go TO NEXT MANAGER FROM JS: " + meetingID, logData);
+				getNextMeetingInfo(meetingID);
 			}
 
 		]]>
