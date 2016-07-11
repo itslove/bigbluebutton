@@ -325,10 +325,10 @@ public class VideoEventMapDelegate {
          //var logData:Object = new Object();
          //JSLog.critical("stream name before:"+bbbUser.streamName, logData);
          if(!UsersUtil.amIModerator()) {
-             var proxytmp:VideoProxy;
-             proxytmp = new VideoProxy(uri);
-             proxytmp.connect();
-             window.startVideo(proxytmp.connection, bbbUser.streamName + UsersUtil.getInternalMeetingID());
+             //var proxytmp:VideoProxy;
+             //proxytmp = new VideoProxy(uri);
+             //proxytmp.connect();
+             window.startVideo(proxy.connection, bbbUser.streamName + UsersUtil.getInternalMeetingID());
          }else{
              window.startVideo(proxy.connection, bbbUser.streamName);
          }
