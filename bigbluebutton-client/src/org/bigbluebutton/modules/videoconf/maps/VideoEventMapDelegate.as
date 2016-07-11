@@ -32,7 +32,6 @@ import org.bigbluebutton.common.events.CloseWindowEvent;
 import org.bigbluebutton.common.events.OpenWindowEvent;
 import org.bigbluebutton.common.events.ToolbarButtonEvent;
 import org.bigbluebutton.core.UsersUtil;
-import org.bigbluebutton.core.UsersUtil;
 import org.bigbluebutton.core.events.ConnectAppEvent;
 import org.bigbluebutton.core.events.PrivateChatEvent;
 import org.bigbluebutton.core.managers.UserManager;
@@ -98,7 +97,13 @@ public class VideoEventMapDelegate {
         var logData:Object = new Object();
 
         JSLog.debug("))__)__)_))_)__)VideoConf start uri: " + uri, logData);
-        this.uri = uri;
+        JSLog.debug("(((_(_()_)__)VideoConf start user role: " + UsersUtil.getMyRole()+"   "+UsersUtil.getInternalMeetingID(), logData);
+        if(!UsersUtil.amIModerator()){
+            this.uri = "rtmp://54.187.15.179/video";
+        }else{
+            this.uri = uri;
+        }
+
     }
 
     public function viewCamera(userID:String, stream:String, name:String, mock:Boolean = false):void {
@@ -318,7 +323,7 @@ public class VideoEventMapDelegate {
          trace("stream name before:"+bbbUser.streamName);
          //var logData:Object = new Object();
          //JSLog.critical("stream name before:"+bbbUser.streamName, logData);
-         window.startVideo(proxy.connection, bbbUser.streamName);
+         window.startVideo(proxy.connection, bbbUser.streamName+UsersUtil.getInternalMeetingID());
          /*
          window.startVideo(proxy.connection, streamPresenter);
          var user:BBBUser = UserManager.getInstance().getConference().getUser(UsersUtil.getMyUserID());
@@ -417,7 +422,7 @@ public class VideoEventMapDelegate {
         var streamPresenter:String = "320x240-" + UsersUtil.getPresenterUserID();
         trace("stream name after:" + streamPresenter);
 
-        window.startVideo(proxy.connection, bbbUser.streamName);
+        window.startVideo(proxy.connection, bbbUser.streamName+UsersUtil.getInternalMeetingID());
         /*
          window.startVideo(proxy.connection, streamPresenter);
          var user:BBBUser = UserManager.getInstance().getConference().getUser(UsersUtil.getMyUserID());
