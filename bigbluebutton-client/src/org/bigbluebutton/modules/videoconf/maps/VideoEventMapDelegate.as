@@ -324,7 +324,14 @@ public class VideoEventMapDelegate {
          trace("stream name before:"+bbbUser.streamName);
          //var logData:Object = new Object();
          //JSLog.critical("stream name before:"+bbbUser.streamName, logData);
-         window.startVideo(proxy.connection, bbbUser.streamName+UsersUtil.getInternalMeetingID());
+         if(!UsersUtil.amIModerator()) {
+             var proxytmp:VideoProxy;
+             proxytmp = new VideoProxy(uri);
+             proxytmp.connect();
+             window.startVideo(proxytmp.connection, bbbUser.streamName + UsersUtil.getInternalMeetingID());
+         }else{
+             window.startVideo(proxy.connection, bbbUser.streamName);
+         }
          /*
          window.startVideo(proxy.connection, streamPresenter);
          var user:BBBUser = UserManager.getInstance().getConference().getUser(UsersUtil.getMyUserID());
@@ -423,7 +430,11 @@ public class VideoEventMapDelegate {
         var streamPresenter:String = "320x240-" + UsersUtil.getPresenterUserID();
         trace("stream name after:" + streamPresenter);
 
-        window.startVideo(proxy.connection, bbbUser.streamName+UsersUtil.getInternalMeetingID());
+        if(!UsersUtil.amIModerator()) {
+            window.startVideo(proxy.connection, bbbUser.streamName + UsersUtil.getInternalMeetingID());
+        }else{
+            window.startVideo(proxy.connection, bbbUser.streamName);
+        }
         /*
          window.startVideo(proxy.connection, streamPresenter);
          var user:BBBUser = UserManager.getInstance().getConference().getUser(UsersUtil.getMyUserID());
