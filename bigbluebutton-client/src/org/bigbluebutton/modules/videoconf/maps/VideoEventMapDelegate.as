@@ -46,10 +46,14 @@ import org.bigbluebutton.main.model.users.events.BroadcastStartedEvent;
 import org.bigbluebutton.main.model.users.events.BroadcastStoppedEvent;
 import org.bigbluebutton.main.model.users.events.StreamStartedEvent;
 import org.bigbluebutton.modules.videoconf.business.VideoProxy;
+import org.bigbluebutton.modules.videoconf.business.VideoProxyView;
+import org.bigbluebutton.modules.videoconf.business.VideoProxyView;
+import org.bigbluebutton.modules.videoconf.business.VideoProxyView;
 import org.bigbluebutton.modules.videoconf.business.VideoWindowItf;
 import org.bigbluebutton.modules.videoconf.events.CloseAllWindowsEvent;
 import org.bigbluebutton.modules.videoconf.events.ClosePublishWindowEvent;
 import org.bigbluebutton.modules.videoconf.events.ConnectedEvent;
+import org.bigbluebutton.modules.videoconf.events.ConnectedViewEvent;
 import org.bigbluebutton.modules.videoconf.events.OpenVideoWindowEvent;
 import org.bigbluebutton.modules.videoconf.events.ShareCameraRequestEvent;
 import org.bigbluebutton.modules.videoconf.events.ShowNextManagerEvent;
@@ -70,8 +74,10 @@ public class VideoEventMapDelegate {
 
     private var options:VideoConfOptions = new VideoConfOptions();
     private var uri:String;
+    private var nginxUri:String = "rtmp://52.41.139.101/video";
 
     private var webcamWindows:WindowManager = new WindowManager();
+    private var videoProxyConnections:VideoConnectionManager = new VideoConnectionManager();
 
     private var button:ToolbarButton = new ToolbarButton();
     private var proxy:VideoProxy;
@@ -99,11 +105,8 @@ public class VideoEventMapDelegate {
 
         //JSLog.debug("))__)__)_))_)__)VideoConf start uri: " + uri, logData);
         //JSLog.debug("(((_(_()_)__)VideoConf start user role: " + UsersUtil.getMyRole()+"   "+UsersUtil.getInternalMeetingID(), logData);
-        if(!UsersUtil.amIModerator()){
-            this.uri = "rtmp://54.187.15.179/video";
-        }else{
+
             this.uri = uri;
-        }
 
     }
 
@@ -308,41 +311,73 @@ public class VideoEventMapDelegate {
         }
     }
 
+    private function closeConnectionForView(userID:String):void {
+        if (!videoProxyConnections.hasConnection(userID)) {
+            trace("VideoEventMapDelegate:: [" + me + "] closeConnection:: No connection for [" + userID + "] [" + UsersUtil.getUserName(userID) + "]");
+            return;
+        }
 
-     private function openViewWindowFor(userID:String):void {
-         trace("VideoEventMapDelegate:: [" + me + "] openViewWindowFor:: Opening VIEW window for [" + userID + "]");
+        var conn:VideoProxyView = videoProxyConnections.removeConnection(userID);
+        if (conn != null) {
+            trace("VideoEventMapDelegate:: [" + me + "] closeConnection:: Closing connection for [" + userID + "] [" + UsersUtil.getUserName(userID) + "]");
+            conn.disconnect();
 
-         var window:VideoWindow = new VideoWindow();
-         window.userID = userID;
-         window.videoOptions = options;
-         window.resolutions = options.resolutions.split(",");
-         window.title = UsersUtil.getUserName(userID);
+        } else {
+            trace("VideoEventMapDelegate:: [" + me + "] closeConnection:: Not Closing. No connections for [" + userID + "] [" + UsersUtil.getUserName(userID) + "]");
+        }
+    }
 
-         closeWindow(userID);
+    public function handleOpenViewWindowFor(event:ConnectedViewEvent){
+        var logData:Object = new Object();
 
-         var bbbUser:BBBUser = UsersUtil.getUser(userID);
-         trace("stream name before:"+bbbUser.streamName);
-         //var logData:Object = new Object();
-         //JSLog.critical("stream name before:"+bbbUser.streamName, logData);
-         if(!UsersUtil.amIModerator()) {
-             //var proxytmp:VideoProxy;
-             //proxytmp = new VideoProxy(uri);
-             //proxytmp.connect();
-             window.startVideo(proxy.connection, bbbUser.streamName + UsersUtil.getInternalMeetingID());
-         }else{
-             window.startVideo(proxy.connection, bbbUser.streamName);
-         }
-         /*
+
+        JSLog.debug("(())))__)__)_))_)__)NGINX CONNECTED: " + nginxUri, logData);
+
+        openNGNXViewWindowFor(event.userID);
+    }
+
+    private function openNGNXViewWindowFor(userID:String):void {
+        trace("VideoEventMapDelegate:: [" + me + "] openViewWindowFor:: Opening VIEW window for [" + userID + "]");
+
+        var window:VideoWindow = new VideoWindow();
+        window.userID = userID;
+        window.videoOptions = options;
+        window.resolutions = options.resolutions.split(",");
+        window.title = UsersUtil.getUserName(userID);
+
+        closeWindow(userID);
+
+        var bbbUser:BBBUser = UsersUtil.getUser(userID);
+        trace("stream name before:"+bbbUser.streamName);
+        //var logData:Object = new Object();
+        //JSLog.critical("stream name before:"+bbbUser.streamName, logData);
+        //if(!UsersUtil.amIModerator()) {
+            //var proxytmp:VideoProxy;
+            //proxytmp = new VideoProxy(uri);
+            //proxytmp.connect();
+            window.startVideo((videoProxyConnections.getConnection(userID)).connection, bbbUser.streamName + UsersUtil.getInternalMeetingID());
+        //}else{
+           // window.startVideo(proxy.connection, bbbUser.streamName);
+        //}
+        /*
          window.startVideo(proxy.connection, streamPresenter);
          var user:BBBUser = UserManager.getInstance().getConference().getUser(UsersUtil.getMyUserID());
          var streemUser:BBBUser = UserManager.getInstance().getConference().getUser(window.userID);
          if (!user.isPrivateChat&&!streemUser.presenter){
          return;
          }*/
-         //
-         webcamWindows.addWindow(window);
-         openWindow(window);
-         dockWindow(window);
+        //
+        webcamWindows.addWindow(window);
+        openWindow(window);
+        dockWindow(window);
+    }
+
+     private function openViewWindowFor(userID:String):void {
+         trace("VideoEventMapDelegate:: [" + me + "] openViewWindowFor:: Opening VIEW window for [" + userID + "]");
+         closeConnectionForView(userID);
+         var proxyNGINX: VideoProxyView = new VideoProxyView(nginxUri,userID);
+         proxyNGINX.connect();
+         videoProxyConnections.addConnection(proxyNGINX);
      }
 
      /*
@@ -481,6 +516,7 @@ public class VideoEventMapDelegate {
         //JSLog.debug("-=-=-=-=-=connectToNextManagerVideo " + UsersUtil.getInternalMeetingID(), logData);
         UserManager.getInstance().getConference().removeAllParticipants();
         closeAllWindows();
+        videoProxyConnections.disconnectAll();
         proxy.disconnect();
         proxy = new VideoProxy(uri);
         proxy.connect();
@@ -580,6 +616,7 @@ public class VideoEventMapDelegate {
         trace("VideoEventMapDelegate:: stopping video module");
         closeAllWindows();
         proxy.disconnect();
+        videoProxyConnections.disconnectAll();
     }
 
     public function closeAllWindows():void {
