@@ -45,6 +45,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			import org.bigbluebutton.modules.videoconf.events.VideoModuleStopEvent;
 			import org.bigbluebutton.modules.videoconf.events.WebRTCWebcamRequestEvent;
 			import org.bigbluebutton.modules.videoconf.events.ConnectedViewEvent;
+			import org.bigbluebutton.modules.videoconf.events.CloseWindowForEvent;
+
 
 		]]>
 	</mx:Script>
@@ -138,7 +140,9 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
   <EventHandlers type="{ModuleLoadEvent.RELOAD_ALL_MODULES}" >
     <MethodInvoker generator="{VideoEventMapDelegate}" method="connectToNextManagerVideo"  />
   </EventHandlers>
-	
+  <EventHandlers type="{CloseWindowForEvent.CLOSE_WINDOW_FOR}" >
+    <MethodInvoker generator="{VideoEventMapDelegate}" method="handleCloseWindowFor" arguments="{event}" />
+  </EventHandlers>
   <!-- ~~~~~~~~~~~~~~~~~~    INJECTORS     ~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
   
 </EventMap>

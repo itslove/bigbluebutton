@@ -57,6 +57,7 @@ package org.bigbluebutton.modules.users.services
   import org.bigbluebutton.modules.users.events.MeetingMutedEvent;
   import org.bigbluebutton.modules.videoconf.views.ControlButtons;
   import org.bigbluebutton.modules.videoconf.views.ToolbarButton;
+  import org.bigbluebutton.modules.videoconf.events.CloseWindowForEvent;
 import org.bigbluebutton.main.api.JSLog;
   
   public class MessageReceiver implements IMessageListener
@@ -516,6 +517,12 @@ import org.bigbluebutton.main.api.JSLog;
     private function handleUserLoweredHand(msg: Object):void {
       trace(LOG + "*** handleUserLoweredHand " + msg.msg + " **** \n" + "****" + UsersUtil.getMyExternalUserID());
 	  var map:Object = JSON.parse(msg.msg);
+      var dispatcher:Dispatcher = new Dispatcher();
+      //close window when manager web camera off
+      if(map.loweredBy=="closeWindow"){
+        dispatcher.dispatchEvent(new CloseWindowForEvent(map.userId));
+        return;
+      }
 
 	  var privatePresenter: String = map.loweredBy.split("-")[0];
       var voiceBridge:String = map.loweredBy.split("-")[1];
@@ -529,7 +536,7 @@ import org.bigbluebutton.main.api.JSLog;
         return;
       }
 
-	  var dispatcher:Dispatcher = new Dispatcher();
+
 	  var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
 	  //update manager privatechat 
 

@@ -45,6 +45,7 @@ import org.bigbluebutton.main.model.users.BBBUser;
 import org.bigbluebutton.main.model.users.events.BroadcastStartedEvent;
 import org.bigbluebutton.main.model.users.events.BroadcastStoppedEvent;
 import org.bigbluebutton.main.model.users.events.StreamStartedEvent;
+import org.bigbluebutton.modules.broadcast.services.MessageSender;
 import org.bigbluebutton.modules.videoconf.business.VideoProxy;
 import org.bigbluebutton.modules.videoconf.business.VideoProxyView;
 import org.bigbluebutton.modules.videoconf.business.VideoProxyView;
@@ -68,6 +69,8 @@ import org.bigbluebutton.modules.videoconf.views.VideoWindow;
 import org.flexunit.runner.manipulation.filters.IncludeAllFilter;
 import org.bigbluebutton.main.events.PresenterStatusEvent;
 import org.bigbluebutton.main.api.JSLog;
+import org.bigbluebutton.modules.videoconf.events.CloseWindowForEvent;
+import org.bigbluebutton.modules.users.services.MessageSender;
 
 public class VideoEventMapDelegate {
     static private var PERMISSION_DENIED_ERROR:String = "PermissionDeniedError";
@@ -107,6 +110,7 @@ public class VideoEventMapDelegate {
         //JSLog.debug("(((_(_()_)__)VideoConf start user role: " + UsersUtil.getMyRole()+"   "+UsersUtil.getInternalMeetingID(), logData);
 
             this.uri = uri;
+
 
     }
 
@@ -254,7 +258,9 @@ public class VideoEventMapDelegate {
 
     private function openAvatarWindowFor(userID:String):void {
         if (!UsersUtil.hasUser(userID)) return;
+        var logData:Object = new Object();
 
+        JSLog.debug("))__)__)_))_)__)Open AvatarWindow close", logData);
         var window:AvatarWindow = new AvatarWindow();
         window.userID = userID;
         window.title = UsersUtil.getUserName(userID);
@@ -311,6 +317,7 @@ public class VideoEventMapDelegate {
         }
     }
 
+
     private function closeConnectionForView(userID:String):void {
         if (!videoProxyConnections.hasConnection(userID)) {
             trace("VideoEventMapDelegate:: [" + me + "] closeConnection:: No connection for [" + userID + "] [" + UsersUtil.getUserName(userID) + "]");
@@ -325,6 +332,10 @@ public class VideoEventMapDelegate {
         } else {
             trace("VideoEventMapDelegate:: [" + me + "] closeConnection:: Not Closing. No connections for [" + userID + "] [" + UsersUtil.getUserName(userID) + "]");
         }
+    }
+
+    public function handleCloseWindowFor(e:CloseWindowForEvent):void{
+        closeWindow(e.userID);
     }
 
     public function handleOpenViewWindowFor(event:ConnectedViewEvent){
@@ -347,6 +358,7 @@ public class VideoEventMapDelegate {
 
         closeWindow(userID);
 
+
         var bbbUser:BBBUser = UsersUtil.getUser(userID);
         trace("stream name before:"+bbbUser.streamName);
         //var logData:Object = new Object();
@@ -360,6 +372,14 @@ public class VideoEventMapDelegate {
            // window.startVideo(proxy.connection, bbbUser.streamName);
         //}
         /*
+
+         var bbbUser:BBBUser = UsersUtil.getUser(userID);
+         trace("stream name before:"+bbbUser.streamName);
+         //var logData:Object = new Object();
+         //JSLog.critical("stream name before:"+bbbUser.streamName, logData);
+         window.startVideo(proxy.connection, bbbUser.streamName);
+         /*
+
          window.startVideo(proxy.connection, streamPresenter);
          var user:BBBUser = UserManager.getInstance().getConference().getUser(UsersUtil.getMyUserID());
          var streemUser:BBBUser = UserManager.getInstance().getConference().getUser(window.userID);
@@ -573,6 +593,10 @@ public class VideoEventMapDelegate {
             trace("VideoEventMapDelegate:: [" + me + "] Opening avatar");
             openAvatarWindowFor(UsersUtil.getMyUserID());
         }
+
+        var sender:org.bigbluebutton.modules.users.services.MessageSender = new org.bigbluebutton.modules.users.services.MessageSender();
+        sender.closeVideoWindowFor(UsersUtil.getMyUserID());
+
     }
 
     public function handleClosePublishWindowEvent(event:ClosePublishWindowEvent):void {
@@ -686,7 +710,9 @@ public class VideoEventMapDelegate {
 
     public function handleStoppedViewingWebcamEvent(event:StoppedViewingWebcamEvent):void {
         trace("VideoEventMapDelegate::handleStoppedViewingWebcamEvent [" + me + "] received StoppedViewingWebcamEvent for user [" + event.webcamUserID + "]");
+        //var logData:Object = new Object();
 
+        //JSLog.debug("()))()9999__999____handleStoppedViewingWebcamEvent ", logData);
         closeWindow(event.webcamUserID);
 
         if (options.displayAvatar && UsersUtil.hasUser(event.webcamUserID) && !UsersUtil.isUserLeaving(event.webcamUserID)) {
