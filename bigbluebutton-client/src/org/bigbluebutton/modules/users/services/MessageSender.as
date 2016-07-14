@@ -90,26 +90,43 @@ import flash.utils.Timer;
           }
         );        
       } else {
-        var message:Object = new Object();
-        message["userId"] = userID;
-        var presenter: String = UserManager.getInstance().getConference().getPresenter().userID;
-        message["loweredBy"] = presenter+"-"+(50000+Math.round(Math.random()*1000));
 
-        _nc.sendMessage("participants.lowerHand", 
-          function(result:String):void { // On successful result
-            LogUtil.debug(result); 
-          },	                   
-          function(status:String):void { // status - On error occurred
-            LogUtil.error(status); 
-          },
-          message
-        );
+          var message:Object = new Object();
+          message["userId"] = userID;
+          var presenter: String = UserManager.getInstance().getConference().getPresenter().userID;
+          message["loweredBy"] = presenter+"-"+(50000+Math.round(Math.random()*1000));
 
-        var timer:Timer = new Timer(30000);
-        timer.addEventListener(TimerEvent.TIMER,function(e:TimerEvent) : void { privateChatManagerPing(e, presenter,userID ) } );
-        timer.start();
+          _nc.sendMessage("participants.lowerHand",
+            function(result:String):void { // On successful result
+              LogUtil.debug(result);
+            },
+            function(status:String):void { // status - On error occurred
+              LogUtil.error(status);
+            },
+            message
+          );
+
+          var timer:Timer = new Timer(30000);
+          timer.addEventListener(TimerEvent.TIMER,function(e:TimerEvent) : void { privateChatManagerPing(e, presenter,userID ) } );
+          timer.start();
 
       }  
+    }
+
+    public function closeVideoWindowFor(userID:String):void{
+      var _nc:ConnectionManager = BBB.initConnectionManager();
+      var message:Object = new Object();
+      message["userId"] = userID;
+      message["loweredBy"] = "closeWindow";
+      _nc.sendMessage("participants.lowerHand",
+          function(result:String):void { // On successful result
+            LogUtil.debug(result);
+          },
+          function(status:String):void { // status - On error occurred
+            LogUtil.error(status);
+          },
+          message
+      );
     }
 
     public function privateChatManagerPing(event:TimerEvent,presenter:String, userID:String ):void{

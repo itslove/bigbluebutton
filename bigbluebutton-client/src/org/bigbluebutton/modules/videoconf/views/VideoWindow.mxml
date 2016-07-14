@@ -240,6 +240,9 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			}
 			
 			private function onNetStatus(e:NetStatusEvent):void{
+var logData:Object = new Object();
+
+	  			JSLog.debug("_____________________onNetStatus:"+e.info.code, logData);
 				switch(e.info.code){
 					case "NetStream.Publish.Start":
 						LogUtil.debug("NetStream.Publish.Start for broadcast stream " + streamName);
