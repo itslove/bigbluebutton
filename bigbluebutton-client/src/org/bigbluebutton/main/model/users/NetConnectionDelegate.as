@@ -251,6 +251,10 @@ package org.bigbluebutton.main.model.users
 		public function connectToNextRoom():void{
 			this.goToNextManager = true;
 		}
+
+		public function readyConnectToNextRoom():void{
+			this.goToNextManager = false;
+		}
 		
     
     public function forceClose():void {
@@ -285,7 +289,7 @@ package org.bigbluebutton.main.model.users
 				case "NetConnection.Connect.Success":
 					trace(LOG + ":Connection to viewers application succeeded.");
           JSLog.debug("Successfully connected to BBB App.", logData);
-					this.goToNextManager=false;
+
           			validateToken();
 			
 					break;

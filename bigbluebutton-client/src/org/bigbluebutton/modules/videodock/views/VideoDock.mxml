@@ -83,6 +83,9 @@
 			import org.bigbluebutton.main.model.modules.ModulesProxy;
 			import org.bigbluebutton.modules.videoconf.business.VideoProxy;
 			import org.bigbluebutton.main.events.GoToNextManagerEvent;
+			import flash.events.TimerEvent; 
+			import flash.utils.Timer;
+
 
 
 
@@ -110,7 +113,7 @@
 			private var confOptions:VideoConfOptions = new VideoConfOptions();
 			private var dispatcher:Dispatcher;			
 			private var keyCombos:Object;
-			 private var isNextManagerClicked=false;
+			 private var isNextManagerClicked:Boolean=false;
 			
 			[Bindable] 
 			private var baseIndex:int;
@@ -159,8 +162,77 @@
 		        var gDispatcher:Dispatcher = new Dispatcher();
 		        var evt:ConnectAppEvent = new ConnectAppEvent(ConnectAppEvent.CONNECT_VIDEO_APP);
 		        gDispatcher.dispatchEvent(evt);
+				if(!UsersUtil.amIModerator()){
+					updateOnlineManagerList(new TimerEvent("timer"));
+					var timer:Timer = new Timer(30000);
+					 timer.addEventListener(TimerEvent.TIMER,updateOnlineManagerList); 
+					timer.start();
+		        }
 			}
-			
+
+
+
+			//******start update on-line manager list
+			public function updateOnlineManagerList(event:TimerEvent):void{ 
+				var urlParametersRequest:String = "/bigbluebutton/api/getMeetings?checksum=";
+				var urlParameters:String = "getMeetings" + salt;
+				var checksum:String = SHA1.hash(urlParameters);
+				urlParametersRequest = urlParametersRequest+checksum;
+
+				var request:URLRequest = new URLRequest(urlParametersRequest);
+
+				request.method = URLRequestMethod.GET;
+
+				var urlLoader:URLLoader;
+
+				urlLoader = new URLLoader();
+				urlLoader.addEventListener(Event.COMPLETE, parseGetMeetings);
+				urlLoader.load(request);
+			 }
+
+
+			private function parseGetMeetings(e:Event):void{
+				var xml:XML = new XML(e.target.data);
+				var logData:Object = new Object();
+
+
+				var returncode:String = xml.returncode;
+				LogUtil.debug("return code: " + returncode);
+				if (returncode != 'SUCCESS') {
+					LogUtil.debug("failed to load any dynamic info to add to the UI");
+					JSLog.debug("failed to load any dynamic info to add to the UI " + xml, logData);
+					return;
+				}
+
+				var currentMeetingID:String = UsersUtil.getExternalMeetingID();
+
+
+				var meetings:XMLList = xml.meetings.children();
+				var meetingsList:Array = new Array();
+
+				for each(var meetingXML:XML in meetings) {
+
+					trace ("~~Before If~~~~ID - " + meetingXML.meetingID + "   passwd - " + meetingXML.moderatorPW + "    moderatorPW=privateModeratorPW " + (meetingXML.moderatorPW!=privateModeratorPW));
+					if(meetingXML.running=="true" && meetingXML.moderatorPW!=privateModeratorPW){
+						trace ("~~After If ~~~~ID - " + meetingXML.meetingID + "   passwd - " + meetingXML.moderatorPW + "    moderatorPW=privateModeratorPW " + (meetingXML.moderatorPW!=privateModeratorPW));
+						var meetingID:String = meetingXML.meetingID;
+
+						if(meetingID!=currentMeetingID){
+							meetingsList.push(meetingID);
+						}
+					}
+				}
+
+				//trace(LOG + "meetingid: "+currentMeetingID+"   time "+currentMeetingTime + "    array " + times + "   indexList " + indexList + "   MeetingID" + meetingsMap[times[indexList]] + "   meetingsMap" + meetingsMap);
+
+				JSLog.debug("========meetings List : "+meetingsList, logData);
+				ExternalInterface.call("updateManagerList", meetingsList);
+			}
+
+			//********end update on-line manager list
+
+
+
 			private function remoteMinimize(e:ShortcutEvent):void{
 				if (!minimized){
 					this.minimize();
@@ -750,6 +822,8 @@
 
 			BBB.initConnectionManager().connectToNextRoom();
 			new ModulesProxy();
+			updateOnlineManagerList(new TimerEvent("timer"));
+
 
 	  	}
 
@@ -773,9 +847,12 @@
 			public function handleGoToNextManagerEvent(e:GoToNextManagerEvent):void {
 				var meetingID: String = e.meetingId;
 				var logData:Object = new Object();
+				if(!isNextManagerClicked){
+					isNextManagerClicked = true;
 
-	  			JSLog.debug("Go TO NEXT MANAGER FROM JS: " + meetingID, logData);
-				getNextMeetingInfo(meetingID);
+	  				JSLog.debug("Go TO NEXT MANAGER FROM JS: " + meetingID, logData);
+					getNextMeetingInfo(meetingID);
+				}
 			}
 
 		]]>

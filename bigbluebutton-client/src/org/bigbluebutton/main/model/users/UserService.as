@@ -140,7 +140,7 @@ package org.bigbluebutton.main.model.users
 				
 				// assign the meeting name to the document title
 				ExternalInterface.call("setTitle", _conferenceParameters.meetingName);
-				
+
 				trace(LOG + " Got the user info from web api.");       
 				/**
 				 * Temporarily store the parameters in global BBB so we get easy access to it.
@@ -154,6 +154,8 @@ package org.bigbluebutton.main.model.users
 				connect();
 			}
 		}
+
+
 		
     private function connect():void{
       _connectionManager = BBB.initConnectionManager();

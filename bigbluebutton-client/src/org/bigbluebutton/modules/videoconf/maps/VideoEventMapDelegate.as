@@ -67,7 +67,7 @@ import org.bigbluebutton.main.events.PresenterStatusEvent;
 import org.bigbluebutton.main.api.JSLog;
 import org.bigbluebutton.modules.videoconf.events.CloseWindowForEvent;
 import org.bigbluebutton.modules.users.services.MessageSender;
-
+import org.bigbluebutton.core.BBB;
 public class VideoEventMapDelegate {
     static private var PERMISSION_DENIED_ERROR:String = "PermissionDeniedError";
 
@@ -478,6 +478,7 @@ public class VideoEventMapDelegate {
         proxy.disconnect();
         proxy = new VideoProxy(uri);
         proxy.connect();
+        BBB.initConnectionManager().readyConnectToNextRoom();
     }
 
     public function startPublishing(e:StartBroadcastEvent):void {

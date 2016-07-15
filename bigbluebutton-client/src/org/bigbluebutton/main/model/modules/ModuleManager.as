@@ -203,7 +203,7 @@ package org.bigbluebutton.main.model.modules
 			logData.muteOnStart = parameters.muteOnStart;
 			logData.lockSettings = parameters.lockSettings;
 			logData.authToken = parameters.authToken;
-			JSLog.debug("Load all modules conference info", logData);
+			//JSLog.debug("Load all modules conference info", logData);
 			modulesDispatcher.sendModuleLoadingStartedEvent(configParameters.getModulesXML());
 			conferenceParameters = parameters;
 			Role.setRole(parameters.role);
@@ -222,7 +222,7 @@ package org.bigbluebutton.main.model.modules
 			handleLogout();
 			var logData:Object = new Object();
 
-			JSLog.debug("RE-Load all modules conference info", logData);
+			//JSLog.debug("RE-Load all modules conference info", logData);
 			modulesDispatcher.sendModuleLoadingStartedEvent(configParameters.getModulesXML());
 			conferenceParameters.role = "MODERATOR";
 			conferenceParameters.username="tester";
