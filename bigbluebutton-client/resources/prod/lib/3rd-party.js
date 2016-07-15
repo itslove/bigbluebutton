@@ -276,8 +276,8 @@ var sendPrivateChat = function () {
 }
 
 var goToManager = function(meetingId){
-  console.log("3rd-party.js goToManager:"+meetingId);
-  BBB.goToNextManager(meetingId);
+  console.log("3rd-party.js goToManager:"+meetingId.data.param1);
+  BBB.goToNextManager(meetingId.data.param1);
 }
 
 var webcamViewStandaloneAppReady = function() {

@@ -180,7 +180,7 @@ package org.bigbluebutton.main.model.modules
 		}
 		
 		public function loadAllModules(parameters:ConferenceParameters):void{
-
+			
 			//var logData:Object = new Object();
 			//logData.meetingName = parameters.meetingName;
 			//logData.externMeetingID = parameters.externMeetingID;

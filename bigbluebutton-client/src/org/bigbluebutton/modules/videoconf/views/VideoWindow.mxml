@@ -188,6 +188,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				//var logData:Object = new Object();
 
 	  			///JSLog.debug("_____________________Start video stream:"+stream, logData);
+
 				trace("_____________________Start video stream:"+stream);
 				var res:Array = getVideoResolution(stream);
 				if (res == null) // error
@@ -240,6 +241,9 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			}
 			
 			private function onNetStatus(e:NetStatusEvent):void{
+
+
+	  			//JSLog.debug("_____________________onNetStatus:"+e.info.code, logData);
 
 				switch(e.info.code){
 					case "NetStream.Publish.Start":
