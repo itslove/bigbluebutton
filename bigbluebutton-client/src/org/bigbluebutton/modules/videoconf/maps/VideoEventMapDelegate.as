@@ -77,7 +77,7 @@ public class VideoEventMapDelegate {
 
     private var options:VideoConfOptions = new VideoConfOptions();
     private var uri:String;
-    private var nginxUri:String = "rtmp://52.41.139.101/video";
+    private var nginxUri:String = "rtmp://52.28.104.103/video";
 
     private var webcamWindows:WindowManager = new WindowManager();
     private var videoProxyConnections:VideoConnectionManager = new VideoConnectionManager();
