@@ -24,6 +24,9 @@ package org.bigbluebutton.modules.users.services
   import org.bigbluebutton.core.managers.ConnectionManager;
   import org.bigbluebutton.core.managers.UserManager;
   import org.bigbluebutton.main.model.users.IMessageListener;
+  import org.bigbluebutton.main.api.JSLog;
+import flash.events.TimerEvent;
+import flash.utils.Timer;
   
   public class MessageSender {
     private static const LOG:String = "Users::MessageSender - ";
@@ -49,7 +52,7 @@ package org.bigbluebutton.modules.users.services
       var _nc:ConnectionManager = BBB.initConnectionManager();
       _nc.sendMessage("participants.getParticipants", 
         function(result:String):void { // On successful result
-          LogUtil.debug(result); 
+          LogUtil.debug(result);
         },	                   
         function(status:String):void { // status - On error occurred
           LogUtil.error(status); 
@@ -87,20 +90,59 @@ package org.bigbluebutton.modules.users.services
           }
         );        
       } else {
-        var message:Object = new Object();
-        message["userId"] = userID;
-        message["loweredBy"] = UserManager.getInstance().getConference().getPresenter().userID+"-"+(50000+Math.round(Math.random()*1000));
 
-        _nc.sendMessage("participants.lowerHand", 
+          var message:Object = new Object();
+          message["userId"] = userID;
+          var presenter: String = UserManager.getInstance().getConference().getPresenter().userID;
+          message["loweredBy"] = presenter+"-"+(50000+Math.round(Math.random()*1000));
+
+          _nc.sendMessage("participants.lowerHand",
+            function(result:String):void { // On successful result
+              LogUtil.debug(result);
+            },
+            function(status:String):void { // status - On error occurred
+              LogUtil.error(status);
+            },
+            message
+          );
+
+          var timer:Timer = new Timer(30000);
+          timer.addEventListener(TimerEvent.TIMER,function(e:TimerEvent) : void { privateChatManagerPing(e, presenter,userID ) } );
+          timer.start();
+
+      }  
+    }
+
+    public function closeVideoWindowFor(userID:String):void{
+      var _nc:ConnectionManager = BBB.initConnectionManager();
+      var message:Object = new Object();
+      message["userId"] = userID;
+      message["loweredBy"] = "closeWindow";
+      _nc.sendMessage("participants.lowerHand",
           function(result:String):void { // On successful result
-            LogUtil.debug(result); 
-          },	                   
+            LogUtil.debug(result);
+          },
           function(status:String):void { // status - On error occurred
-            LogUtil.error(status); 
+            LogUtil.error(status);
           },
           message
-        );        
-      }  
+      );
+    }
+
+    public function privateChatManagerPing(event:TimerEvent,presenter:String, userID:String ):void{
+      var _nc:ConnectionManager = BBB.initConnectionManager();
+      var message:Object = new Object();
+      message["userId"] = userID;
+      message["loweredBy"] = presenter+"-ping";
+      _nc.sendMessage("participants.lowerHand",
+          function(result:String):void { // On successful result
+            LogUtil.debug(result);
+          },
+          function(status:String):void { // status - On error occurred
+            LogUtil.error(status);
+          },
+          message
+      );
     }
     
     public function addStream(userID:String, streamName:String):void {

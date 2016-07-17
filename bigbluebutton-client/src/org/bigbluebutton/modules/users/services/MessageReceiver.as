@@ -57,7 +57,8 @@ package org.bigbluebutton.modules.users.services
   import org.bigbluebutton.modules.users.events.MeetingMutedEvent;
   import org.bigbluebutton.modules.videoconf.views.ControlButtons;
   import org.bigbluebutton.modules.videoconf.views.ToolbarButton;
-
+  import org.bigbluebutton.modules.videoconf.events.CloseWindowForEvent;
+import org.bigbluebutton.main.api.JSLog;
   
   public class MessageReceiver implements IMessageListener
   {
@@ -515,20 +516,34 @@ package org.bigbluebutton.modules.users.services
 
     private function handleUserLoweredHand(msg: Object):void {
       trace(LOG + "*** handleUserLoweredHand " + msg.msg + " **** \n" + "****" + UsersUtil.getMyExternalUserID());
-	  var map:Object = JSON.parse(msg.msg); 
-	  
-	  //if (UsersUtil.isMe(map.userId)){
-		//Nothing  
-	  //}
-	  var privatePresenter: String = map.loweredBy.split("-")[0]
-	  var voiceBridge:String = map.loweredBy.split("-")[1];
-	  var dispatcher:Dispatcher = new Dispatcher();
+	  var map:Object = JSON.parse(msg.msg);
+      var dispatcher:Dispatcher = new Dispatcher();
+      //close window when manager web camera off
+      if(map.loweredBy=="closeWindow"){
+        dispatcher.dispatchEvent(new CloseWindowForEvent(map.userId));
+        return;
+      }
+
+	  var privatePresenter: String = map.loweredBy.split("-")[0];
+      var voiceBridge:String = map.loweredBy.split("-")[1];
+      var manager:BBBUser = UsersUtil.getUser(privatePresenter);
+
+      if (voiceBridge=="ping"){
+
+        if(manager!=null){
+          manager.name = manager.name.split("_")[0]+"_Private";
+        }
+        return;
+      }
+
+
 	  var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
 	  //update manager privatechat 
-	  var manager:BBBUser = UsersUtil.getUser(privatePresenter);
+
 	  manager.isPrivateChat = true;
 	  manager.voiceBridgeForPrivateChat = voiceBridge;	
 	  manager.presenterForPrivateChat=privatePresenter;
+      manager.name = manager.name.split("_")[0]+"_Private";
 	  //update viewer private chat
 	  var bbbUser:BBBUser = UsersUtil.getUser(map.userId);
 	  bbbUser.isPrivateChat = true;
@@ -549,7 +564,7 @@ package org.bigbluebutton.modules.users.services
 			  dispatcher.dispatchEvent(new LeaveVoiceConferenceCommand());
 			  
 			  dispatcher.dispatchEvent(new ShortcutEvent(ShortcutEvent.SHARE_MICROPHONE));
-			  
+
 		  }
 		  //_controlButtons.goToPrivateChat();
 	  } else {

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <config>
     <localeversion suppressWarning="false">0.9.0</localeversion>
-    <version>269</version>
+    <version>273</version>
     <help url="http://52.59.68.199/help.html"/>
     <javaTest url="http://52.59.68.199/testjava.html"/>
     <porttest host="52.59.68.199" application="video/portTest" timeout="10000"/>    
@@ -22,7 +22,7 @@
 		<modules>
 		 
 		<module name="ChatModule" url="http://52.59.68.199/client/ChatModule.swf?v=268" 
-			uri="rtmp://52.59.68.199/bigbluebutton" 
+			uri="rtmp://52.59.68.199/bigbluebutton"
 			dependsOn="UsersModule"	
 			privateEnabled="false"  
 			fontSize="12"
@@ -31,8 +31,9 @@
 			colorPickerIsVisible="false"
 		/>
 
+
 		<module name="UsersModule" url="http://52.59.68.199/client/UsersModule.swf?v=268" 
-			uri="rtmp://52.59.68.199/bigbluebutton" 
+			uri="rtmp://52.59.68.199/bigbluebutton"
 			allowKickUser="true"
 			enableRaiseHand="true"
 			enableSettingsButton="true"
@@ -40,6 +41,7 @@
 		/>
 
 		
+
 		<module name="DeskShareModule" 
 			url="http://52.59.68.199/client/DeskShareModule.swf?v=268" 
 			uri="rtmp://52.59.68.199/deskShare"
@@ -49,8 +51,9 @@
 			baseTabIndex="201"
 		/>
 		
+
  	<module name="PhoneModule" url="http://52.59.68.199/client/PhoneModule.swf?v=268" 
-			uri="rtmp://52.59.68.199/sip" 
+			uri="rtmp://52.59.68.199/sip"
 			autoJoin="true"
 			listenOnlyMode="true"
 			presenterShareOnly="true"
@@ -62,6 +65,7 @@
 			echoTestApp="9196"
 			dependsOn="UsersModule"
 		/>
+
 
 		<module name="VideoconfModule" url="http://52.59.68.199/client/VideoconfModule.swf?v=268" 
 			uri="rtmp://52.59.68.199/video"
@@ -95,8 +99,9 @@
 			glowBlurSize = "30.0"	
 		/>
 <!--		
+
 		<module name="WhiteboardModule" url="http://52.59.68.199/client/WhiteboardModule.swf?v=268" 
-			uri="rtmp://52.59.68.199/bigbluebutton" 
+			uri="rtmp://52.59.68.199/bigbluebutton"
 			dependsOn="PresentModule"
 			baseTabIndex="601"
 			whiteboardAccess="presenter"
@@ -104,15 +109,17 @@
 		/>
 
 
+
     <module name="PollingModule" url="http://52.59.68.199/client/PollingModule.swf?v=268" 
-      uri="rtmp://52.59.68.199/bigbluebutton" 
+      uri="rtmp://52.59.68.199/bigbluebutton"
       dependsOn="PresentModule"
     />
     		
 
+
 		<module name="PresentModule" url="http://52.59.68.199/client/PresentModule.swf?v=268" 
 			uri="rtmp://52.59.68.199/bigbluebutton" 
-			host="http://52.59.68.199" 
+			host="http://52.59.68.199"
 			showPresentWindow="true"
 			showWindowControls="true"
 			openExternalFileUploadDialog="false"
@@ -121,8 +128,9 @@
 			maxFileSize="30"
 		/>
 -->
+
 		<module name="VideodockModule" url="http://52.59.68.199/client/VideodockModule.swf?v=268"
-			uri="rtmp://52.59.68.199/bigbluebutton" 
+			uri="rtmp://52.59.68.199/bigbluebutton"
 			dependsOn="VideoconfModule, UsersModule"
 			autoDock="true"
 			showControls="true"
@@ -135,13 +143,16 @@
 			baseTabIndex="401"
 		/>
 		
+
 		<module name="LayoutModule" url="http://52.59.68.199/client/LayoutModule.swf?v=268"
 			uri="rtmp://52.59.68.199/bigbluebutton"
 			layoutConfig="http://52.59.68.199/client/conf/layout.xml"
+
 			enableEdit="true"
 		/>
 
 <!--
+
     <module name="NotesModule" url="http://52.59.68.199/client/NotesModule.swf?v=268"
       saveURL="http://52.59.68.199"
       position="top-left"

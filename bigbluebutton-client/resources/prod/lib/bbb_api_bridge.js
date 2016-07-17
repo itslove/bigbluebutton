@@ -385,6 +385,17 @@
     }
 
     /**
+     * Request to switch to next manager
+     *  meetingID - the external meeting id for next manager
+     */
+    BBB.goToNextManager = function(meetingID){
+        var swfObj = getSwfObj();
+        if (swfObj) {
+            swfObj.goToNextManager(meetingID);
+        }
+    }
+
+    /**
     * Request to display a presentation.
     *  presentationID - the presentation to display
     */     

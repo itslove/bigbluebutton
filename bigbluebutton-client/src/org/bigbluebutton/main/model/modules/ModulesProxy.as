@@ -77,6 +77,10 @@ package org.bigbluebutton.main.model.modules
 		public function loadAllModules(params:ConferenceParameters):void{
 			modulesManager.loadAllModules(params);
 		}
+
+		public function reloadAllModules():void{
+			modulesManager.reloadAllModules();
+		}
 		
 		public function handleLogout():void {
 			modulesManager.handleLogout();

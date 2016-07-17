@@ -34,6 +34,10 @@ package org.bigbluebutton.modules.chat.model
     public function numMessages():int {
       return messages.length;
     }
+    public function removeAllMessages():void {
+       messages.removeAll();
+    }
+
 	
     public function newChatMessage(msg:ChatMessageVO):void {
       var cm:ChatMessage = new ChatMessage();

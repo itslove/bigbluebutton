@@ -37,6 +37,7 @@
 	<mate:Listener type="{LockControlEvent.CHANGED_LOCK_SETTINGS}" method="handleChangedLockSettingsEvent" />
 	<mx:Script>
 		<![CDATA[
+			import com.adobe.crypto.SHA1;
 			import com.asfusion.mate.events.Dispatcher;
 			
 			import mx.binding.utils.BindingUtils;
@@ -47,6 +48,7 @@
 			import mx.events.ListEvent;
 			import mx.events.MenuEvent;
 			import mx.managers.PopUpManager;
+			import mx.utils.StringUtil;
 			
 			import org.bigbluebutton.common.Images;
 			import org.bigbluebutton.common.LogUtil;
@@ -71,6 +73,8 @@
 			import org.bigbluebutton.modules.users.events.UsersRollEvent;
 			import org.bigbluebutton.modules.users.model.UsersOptions;
 			import org.bigbluebutton.util.i18n.ResourceUtil;
+			import org.bigbluebutton.main.views.MainApplicationShell;
+			import org.bigbluebutton.main.api.JSLog;
 			
 			private var dispatcher:Dispatcher;
 			
@@ -499,6 +503,34 @@
 			private function remoteMuteAllButPres(e:ShortcutEvent):void{
 				muteAlmostAll();
 			}
+
+			public function manualEndMeeting():void{
+				var me:BBBUser = UserManager.getInstance().getConference().getMyUser();
+				if(!UsersUtil.amIModerator()){
+					return;
+				}
+				//var controller:MainApplicationShell =new MainApplicationShell();
+				//controller.sendReloadAllModuleStartedEvent();
+				//var logData:Object = new Object();
+
+				//JSLog.debug("manualEndMeeting "+UsersUtil.getExternalMeetingID(), logData);
+				var salt:String ="2d75e011711511fb656d2eadf7a5ff29";//"eb7c5c72b730112644db1a12db84267e";
+				var meetingID:String = UsersUtil.getExternalMeetingID();
+				var urlParameters: String = "endmeetingID="+meetingID+"&password=prof123"+salt;
+				var checksum:String = SHA1.hash(urlParameters);
+				//JSLog.debug("manualEndMeeting checksum "+checksum +"  urlParam "+urlParameters, logData);
+				var urlParametersRequest:String = "/bigbluebutton/api/end?meetingID="+meetingID+"&password=prof123&checksum="+checksum;
+				var request:URLRequest = new URLRequest(urlParametersRequest);
+
+				request.method = URLRequestMethod.GET;
+
+				var urlLoader:URLLoader;
+
+				urlLoader = new URLLoader();
+				//urlLoader.addEventListener(Event.COMPLETE, handleComplete);
+				urlLoader.load(request);
+
+			}
 			
 		]]>
 	</mx:Script>
@@ -522,9 +554,11 @@
 	<mx:ControlBar width="100%">
 		<mx:Button id="settingsBtn" icon="{images.users_settings}" width="30" height="30"
 					toolTip="{ResourceUtil.getInstance().getString('bbb.users.settings.buttonTooltip')}" click="openSettings()" visible="true" tabIndex="{partOptions.baseTabIndex+10}" />
-		<mx:Button id="raiseHandBtn" toggle="true" icon="{images.hand_new}" selected="{UserManager.getInstance().getConference().isMyHandRaised}"
-				   width="30" height="30" toolTip="{ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip')}" click="raiseHand()"
-				   visible="false" tabIndex="{partOptions.baseTabIndex+15}" />
+
+		<mx:Button id="endMeeting" toggle="true" icon="{images.cancel}" width="30" height="30" toolTip="{ResourceUtil.getInstance().getString('bbb.users.endMeeting.toolTip')}" click="manualEndMeeting()" visible="true" tabIndex="{partOptions.baseTabIndex+15}" />
+        <mx:Button id="raiseHandBtn" toggle="true" icon="{images.hand_new}" selected="{UserManager.getInstance().getConference().isMyHandRaised}"
+        				   width="30" height="30" toolTip="{ResourceUtil.getInstance().getString('bbb.users.raiseHandBtn.toolTip')}" click="raiseHand()"
+        				   visible="false" tabIndex="{partOptions.baseTabIndex+30}" />
 		<mx:VBox>
 			<mx:Label text="{ResourceUtil.getInstance().getString('bbb.users.roomMuted.text')}" visible="{roomMuted}" includeInLayout="{roomMuted}" />
 			<mx:Label text="{ResourceUtil.getInstance().getString('bbb.users.roomLocked.text')}" visible="{roomLocked}" includeInLayout="{roomLocked}" />

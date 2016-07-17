@@ -59,7 +59,7 @@ package org.bigbluebutton.modules.videoconf.business
 		
 		public function VideoProxy(url:String)
 		{
-      _url = url;
+      		_url = url;
 			parseOptions();			
 			nc = new NetConnection();
 			nc.proxyType = "best";

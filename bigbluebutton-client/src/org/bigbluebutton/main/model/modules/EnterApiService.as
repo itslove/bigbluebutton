@@ -20,6 +20,7 @@ package org.bigbluebutton.main.model.modules
   import org.bigbluebutton.core.model.users.UsersModel;
   import org.bigbluebutton.main.events.MeetingNotFoundEvent;
   import org.bigbluebutton.main.model.users.events.ConnectionFailedEvent;
+  import org.bigbluebutton.main.api.JSLog;
   
   public class EnterApiService
   {    
@@ -39,6 +40,8 @@ package org.bigbluebutton.main.model.modules
     public function load(url:String):void {
       var date:Date = new Date();
       trace(LOG + "load " + url);
+      var logData:Object = new Object();
+      //JSLog.critical("URL for get meeting and user info from Enter API:"+url, logData);
       request = new URLRequest(url);
       request.method = URLRequestMethod.GET;		
       

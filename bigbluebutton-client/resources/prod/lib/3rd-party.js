@@ -275,6 +275,11 @@ var sendPrivateChat = function () {
   BBB.sendPrivateChatMessage(bbbEvent.fromColor, bbbEvent.fromLang, message,  bbbEvent.fromUserID);
 }
 
+var goToManager = function(meetingId){
+  console.log("3rd-party.js goToManager:"+meetingId.data.param1);
+  BBB.goToNextManager(meetingId.data.param1);
+}
+
 var webcamViewStandaloneAppReady = function() {
   console.log("WebcamViewStandalone App is ready.");
   BBB.getPresenterUserID(function(puid) {

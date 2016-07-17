@@ -32,6 +32,8 @@ import org.red5.server.api.stream.IStreamListener;
 import org.red5.server.stream.ClientBroadcastStream;
 import org.slf4j.Logger;
 import com.google.gson.Gson;
+import java.util.*;
+import java.io.*;
 
 public class VideoApplication extends MultiThreadedApplicationAdapter {
 	private static Logger log = Red5LoggerFactory.getLogger(VideoApplication.class, "video");
@@ -60,9 +62,17 @@ public class VideoApplication extends MultiThreadedApplicationAdapter {
 
   @Override
 	public boolean roomConnect(IConnection conn, Object[] params) {
-		log.info("BBB Video roomConnect"); 
-  	String meetingId = ((String) params[0]).toString();
-  	String userId = ((String) params[1]).toString();
+		log.info("BBB Video roomConnect");
+	String meetingId ;
+	String userId ;
+	try{
+		meetingId = ((String) params[0]).toString();
+		userId = ((String) params[1]).toString();
+	}catch(Exception e){
+		meetingId = "mainMeeting";
+		userId = "1232433543";
+	}
+
   	
   	Red5.getConnectionLocal().setAttribute("MEETING_ID", meetingId);
   	Red5.getConnectionLocal().setAttribute("USERID", userId);

@@ -51,6 +51,13 @@ package org.bigbluebutton.core.managers
     public function disconnect(onUserAction:Boolean):void {
         connDelegate.disconnect(onUserAction);
     }
+        public function connectToNextRoom():void {
+            connDelegate.connectToNextRoom();
+        }
+
+        public function readyConnectToNextRoom():void {
+            connDelegate.readyConnectToNextRoom();
+        }
         
         public function addMessageListener(listener:IMessageListener):void {
             connDelegate.addMessageListener(listener);

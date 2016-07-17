@@ -2,6 +2,24 @@ function setTitle(title){
     document.title= "Easy Chat - " + title;
 }
 
+function updateManagerList(managerList){
+    console.log(managerList); 
+    //var managerList = ['test1','test2'];
+    var countManagers = managerList.length;
+    var divIdToChange = "#manager_avatar";
+    var subIdLink;
+
+    $(divIdToChange).html(""); //clear div with  manager's avatars
+
+    for (var i = 0; i < countManagers; i++) {
+        subIdLink = 'sub_id_link' + i;
+        $(divIdToChange).append('<div id = ' + subIdLink + ' class="thumbnail" style="display:inline-block; margin: 4px; cursor:pointer; background-color: #eeeeee;">' +
+            '                           <img src="avatar1.png" width="80px" height="80px" >' +
+            '                       <span class="text-center">'+managerList[i]+'</span></div>');
+        $('#' + subIdLink).click({param1: [managerList[i]]}, goToManager);
+    }
+}
+
 function clientReady(message){
 	var target = document.getElementById("clientReady");
 	if (target) target.innerHTML = message;

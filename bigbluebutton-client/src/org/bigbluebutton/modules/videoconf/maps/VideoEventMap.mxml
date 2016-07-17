@@ -32,6 +32,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			import org.bigbluebutton.main.events.StoppedViewingWebcamEvent;
 			import org.bigbluebutton.main.events.UserJoinedEvent;
 			import org.bigbluebutton.main.events.UserLeftEvent;
+			import org.bigbluebutton.main.events.ModuleLoadEvent;
 			import org.bigbluebutton.main.model.users.events.StreamStartedEvent;
 			import org.bigbluebutton.modules.users.events.ViewCameraEvent;
 			import org.bigbluebutton.modules.videoconf.events.ClosePublishWindowEvent;
@@ -43,6 +44,10 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			import org.bigbluebutton.modules.videoconf.events.VideoModuleStartEvent;
 			import org.bigbluebutton.modules.videoconf.events.VideoModuleStopEvent;
 			import org.bigbluebutton.modules.videoconf.events.WebRTCWebcamRequestEvent;
+			import org.bigbluebutton.modules.videoconf.events.ConnectedViewEvent;
+			import org.bigbluebutton.modules.videoconf.events.CloseWindowForEvent;
+
+
 		]]>
 	</mx:Script>
 	
@@ -107,6 +112,10 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
   <EventHandlers type="{ConnectedEvent.VIDEO_CONNECTED}">
     <MethodInvoker generator="{VideoEventMapDelegate}" method="connectedToVideoApp" />
   </EventHandlers>
+
+  <EventHandlers type="{ConnectedViewEvent.VIDEO_CONNECTED_FOR_VIEW}">
+    <MethodInvoker generator="{VideoEventMapDelegate}" method="handleOpenViewWindowFor" arguments="{event}" />
+  </EventHandlers>
  
   <EventHandlers type="{ClosePublishWindowEvent.CLOSE_PUBLISH_WINDOW}">
     <MethodInvoker generator="{VideoEventMapDelegate}" method="handleClosePublishWindowEvent" arguments="{event}"/>
@@ -127,9 +136,13 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 <EventHandlers type="{PrivateChatEvent.PRIVATE_CHAT}">
 	<MethodInvoker generator="{VideoEventMapDelegate}" method="handlePrivateChatEvent"  arguments="{event}"/>
 </EventHandlers>
-	
-	
-	
+
+  <EventHandlers type="{ModuleLoadEvent.RELOAD_ALL_MODULES}" >
+    <MethodInvoker generator="{VideoEventMapDelegate}" method="connectToNextManagerVideo"  />
+  </EventHandlers>
+  <EventHandlers type="{CloseWindowForEvent.CLOSE_WINDOW_FOR}" >
+    <MethodInvoker generator="{VideoEventMapDelegate}" method="handleCloseWindowFor" arguments="{event}" />
+  </EventHandlers>
   <!-- ~~~~~~~~~~~~~~~~~~    INJECTORS     ~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
   
 </EventMap>

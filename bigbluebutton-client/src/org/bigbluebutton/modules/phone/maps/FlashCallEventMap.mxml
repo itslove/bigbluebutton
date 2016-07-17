@@ -42,6 +42,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			import org.bigbluebutton.modules.phone.events.StopPhoneModuleEvent;
 			import org.bigbluebutton.modules.phone.events.UseFlashModeCommand;
 			import org.bigbluebutton.modules.phone.managers.FlashCallManager;
+			import org.bigbluebutton.main.events.ModuleLoadEvent;
 		]]>
 	</mx:Script>
 	
@@ -113,5 +114,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
   
   <EventHandlers type="{MadePresenterEvent.SWITCH_TO_VIEWER_MODE}">        
     <MethodInvoker generator="{FlashCallManager}" method="handleBecomeViewer"/>
+  </EventHandlers>
+  <EventHandlers type="{ModuleLoadEvent.RELOAD_ALL_MODULES}">
+    <MethodInvoker generator="{FlashCallManager}" method="reloadModule"/>
   </EventHandlers>
 </EventMap>

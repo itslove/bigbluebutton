@@ -82,6 +82,7 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			private var connection:NetConnection;
 			private var uri:String;
 			private var room:String;
+			
 			private var sharingFullScreen:Boolean = false;
 			private var streaming:Boolean = false;
 			
@@ -139,6 +140,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 				minimizeBtn.tabIndex = baseIndex+1;
 				maximizeRestoreBtn.tabIndex = baseIndex+2;
 				closeBtn.tabIndex = baseIndex+3;
+				
+				//windowManager.absPos(this, 1, this.height/3);
 			}
 			
 			private function remoteFocus(e:ShortcutEvent):void{
@@ -246,6 +249,8 @@ with BigBlueButton; if not, see <http://www.gnu.org/licenses/>.
 			
 			private function onAppletStart(event:AppletStartedEvent):void{
 				LogUtil.debug("DeskShareWindow::onAppletStart");
+				trace("DeskShareWindow::onAppletStart");
+				//startPreviewStream(connection, "test", event.videoWidth, event.videoHeight);
 				startPreviewStream(connection, room, event.videoWidth, event.videoHeight);
 				var streamEvent:StreamEvent = new StreamEvent(StreamEvent.START);
 				streamEvent.videoWidth = event.videoWidth;
