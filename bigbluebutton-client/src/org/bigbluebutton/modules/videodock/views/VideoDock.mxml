@@ -357,8 +357,6 @@
 			
 			private function onOpenWindow(e:OpenVideoWindowEvent):void {
 				isNextManagerClicked = false;
-			nextManagerBtn.setStyle("fillColors", new Array(0xfefeff, 0xe1e2e5, 0xffffff, 0xeeeeee));
-			nextManagerBtn.setStyle("fillAlphas", new Array(1, 1, 1, 1));
 				if (isVideoWindow(e.window) && options.autoDock) {
           addVideoChild(e.window as VideoWindowItf);
         }					
