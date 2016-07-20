@@ -338,7 +338,7 @@ public class VideoEventMapDelegate {
         closeWindow(e.userID);
     }
 
-    public function handleOpenViewWindowFor(event:ConnectedViewEvent){
+    public function handleOpenViewWindowFor(event:ConnectedViewEvent):void{
         //var logData:Object = new Object();
 
 
