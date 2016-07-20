@@ -258,9 +258,9 @@ public class VideoEventMapDelegate {
 
     private function openAvatarWindowFor(userID:String):void {
         if (!UsersUtil.hasUser(userID)) return;
-        var logData:Object = new Object();
+        //var logData:Object = new Object();
 
-        JSLog.debug("))__)__)_))_)__)Open AvatarWindow close", logData);
+        //JSLog.debug("))__)__)_))_)__)Open AvatarWindow close", logData);
         var window:AvatarWindow = new AvatarWindow();
         window.userID = userID;
         window.title = UsersUtil.getUserName(userID);
@@ -339,10 +339,10 @@ public class VideoEventMapDelegate {
     }
 
     public function handleOpenViewWindowFor(event:ConnectedViewEvent){
-        var logData:Object = new Object();
+        //var logData:Object = new Object();
 
 
-        JSLog.debug("(())))__)__)_))_)__)NGINX CONNECTED: " + nginxUri, logData);
+        //JSLog.debug("(())))__)__)_))_)__)NGINX CONNECTED: " + nginxUri, logData);
 
         openNGNXViewWindowFor(event.userID);
     }

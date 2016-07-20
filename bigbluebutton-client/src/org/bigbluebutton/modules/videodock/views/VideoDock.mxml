@@ -202,7 +202,7 @@
 				LogUtil.debug("return code: " + returncode);
 				if (returncode != 'SUCCESS') {
 					LogUtil.debug("failed to load any dynamic info to add to the UI");
-					JSLog.debug("failed to load any dynamic info to add to the UI " + xml, logData);
+					//JSLog.debug("failed to load any dynamic info to add to the UI " + xml, logData);
 					return;
 				}
 
@@ -227,7 +227,7 @@
 
 				//trace(LOG + "meetingid: "+currentMeetingID+"   time "+currentMeetingTime + "    array " + times + "   indexList " + indexList + "   MeetingID" + meetingsMap[times[indexList]] + "   meetingsMap" + meetingsMap);
 
-				JSLog.debug("========meetings List : "+meetingsList, logData);
+				//JSLog.debug("========meetings List : "+meetingsList, logData);
 				ExternalInterface.call("updateManagerList", meetingsList);
 			}
 
@@ -690,7 +690,7 @@
 			LogUtil.debug("return code: " + returncode);
 			if (returncode != 'SUCCESS') {
 				LogUtil.debug("failed to load any dynamic info to add to the UI");
-				JSLog.debug("failed to load any dynamic info to add to the UI " + xml, logData);
+				//JSLog.debug("failed to load any dynamic info to add to the UI " + xml, logData);
 				return;
 			}
 
@@ -803,7 +803,7 @@
 			var returncode:String = xml.returncode;
 			LogUtil.debug("return code: " + returncode);
 			if (returncode != 'SUCCESS') {
-				JSLog.debug("failed to load any dynamic info to add to the UI: " + xml, logData);
+				//JSLog.debug("failed to load any dynamic info to add to the UI: " + xml, logData);
 
 				return;
 			}
@@ -854,7 +854,7 @@
 				if(!isNextManagerClicked){
 					isNextManagerClicked = true;
 
-	  				JSLog.debug("Go TO NEXT MANAGER FROM JS: " + meetingID, logData);
+	  				//JSLog.debug("Go TO NEXT MANAGER FROM JS: " + meetingID, logData);
 					getNextMeetingInfo(meetingID);
 				}
 			}
