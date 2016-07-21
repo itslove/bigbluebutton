@@ -24,6 +24,7 @@ package org.bigbluebutton.modules.deskshare.services
 	
 	import org.bigbluebutton.common.LogUtil;
 	import org.bigbluebutton.modules.deskshare.services.red5.Connection;
+	import org.bigbluebutton.core.UsersUtil;
 	
 	/**
 	 * The DeskShareProxy communicates with the Red5 deskShare server application 
