@@ -486,7 +486,7 @@ public class VideoEventMapDelegate {
         trace("stream name after:" + streamPresenter);
 
         if(!UsersUtil.amIModerator()) {
-            window.startVideo(proxy.connection, bbbUser.streamName + UsersUtil.getInternalMeetingID());
+            window.startVideo((videoProxyConnections.getConnection(userID)).connection, bbbUser.streamName + UsersUtil.getInternalMeetingID());
         }else{
             window.startVideo(proxy.connection, bbbUser.streamName);
         }

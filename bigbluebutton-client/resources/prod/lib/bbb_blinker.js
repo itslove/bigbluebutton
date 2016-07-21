@@ -14,7 +14,7 @@ function updateManagerList(managerList){
     for (var i = 0; i < countManagers; i++) {
         subIdLink = 'sub_id_link' + i;
         $(divIdToChange).append('<div id = ' + subIdLink + ' class="thumbnail" style="display:inline-block; margin: 4px; cursor:pointer; background-color: #eeeeee;">' +
-            '                           <img src="avatar1.png" width="80px" height="80px" >' +
+            '                           <img src="avatar1.JPG" width="80px" height="80px" >' +
             '                       <span class="text-center">'+managerList[i]+'</span></div>');
         $('#' + subIdLink).click({param1: [managerList[i]]}, goToManager);
     }
