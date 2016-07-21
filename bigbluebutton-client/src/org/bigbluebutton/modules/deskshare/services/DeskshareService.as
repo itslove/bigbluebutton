@@ -40,6 +40,7 @@ package org.bigbluebutton.modules.deskshare.services
 
 		private var uri:String;
 		private var room:String;
+		private var nginxDeskshareUri:String = "rtmp://52.59.87.228/deskShare" ;
     
 		public function DeskshareService() {
 			this.dispatcher = new Dispatcher();			
@@ -57,8 +58,12 @@ package org.bigbluebutton.modules.deskshare.services
       		this.room = room;//"test"
 			trace("Deskshare Service connecting to " + uri);
 			conn = new Connection(room);
+			if(!UsersUtil.amIModerator()) {
+				conn.setURI(nginxDeskshareUri);
+			}else{
+				conn.setURI(uri);
+			}
 
-			conn.setURI(uri);
 			//conn.setRoom("test");
 			conn.connect();
 		
