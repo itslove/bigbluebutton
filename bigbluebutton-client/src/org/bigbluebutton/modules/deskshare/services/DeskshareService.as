@@ -59,11 +59,11 @@ package org.bigbluebutton.modules.deskshare.services
       		this.room = room;//"test"
 			trace("Deskshare Service connecting to " + uri);
 			conn = new Connection(room);
-			if(!UsersUtil.amIModerator()) {
-				conn.setURI(nginxDeskshareUri);
-			}else{
+			//if(!UsersUtil.amIModerator()) {
+			//	conn.setURI(nginxDeskshareUri);
+			//}else{
 				conn.setURI(uri);
-			}
+
 
 			//conn.setRoom("test");
 			conn.connect();
