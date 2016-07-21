@@ -65,8 +65,8 @@ class DeskshareApplication(streamManager: StreamManager, deskShareServer: DeskSh
 	
 	override def appConnect(conn: IConnection, params: Array[Object]): Boolean = {
 		logger.debug("deskShare appConnect to scope " + conn.getScope().getContextPath());
-		var meetingId = params(0).asInstanceOf[String]
-		super.appConnect(conn, params);
+		//var meetingId = params(0).asInstanceOf[String]
+		super.appConnect(conn, List("test").toArray);
 	}
 	
 	override def appDisconnect(conn: IConnection) {
