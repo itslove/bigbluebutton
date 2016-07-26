@@ -5,7 +5,7 @@
     <help url="http://50.112.40.75/help.html"/>
     <javaTest url="http://50.112.40.75/testjava.html"/>
     <porttest host="50.112.40.75" application="video/portTest" timeout="10000"/>
-    <bwMon server="172.31.39.30" application="video/bwTest"/>
+    <bwMon server="172.31.15.76" application="video/bwTest"/>
     <application uri="rtmp://50.112.40.75/bigbluebutton" host="http://50.112.40.75/bigbluebutton/api/enter"/>
     <language userSelectionEnabled="true" />
     <skinning enabled="true" url="http://50.112.40.75/client/branding/css/BBBDefault.css.swf" />
